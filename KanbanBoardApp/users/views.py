@@ -1,37 +1,61 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from . import forms
 from django.contrib import messages
-from django.contrib.auth.models import User,auth
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
 
-def home(request):
-    return render(request, "users/Home.html")
+def register_view(request):
+    if request.method == 'POST':
+        fm = forms.UserRegistrationForm(request.POST)
+        if fm.is_valid():
+            print(fm.cleaned_data)
+            fm.save()
+            return redirect('login')
+    else :
+        fm = forms.UserRegistrationForm()
+    return render(request, 'users/Register.html', {'form': fm})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = forms.UserLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            print(f'{email} and {password}')
+            user = authenticate(request, email=email, password=password)
+            print(user)
+            if user is not None:
+                login(request, user)
+                messages.success(request, "You have logged in successfully!")
+                return redirect('home')
+            else:
+                messages.error(request, "Invalid email or password.")
+    else:
+        form = forms.UserLoginForm()
+    
+    return render(request, 'users/Login.html', {'form': form})
 
 def logout_view(request):
-    logout(request) 
-    return redirect("/")
+    logout(request)
+    return redirect('/')
 
-def register(request):
+@login_required
+def profile_view(request):
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        username = request.POST['username']
-        email =request.POST['email']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
+        u_form = forms.UserUpdateForm(request.POST, instance=request.user)
+        p_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if password==confirm_password:
-            if User.objects.filter(username=username).exists():
-                messages.info(request, 'Email is exist ')
-                return redirect(register) 
-            else:
-                user = User.objects.create_user(username=username,password=password, email=email, first_name=first_name, last_name=last_name) 
-                user.set_password(password) 
-                user.save()
-                print("success")
-                return redirect('login_user') 
-        else:
-            messages.info(request, 'Both passwords are not matching')
-            return redirect(register)
-    else:
-        print("no post method")
-        return render(request, 'users/register.html') 
+        if u_form.is_valid() and p_form.is_valid() :
+            u_form.save()
+            p_form.save()
+            redirect('/profile')
+    else :
+        u_form = forms.UserUpdateForm(instance=request.user)
+        p_form = forms.ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+
+    return render(request, 'users/Profile.html', context)

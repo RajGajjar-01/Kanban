@@ -1,3 +1,17 @@
 from django.shortcuts import render
 
-# Create your views here.
+def landing_view(request):
+    return render(request, 'board/Base.html')
+
+def home_view(request):
+    pass
+
+def contact_view(request):
+    pass
+
+def about_view(request):
+    pass
+
+def workspace_view(request):
+    pass
+

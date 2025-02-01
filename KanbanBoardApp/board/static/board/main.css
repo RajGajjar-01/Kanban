@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --color-primary: #9034db;
+    --color-secondary: #6b2ecc;
+    --color-accent: #e67e22;
+    --color-text: #333333;
+    --color-text-light: #ffffff;
+    --color-background: #f4f4f4;
+    --color-border: #dddddd;
+    --color-error: #e74c3c;
+    --color-success: #27ae60;
+    --color-warning: #f1c40f;
+  
+    --font-family: 'Poppins';
+    --font-size-base: 16px;
+    --font-size-small: 0.875rem;
+    --font-size-medium: 1rem;
+    --font-size-large: 1.25rem;
+    --font-size-xlarge: 1.5rem;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+  
+    --spacing-unit: 1rem;
+    --spacing-small: 0.5rem;
+    --spacing-medium: 1rem;
+    --spacing-large: 2rem;
+    --spacing-xlarge: 3rem;
+  
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 12px;
+    --border-width: 1px;
+  
+    --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --shadow-large: 0 8px 16px rgba(0, 0, 0, 0.3);
+  
+    --transition-duration: 0.2s;
+    --transition-timing-function: ease-in-out;
+  }
+  
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    line-height: 1.6;
+  }
+  
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-medium);
+}
+  
+  h1 { font-size: var(--font-size-xlarge); }
+  h2 { font-size: var(--font-size-large); }
+  h3 { font-size: var(--font-size-medium); }
+  h4 { font-size: var(--font-size-small); }
+  
+  p {
+    margin-bottom: var(--spacing-medium);
+  }
+  
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-duration) var(--transition-timing-function);
+  }
+  
+a:hover {
+    color: var(--color-secondary);
+  }
+  
+.button {
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius-large);
+    border: none;
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: background-color var(--transition-duration) var(--transition-timing-function);
+  }
+  
+.button:hover {
+    background-color: var(--color-secondary);
+  }
+  
+input, textarea, select {
+    padding: var(--spacing-medium);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+  }
+  
+.text-center {
+    text-align: center;
+  }
+  
+  .mt-small { margin-top: var(--spacing-small); }
+  .mt-medium { margin-top: var(--spacing-medium); }
+  .mt-large { margin-top: var(--spacing-large); }
+  
+  .mb-small { margin-bottom: var(--spacing-small); }
+  .mb-medium { margin-bottom: var(--spacing-medium); }
+  .mb-large { margin-bottom: var(--spacing-large); }
