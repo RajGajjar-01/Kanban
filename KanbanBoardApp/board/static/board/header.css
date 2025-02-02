@@ -1,0 +1,19 @@
+.navbar-nav .nav-style {
+    padding: 16px 20px;
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-button {
+    color: var(--color-text);
+    font-weight: 500;
+    padding: 16px 40px;
+    margin-right: 10px;
+    border: 1px solid #5749D5;
+    border-radius: 8px;
+    transition: all;
+}
+
+.nav-button:hover {
+    background-color: #5749D5;
+    color: white;
+}

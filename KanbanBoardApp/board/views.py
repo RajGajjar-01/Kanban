@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 def landing_view(request):
-    return render(request, 'board/Base.html')
+    return render(request, 'board/Landing.html')
 
 def home_view(request):
     pass

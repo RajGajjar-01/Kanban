@@ -1,0 +1,50 @@
+{% extends "board/Base.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'board/main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'board/landing.css' %}" />
+
+    {% if title %}
+      <title>{{ title }} | Logo</title>
+    {% else %}
+      <title>Logo</title>
+    {% endif %}
+</head>
+<body>
+    {% block content %}
+        <div class="header-hero">
+            <div class="container">
+                <div class="row align-items-center justify-content-center justify-content-lg-between">
+                    <div class="col-lg-6 col-md-10">
+                        <div class="header-hero-content">
+                            <h1 class="header-title">
+                                Simplify collaboration by bringing your tasks and team together with Logo.
+                            </h1>
+                            <p>Keep everything in the same place-even if your team isn't.</p>
+                            <ul>
+                                <li><a href="" class="main-btn">Get Started</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="header-image">
+                            <img src="https://images.ctfassets.net/rz1oowkt5gyp/75rDABL8fyMtNLlUAtBxrg/c5e145977a86c41c47e17c69410c64f7/TrelloUICollage_4x.png?w=1140&fm=webp" alt="Image not found">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
