@@ -10,7 +10,7 @@ def register_view(request):
         if fm.is_valid():
             print(fm.cleaned_data)
             fm.save()
-            return redirect('login')
+            return redirect('user-login')
     else :
         fm = forms.UserRegistrationForm()
     return render(request, 'users/Register.html', {'form': fm})
@@ -27,7 +27,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "You have logged in successfully!")
-                return redirect('home')
+                return redirect('board-home')
             else:
                 messages.error(request, "Invalid email or password.")
     else:

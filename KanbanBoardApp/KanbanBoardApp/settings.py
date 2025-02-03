@@ -33,6 +33,11 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+
+    #  Tailwind
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -46,6 +51,9 @@ MIDDLEWARE = [
 
     # Related to Google Authentication. For more info go to Notes.md or allauth documentation
     "allauth.account.middleware.AccountMiddleware",
+
+    # Related to tailwind
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 # Related to Google Authentication. For more info go to Notes.md or allauth documentation
@@ -153,3 +161,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Tailwind
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = ['127.0.0.1']

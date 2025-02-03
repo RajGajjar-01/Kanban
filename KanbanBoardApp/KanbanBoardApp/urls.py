@@ -8,8 +8,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("board.urls")),
     path("user/", include("users.urls")),
-        path('accounts/google/login/', oauth2_login, name='google_login'),
+    path('accounts/google/login/', oauth2_login, name='google_login'),
     path('accounts/google/login/callback/', oauth2_callback, name='google_callback'),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 if settings.DEBUG:

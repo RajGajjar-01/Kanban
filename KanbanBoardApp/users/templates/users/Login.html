@@ -1,7 +1,8 @@
 {% extends "board/Base.html" %}
+
 {% block content %}
     {% load socialaccount %}
-    <h1>Login</h1>
+    <h1>Sign In</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{form.as_p}}

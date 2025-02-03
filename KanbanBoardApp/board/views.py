@@ -4,7 +4,7 @@ def landing_view(request):
     return render(request, 'board/Base.html')
 
 def home_view(request):
-    pass
+    return render(request, 'board/Home.html')
 
 def contact_view(request):
     pass

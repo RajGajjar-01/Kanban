@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskify Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            border-right: 1px solid #eee;
+            padding: 20px;
+        }
+
+        .workspace-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .workspace-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .workspace-item.active {
+            background-color: #e9f0ff;
+        }
+
+        .board-card {
+            height: 150px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .board-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .board-title {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .create-board {
+            height: 150px;
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        .create-board:hover {
+            background-color: #e9ecef;
+        }
+
+        .company-badge {
+            width: 32px;
+            height: 32px;
+            background-color: #6c5ce7;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="d-flex align-items-center mb-4">
+                <h5 class="mb-0">Workspaces</h5>
+                <button class="btn btn-light ms-auto">+</button>
+            </div>
+
+            <div class="workspace-item active d-flex align-items-center">
+                <div class="company-badge me-2">L</div>
+                Lorem Inc.
+            </div>
+
+            <div class="ps-4 mt-3">
+                <div class="workspace-item active">
+                    <i class="bi bi-grid me-2"></i> Boards
+                </div>
+                <div class="workspace-item">
+                    <i class="bi bi-activity me-2"></i> Activity
+                </div>
+                <div class="workspace-item">
+                    <i class="bi bi-gear me-2"></i> Settings
+                </div>
+                <div class="workspace-item">
+                    <i class="bi bi-credit-card me-2"></i> Billing
+                </div>
+            </div>
+
+            <!-- Other workspaces -->
+            <div class="workspace-item d-flex align-items-center mt-3">
+                <div class="company-badge me-2">F</div>
+                Foo Inc.
+            </div>
+            <div class="workspace-item d-flex align-items-center">
+                <div class="company-badge me-2">A</div>
+                Acme Corp
+            </div>
+            <div class="workspace-item d-flex align-items-center">
+                <div class="company-badge me-2">B</div>
+                Bar Corp
+            </div>
+            <div class="workspace-item d-flex align-items-center">
+                <div class="company-badge me-2">M</div>
+                My Team
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="company-badge me-2">L</div>
+                    <h4 class="mb-0">Lorem Inc.</h4>
+                    <span class="badge bg-light text-dark ms-2">Free</span>
+                </div>
+            </div>
+
+            <h5 class="mb-4">Your boards</h5>
+
+            <div class="row g-4">
+                <!-- Summer Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">Summer Board</div>
+                    </div>
+                </div>
+
+                <!-- Third Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">Third Board</div>
+                    </div>
+                </div>
+
+                <!-- Second Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">Second Board</div>
+                    </div>
+                </div>
+
+                <!-- My Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">My Board</div>
+                    </div>
+                </div>
+
+                <!-- Create New Board -->
+                <div class="col-md-3">
+                    <div class="create-board">
+                        <div class="text-center">
+                            <div>Create new board</div>
+                            <small class="text-muted">1 remaining</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
