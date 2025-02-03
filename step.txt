@@ -13,3 +13,11 @@ python.exe -m pip install --upgrade pip
 git add . 
 git commit -m "sign-up page completed"   
 git push origin feature-branch 
+
+#steps for tailwind
+-->run create new terminal along with existing one using + symbol in terminal
+-->run command : python manage.py tailwind start (in new terminal)
+
+-->run command : python manage.py runserver (in old terminal)
+
+Note : Both terminals should be running side by side
