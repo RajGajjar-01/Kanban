@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskify Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            border-right: 1px solid #eee;
+            padding: 20px;
+        }
+
+        .workspace-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .workspace-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .workspace-item.active {
+            background-color: #e9f0ff;
+        }
+
+        .board-card {
+            height: 150px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .board-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .board-title {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .create-board {
+            height: 150px;
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        .create-board:hover {
+            background-color: #e9ecef;
+        }
+
+        .company-badge {
+            width: 32px;
+            height: 32px;
+            background-color: #6c5ce7;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <nav class="w-full bg-white font-poppins">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-bold text-black">Logo</a>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden p-2" id="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Navigation Links - Modified for mobile -->
+            <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
+                <div
+                    class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 bg-white md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
+                    <!-- Buttons -->
+                    <a href="{% url 'user-logout' %}"
+                        class="px-4 py-3 font-medium bg-rose-500 text-white rounded-lg hover:bg-rose-600 hover:text-white transition-all">
+                        logout
+                    </a>
+                    <a href="{% url 'user-profile' %}"
+                        class="px-4 py-3 font-medium bg-rose-500 text-white rounded-[40%] hover:bg-rose-600 hover:text-white transition-all">
+                        P
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="d-flex bg-slate-900">
+        
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="d-flex align-items-center mb-4">
+                <h5 class="mb-0">Workspaces</h5>
+                <button class="btn btn-light ms-auto">+</button>
+            </div>
+
+            <div class="workspace-item active d-flex align-items-center">
+                <div class="company-badge me-2">L</div>
+                Lorem Inc.
+            </div>
+
+            <div class="ps-4 mt-3">
+                <div class="workspace-item active">
+                    <i class="bi bi-grid me-2"></i> Boards
+                </div>
+                <div class="workspace-item">
+                    <i class="bi bi-activity me-2"></i> Activity
+                </div>
+                <div class="workspace-item">
+                    <i class="bi bi-gear me-2"></i> Settings
+                </div>
+                <div class="workspace-item">
+                    <i class="bi bi-credit-card me-2"></i> Billing
+                </div>
+            </div>
+
+            <!-- Other workspaces -->
+            <div class="workspace-item d-flex align-items-center mt-3">
+                <div class="company-badge me-2">F</div>
+                Foo Inc.
+            </div>
+            <div class="workspace-item d-flex align-items-center">
+                <div class="company-badge me-2">A</div>
+                Acme Corp
+            </div>
+            <div class="workspace-item d-flex align-items-center">
+                <div class="company-badge me-2">B</div>
+                Bar Corp
+            </div>
+            <div class="workspace-item d-flex align-items-center">
+                <div class="company-badge me-2">M</div>
+                My Team
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="company-badge me-2">L</div>
+                    <h4 class="mb-0">Lorem Inc.</h4>
+                    <span class="badge bg-light text-dark ms-2">Free</span>
+                </div>
+            </div>
+
+            <h5 class="mb-4">Your boards</h5>
+
+            <div class="row g-4">
+                <!-- Summer Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">Summer Board</div>
+                    </div>
+                </div>
+
+                <!-- Third Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">Third Board</div>
+                    </div>
+                </div>
+
+                <!-- Second Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">Second Board</div>
+                    </div>
+                </div>
+
+                <!-- My Board -->
+                <div class="col-md-3">
+                    <div class="board-card" style="background-image: url('https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cq_auto:eco%2Cw_700/MTc2NDU2NDc2NzY3ODIzODM0/shades-purple-greensleeves.webp')">
+                        <div class="board-title">My Board</div>
+                    </div>
+                </div>
+
+                <!-- Create New Board -->
+                <div class="col-md-3">
+                    <div class="create-board">
+                        <div class="text-center">
+                            <div>Create new board</div>
+                            <small class="text-muted">1 remaining</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white border-r h-full flex flex-col">
+            <!-- Workspace Header -->
+            <div class="p-4 border-b">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-semibold text-lg">Workspaces</h2>
+                    <button id="addWorkspaceBtn" class="p-2 hover:bg-gray-100 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Workspace List -->
+            <div id="workspaceList" class="flex-1 overflow-y-auto p-2 space-y-1">
+                <!-- Workspaces will be added here dynamically -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="bg-white border-b p-4">
+                <h1 id="currentWorkspaceTitle" class="text-xl font-semibold">Select a Workspace</h1>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-auto p-6">
+                <!-- Tabs -->
+                <div id="workspaceTabs" class="hidden mb-6">
+                    <div class="border-b">
+                        <nav class="flex space-x-8">
+                            <button class="tab-btn active px-4 py-2 border-b-2 border-transparent" data-tab="boards">
+                                Boards
+                            </button>
+                            <button class="tab-btn px-4 py-2 border-b-2 border-transparent" data-tab="members">
+                                Members
+                            </button>
+                            <button class="tab-btn px-4 py-2 border-b-2 border-transparent" data-tab="activities">
+                                Activities
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Boards Grid -->
+                <div id="boardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Boards will be added here dynamically -->
+                    <button id="addBoardBtn" class="h-48 border-2 border-dashed rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
+                        <div class="text-center">
+                            <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span class="text-gray-500">Add Board</span>
+                        </div>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Workspace Modal -->
+    <div id="addWorkspaceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Create New Workspace</h3>
+            <form id="addWorkspaceForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Workspace Name</label>
+                    <input type="text" required class="w-full p-2 border rounded-lg">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" onclick="closeModal('addWorkspaceModal')">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Board Modal -->
+    <div id="addBoardModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Create New Board</h3>
+            <form id="addBoardForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Board Title</label>
+                        <input type="text" required class="w-full p-2 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Description</label>
+                        <textarea class="w-full p-2 border rounded-lg" rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Theme Color</label>
+                        <input type="color" class="w-full p-1 border rounded-lg">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-6">
+                    <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" onclick="closeModal('addBoardModal')">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addTaskModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Create New Task</h3>
+            <form id="addTaskForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Task Title</label>
+                    <input type="text" required class="w-full p-2 border rounded-lg">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" onclick="closeModal('addTaskModal')">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="toDo.js"></script>
+</body>
+</html>

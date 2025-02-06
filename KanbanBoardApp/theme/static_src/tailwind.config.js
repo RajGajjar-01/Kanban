@@ -44,7 +44,14 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: '#ff0000'
+                primary: "#6C63FF",
+                "hero-purple": "#B4B1E8",
+                "button-purple": "#6C63FF",
+                'hero-purple': '#B4B1E8',
+                'feature-red': '#FF6B6B',
+                'feature-purple': '#6C63FF',
+                'feature-green': '#4CD964',
+                'feature-yellow': '#FFB946'
             },
             fontFamily: {
                 poppins: 'poppins',

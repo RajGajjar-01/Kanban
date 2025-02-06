@@ -12,6 +12,23 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'password']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        placeholders = {
+            'username': 'Enter your username',
+            'email': 'Enter your email',
+            'password': 'Enter your password',
+            'confirm_password': 'password again',
+        }
+    
+        for field in self.fields:
+            
+            self.fields[field].widget.attrs.update({
+                'placeholder': placeholders.get(field, ''), 
+                'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
+            })
+
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():

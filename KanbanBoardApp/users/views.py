@@ -3,25 +3,37 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.core.mail import send_mail
+from KanbanBoardApp.settings import EMAIL_HOST_USER
 
 def register_view(request):
     if request.method == 'POST':
-        fm = forms.UserRegistrationForm(request.POST)
-        if fm.is_valid():
-            print(fm.cleaned_data)
-            fm.save()
+        register_form = forms.UserRegistrationForm(request.POST, auto_id=True)
+        if register_form.is_valid():
+            print(register_form.cleaned_data)
+            register_form.save()
+            username = register_form.cleaned_data['username']
+            email = register_form.cleaned_data['email']
+            subject = f'Hello {username}'
+            message = f'Thank you {username} for joining us.'
+            recipient_list = [email]
+            send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)
             return redirect('user-login')
     else :
-        fm = forms.UserRegistrationForm()
-    return render(request, 'users/Register.html', {'form': fm})
+        register_form = forms.UserRegistrationForm(auto_id=True)
+    
+    context = {
+        'form' : register_form,
+        'title': 'sign up'
+    }
+    return render(request, 'users/Register.html', context)
 
 def login_view(request):
     if request.method == 'POST':
-        form = forms.UserLoginForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            print(f'{email} and {password}')
+        login_form = forms.UserLoginForm(request.POST, auto_id=True)
+        if login_form.is_valid():
+            email = login_form.cleaned_data['email']
+            password = login_form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
             print(user)
             if user is not None:
@@ -31,9 +43,13 @@ def login_view(request):
             else:
                 messages.error(request, "Invalid email or password.")
     else:
-        form = forms.UserLoginForm()
+        login_form = forms.UserLoginForm(auto_id=True)
     
-    return render(request, 'users/Login.html', {'form': form})
+    context = {
+        'form': login_form,
+        'title': 'sign in'
+    }
+    return render(request, 'users/Login.html', context)
 
 def logout_view(request):
     logout(request)
@@ -55,7 +71,8 @@ def profile_view(request):
 
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'title' : 'profile'
     }
 
     return render(request, 'users/Profile.html', context)
