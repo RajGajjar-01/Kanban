@@ -57,10 +57,13 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
+    print(request.method)
     if request.method == 'POST':
         u_form = forms.UserUpdateForm(request.POST, instance=request.user)
         p_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
+        print(u_form.is_valid)
+        print(p_form.is_valid)
         if u_form.is_valid() and p_form.is_valid() :
             u_form.save()
             p_form.save()

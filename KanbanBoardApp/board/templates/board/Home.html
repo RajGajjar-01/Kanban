@@ -22,8 +22,11 @@
     
                         <!-- Buttons -->
                         <a href="{% url 'user-profile' %}"
-                            class="px-6 py-4 font-semibold bg-violet-500 rounded-[50%] text-white transition-all">
-                            {{user_initial}}
+                            class="font-semibold bg-rose-400 rounded-[50%] text-white transition-all">
+                            <div class="h-12 w-12 flex justify-center items-center">
+
+                                {{user_initial}}
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -32,9 +35,9 @@
         <div class="pt-[5.8rem]">
 
         </div>
-        <div class="flex h-screen">
+        <div class="flex">
             <!-- Sidebar -->
-            <div class="w-64 bg-white border-r h-full flex flex-col">
+            <div class="w-64 bg-white border-r flex flex-col">
                 <!-- Workspace Header -->
                 <div class="p-4 border-b">
                     <div class="flex items-center justify-between">

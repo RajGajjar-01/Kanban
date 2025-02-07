@@ -1,79 +1,112 @@
 {% extends "board/Base.html" %}
 {% block content %}
-<div class="max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold text-center text-gray-900 mb-8">Profile Settings</h1>
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+<div class="font-poppins bg-violet-300 h-screen">
+    <nav class="w-full px-6 py-4 bg-slate-50 shadow-2xl">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Logo</a>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden p-2" id="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Navigation Links - Modified for mobile -->
+            <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
+                <div class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
+                    <a href="#" class="text-gray-700 hover:text-gray-950 transition-colors">About Us</a>
+                    <a href="{% url 'board-contact' %}"
+                        class="text-gray-700 hover:text-gray-950 transition-colors">Contact</a>
+                    <a href="#" class="text-gray-700 hover:text-gray-950 transition-colors">Blogs</a>
+
+                   
+                    <a href="{% url 'board-home' %}"
+                        class="px-12 py-4 font-semibold bg-slate-50 border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
+                        Back to Home    
+                    </a>
+                
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="max-w-7xl mx-auto px-8 mt-4 bg-white rounded-lg shadow-md flex justify-around flex-col md:flex-row">
         <!-- Profile Image Section -->
-        <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 sm:p-10">
-            <div class="flex flex-col sm:flex-row items-center">
-                <div class="relative mb-4 sm:mb-0 sm:mr-6">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-05%2000-12-34-rRqr8eSdWd2OgRGMOBqorXPpRB4ez1.png"
+        <div class="bg-gradient-to-r from-violet-600 to-blue-600 p-6 sm:p-10 rounded-b-md md:rounded-none">
+            <div class="flex flex-col items-center">    
+                <div class="relative sm:mb-0">
+                    <img src="{{user.profile.image.url}}"
                         alt="Profile picture"
-                        class="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover">
-                    <label for="image-upload"
-                        class="absolute bottom-0 right-0 bg-white text-blue-600 p-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors">
+                        class="w-48 h-48 md:w-64 md:h-64 rounded-full border-2  border-white shadow-xl object-cover">
+                    <label for="{{p_form.image.id_for_label}}"
+                        class="absolute bottom-0 right-4 md:bottom-5 bg-white text-rose-600 p-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <input type="file" id="image-upload" class="hidden" accept="image/*">
                     </label>
                 </div>
-                <div class="text-center sm:text-left">
-                    <h2 class="text-2xl font-semibold text-white">Raj</h2>
-                    <p class="text-blue-100">Member since 2023</p>
+                <div class="text-white text-center sm:text-left mt-10 md:w-[24rem]">
+                    <h2 class="text-2xl font-semibold mb-4">{{ user.username }}</h2>
+                    <p class="mb-4 font-medium">Joined : {{ user.date_joined|date:"D, d M Y" }}</p>
+                    <p class="text-gray-100 w-30">{{ user.profile.bio }}</p>
                 </div>
             </div>
         </div>
-
+        
         <!-- Form Section -->
-        <form class="p-6 sm:p-10 space-y-6">
+        <form class="p-6 sm:p-10 space-y-6" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="hidden">
+                {{ p_form.image }}
+            </div>
             <!-- Username Field -->
             <div class="space-y-2">
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="username" name="username" value="raj"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
-                <p class="text-sm text-gray-500">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
-                </p>
+                <label for="{{ u_form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ u_form.username.label }}</label>
+                {{ u_form.username }}
+               
             </div>
 
             <!-- Email Field -->
             <div class="space-y-2">
-                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-                <input type="email" id="email" name="email" value="atlantic.march11@gmail.com"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                <label for="{{ u_form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ u_form.email.label }}</label>
+               {{ u_form.email }}
             </div>
 
             <!-- Bio Field -->
             <div class="space-y-2">
-                <label for="bio" class="block text-sm font-medium text-gray-700">About myself</label>
-                <textarea id="bio" name="bio" rows="4"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
-                    placeholder="Tell us about yourself"></textarea>
+                <label for="{{ p_form.bio.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ p_form.bio.label }}</label>
+                {{ p_form.bio }}
             </div>
 
-            <!-- Additional Fields -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                    <input type="text" id="location" name="location" placeholder="City, Country"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
-                </div>
+                    <label for="location" class="block text-sm font-medium text-gray-700">{{ p_form.location.label }}</label>
+                    {{ p_form.location }}
+                </div>  
                 <div class="space-y-2">
-                    <label for="website" class="block text-sm font-medium text-gray-700">Website</label>
-                    <input type="url" id="website" name="website" placeholder="https://example.com"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                    <label for="website" class="block text-sm font-medium text-gray-700">{{ p_form.website.label }}</label>
+                    {{ p_form.website }}
                 </div>
             </div>
 
             <!-- Submit Button -->
             <div class="pt-4">
-                <button type="submit"
-                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors text-sm font-medium">
+                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border
+                        text-sm font-medium rounded-lg text-white bg-rose-600 hover:bg-rose-500
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-400
+                        transition-colors duration-200">
                     Update Profile
                 </button>
+            </div>
+            <div class="">
+                <a href="{% url 'user-logout' %}">
+                    Logout
+                </a>
             </div>
         </form>
     </div>
