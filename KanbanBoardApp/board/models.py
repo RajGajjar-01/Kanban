@@ -13,12 +13,7 @@ class Workspace(models.Model):
     
     @property
     def user_list(self):
-            user_list = set(Board.objects.filter(workspace=self).values_list('user__username', flat=True))
-
-            if self.created_by:
-                user_list.append(self.created_by.username)
-
-            return  list(user_list)
+            return Board.objects.filter(workspace=self).values_list('user__username', flat=True)
 
 class Board(models.Model):
     user             = models.ManyToManyField(User, through='BoardMember', related_name='user')
@@ -73,7 +68,6 @@ class Card(models.Model):
         IMP_NOT_URGENT = 'important but not urgent'
         NOT_URGENT_NOT_IMPORTANT = 'neither important nor urgent'
         
-
     list_id          = models.ForeignKey(List, on_delete=models.CASCADE)
     card_name        = models.CharField(max_length=255, default="card1")
     card_description = models.TextField(null=True, blank=True)

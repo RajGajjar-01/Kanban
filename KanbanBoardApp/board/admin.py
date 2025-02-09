@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Board, BoardMember, Workspace, List, Card, Comment, CardActivity, CardAttachment
+from .models import Board, BoardMember, Workspace, List, Card, Comment, CardActivity, CardAttachment, CardMember
 class BoardAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'created_date', 'workspace']
 
@@ -12,7 +12,7 @@ class WorkspaceAdmin(admin.ModelAdmin):
 class CardAdmin(admin.ModelAdmin):
     list_display = ['id', 'card_name', 'card_description', 'created_date']
 
-class CardMember(admin.ModelAdmin):
+class CardMemberAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'card', 'added_date']
 
 class ListAdmin(admin.ModelAdmin):
@@ -29,6 +29,7 @@ class ActivityAdmin(admin.ModelAdmin):
 class AttachmentAdmin(admin.ModelAdmin):
     list_display = ['card', 'uploaded_date', 'name', 'location']
 
+
 admin.site.register(Board, BoardAdmin)
 admin.site.register(BoardMember, BoardMemberAdmin)
 admin.site.register(Workspace, WorkspaceAdmin)
@@ -37,3 +38,4 @@ admin.site.register(Card, CardAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(CardActivity, ActivityAdmin)
 admin.site.register(CardAttachment, AttachmentAdmin)
+admin.site.register(CardMember, CardMemberAdmin)
