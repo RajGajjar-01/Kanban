@@ -49,6 +49,9 @@ class BoardMember(models.Model):
     user  = models.ForeignKey(User, on_delete=models.CASCADE)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('user', 'board')
+
     def __str__(self):
         return f"{self.user.username} - {self.board.name}"
 

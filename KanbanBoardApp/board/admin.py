@@ -29,7 +29,6 @@ class ActivityAdmin(admin.ModelAdmin):
 class AttachmentAdmin(admin.ModelAdmin):
     list_display = ['card', 'uploaded_date', 'name', 'location']
 
-
 admin.site.register(Board, BoardAdmin)
 admin.site.register(BoardMember, BoardMemberAdmin)
 admin.site.register(Workspace, WorkspaceAdmin)
