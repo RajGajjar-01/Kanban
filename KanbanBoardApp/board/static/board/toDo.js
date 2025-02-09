@@ -2,7 +2,6 @@
 let workspaces = [];
 let currentWorkspace = null;
 let currentBoard = null;
-console.log('Hii')
 
 // DOM Elements
 const workspaceList = document.getElementById("workspaceList");
@@ -32,182 +31,200 @@ addTaskForm.addEventListener("submit", handleAddTask);
 
 // Tab functionality
 document.querySelectorAll(".tab-btn").forEach((button) => {
-    button.addEventListener("click", () => switchTab(button.dataset.tab));
+  button.addEventListener("click", () => switchTab(button.dataset.tab));
 });
 
 // Utility Functions
 function openModal(modalId) {
-    document.getElementById(modalId).classList.remove("hidden");
+  document.getElementById(modalId).classList.remove("hidden");
 }
 
 function closeModal(modalId) {
-    document.getElementById(modalId).classList.add("hidden");
+  document.getElementById(modalId).classList.add("hidden");
 }
+document.getElementById("confirmDeleteWorkspace").addEventListener("click", function () {
+  if (workspaceToDelete !== null) {
+    workspaces = workspaces.filter((workspace) => workspace.id !== workspaceToDelete);
+
+    // Reset current workspace if the deleted one was selected
+    if (currentWorkspace && currentWorkspace.id === workspaceToDelete) {
+      currentWorkspace = workspaces.length > 0 ? workspaces[0] : null;
+      currentWorkspaceTitle.textContent = currentWorkspace ? currentWorkspace.name : "";
+      renderBoards();
+    }
+
+    renderWorkspaces();
+    closeModal("deleteWorkspaceModal");
+    workspaceToDelete = null; // Reset variable
+  }
+});
+
 
 function switchTab(tabName) {
-    document.querySelectorAll(".tab-btn").forEach((btn) => {
-        btn.classList.remove("active", "border-blue-500", "text-blue-600");
-        if (btn.dataset.tab === tabName) {
-            btn.classList.add("active", "border-blue-500", "text-blue-600");
-        }
-    });
-    // Handle tab content switching here
-    if (tabName === "boards") {
-        renderBoards();
-    } else {
-        // Implement other tab content
-        boardsGrid.innerHTML = '<p>Content for ${tabName} tab</p>';
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.classList.remove("active", "border-blue-500", "text-blue-600");
+    if (btn.dataset.tab === tabName) {
+      btn.classList.add("active", "border-blue-500", "text-blue-600");
     }
+  });
+
+  if (tabName === "boards") {
+    renderBoards();
+  } else {
+    boardsGrid.innerHTML = `<p>Content for ${tabName} tab</p>`;
+  }
 }
 
 // Workspace Functions
 function handleAddWorkspace(e) {
-    e.preventDefault();
-    const workspaceName = e.target.querySelector("input").value;
+  e.preventDefault();
+  const workspaceName = e.target.querySelector("input").value;
 
-    const workspace = {
-        id: Date.now(),
-        name: workspaceName,
-        boards: [],
-    };
+  const workspace = {
+    id: Date.now(),
+    name: workspaceName,
+    boards: [],
+  };
 
-    workspaces.push(workspace);
-    renderWorkspaces();
-    closeModal("addWorkspaceModal");
-    e.target.reset();
+  workspaces.push(workspace);
+  renderWorkspaces();
+  closeModal("addWorkspaceModal");
+  e.target.reset();
 }
+
+let workspaceToDelete = null; // Store workspace ID before confirming deletion
+
+function confirmDeleteWorkspace(workspaceId) {
+  workspaceToDelete = workspaceId; // Store ID
+  openModal("deleteWorkspaceModal"); // Show confirmation modal
+}
+
 
 function renderWorkspaces() {
-    workspaceList.innerHTML = workspaces
-        .map(
-            (workspace) => `
-        <button 
-            class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 ${currentWorkspace?.id === workspace.id ? "bg-gray-100" : ""
-                }"
-            onclick="selectWorkspace(${workspace.id})"
-        >
-            ${workspace.name}
-        </button>
+  workspaceList.innerHTML = workspaces
+    .map(
+      (workspace) => `
+        <div class="flex justify-between items-center w-full px-4 py-2 rounded-lg hover:bg-gray-200 ${currentWorkspace?.id === workspace.id ? "bg-gray-200" : ""
+        }">
+            <button class="flex-1 text-left" onclick="selectWorkspace(${workspace.id})">
+                ${workspace.name}
+            </button>
+            <button class="text-red-500 hover:text-red-700" onclick="confirmDeleteWorkspace(${workspace.id})">
+                ✖
+            </button>
+        </div>
     `
-        )
-        .join("");
+    )
+    .join("");
 }
 
+
 function selectWorkspace(workspaceId) {
-    currentWorkspace = workspaces.find((w) => w.id === workspaceId);
-    currentWorkspaceTitle.textContent = currentWorkspace.name;
-    workspaceTabs.classList.remove("hidden");
+  currentWorkspace = workspaces.find((w) => w.id === workspaceId);
+  currentWorkspaceTitle.textContent = currentWorkspace.name;
+  workspaceTabs.classList.remove("hidden");
+  renderBoards();
+}
+
+function deleteWorkspace(workspaceId) {
+  workspaces = workspaces.filter((workspace) => workspace.id !== workspaceId);
+
+  // If the deleted workspace was the selected one, reset or select another
+  if (currentWorkspace && currentWorkspace.id === workspaceId) {
+    currentWorkspace = workspaces.length > 0 ? workspaces[0] : null;
+    currentWorkspaceTitle.textContent = currentWorkspace ? currentWorkspace.name : "";
     renderBoards();
+  }
+
+  renderWorkspaces();
 }
 
 // Board Functions
 function handleAddBoard(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Ensure a workspace is selected
-    if (!currentWorkspace) {
-        alert("Please select a workspace first.");
-        return;
-    }
+  if (!currentWorkspace) {
+    alert("Please select a workspace first.");
+    return;
+  }
 
-    const formData = new FormData(e.target);
-    const board = {
-        id: Date.now(),
-        title: formData.get("title"),
-        description: formData.get("description"),
-        theme: formData.get("theme"),
-        tasks: [],
-    };
+  const formData = new FormData(e.target);
+  const board = {
+    id: Date.now(),
+    title: formData.get("title"),
+    description: formData.get("description"),
+    theme: formData.get("theme"),
+    tasks: [],
+  };
 
-    // Debugging: Check if boards array is updated
-    console.log("Before adding board:", currentWorkspace.boards);
-
-    currentWorkspace.boards.push(board);
-
-    console.log("After adding board:", currentWorkspace.boards);
-
-    renderBoards();
-    closeModal("addBoardModal");
-    e.target.reset();
+  currentWorkspace.boards.push(board);
+  renderBoards();
+  closeModal("addBoardModal");
+  e.target.reset();
 }
+
+
 
 function renderBoards() {
-    if (!currentWorkspace) {
-        boardsGrid.innerHTML = "<p>Please select a workspace to view boards.</p>";
-        return;
-    }
+  if (!currentWorkspace) {
+    boardsGrid.innerHTML = "<p>Please select a workspace to view boards.</p>";
+    return;
+  }
 
-    console.log("Rendering boards for:", currentWorkspace.name);
-
-    const boardsHTML = currentWorkspace.boards
-        .map(
-            (board) => `
+  const boardsHTML = currentWorkspace.boards
+    .map(
+      (board) => `
         <div class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer"
-             onclick="selectBoard(${board.id})"
-             style="border-top: 4px solid ${board.theme}">
+            style="background-color: ${board.theme}">
             <h3 class="font-semibold mb-2">${board.title}</h3>
-            <p class="text-sm text-gray-600">${board.description}</p>
+            <p class="text-sm text-gray-300">${board.description}</p>
         </div>
     `
-        )
-        .join("");
-    boardsGrid.innerHTML = boardsHTML + addBoardBtn.outerHTML;
-    boardsGrid.innerHTML =
-        boardsHTML +
-        `
-    <button id="addBoardBtn" class="h-48 border-2 border-dashed rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
-            onclick="openModal('addBoardModal')">
-        <div class="text-center">
-            <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            <span class="text-gray-500">Add Board</span>
-        </div>
-    </button>
-`;
-}
+    )
+    .join("");
 
-function selectBoard(boardId) {
-    currentBoard = currentWorkspace.boards.find((b) => b.id === boardId);
-    renderTasks();
+  boardsGrid.innerHTML =
+    boardsHTML +
+    ` <button id="addBoardBtn" class="h-48 rounded-lg flex items-center justify-center border-2 border-black"
+        onclick="openModal('addBoardModal')">
+        <div class="text-center hover:bg-blue-300 transition-all">
+            <svg class="w-8 h-8 mx-auto mb-2 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-line join="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <span class="text-black font-medium">Add Board</span>
+        </div>
+    </button>`;
 }
 
 // Task Functions
 function handleAddTask(e) {
-    e.preventDefault();
-    if (!currentBoard) return;
+  e.preventDefault();
+  if (!currentBoard) return;
 
-    const taskTitle = e.target.querySelector("input").value;
-    const task = {
-        id: Date.now(),
-        title: taskTitle,
-        subtasks: [],
-    };
+  const taskTitle = e.target.querySelector("input").value;
+  const task = {
+    id: Date.now(),
+    title: taskTitle,
+    subtasks: [],
+  };
 
-    currentBoard.tasks.push(task);
-    renderTasks();
-    closeModal("addTaskModal");
-    e.target.reset();
+  currentBoard.tasks.push(task);
+  renderTasks();
+  closeModal("addTaskModal");
+  e.target.reset();
 }
 
 function renderTasks() {
-    const tasksContainer = document.createElement("div");
-    tasksContainer.className =
-        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4";
+  const tasksContainer = document.createElement("div");
+  tasksContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4";
 
-    const tasksHTML = currentBoard.tasks
-        .map(
-            (task) => `
+  const tasksHTML = currentBoard.tasks
+    .map(
+      (task) => `
         <div class="bg-white p-4 rounded-lg shadow-sm border">
             <h4 class="font-medium">${task.title}</h4>
             <div class="mt-2 space-y-1">
-                ${task.subtasks
-                    .map(
-                        (subtask) => `
-                    <div class="text-sm text-gray-600">${subtask.title}</div>
-                `
-                    )
-                    .join("")}
+                ${task.subtasks.map((subtask) => `<div class="text-sm text-gray-600">${subtask.title}</div>`).join("")}
             </div>
             <button class="mt-2 text-sm text-blue-500 hover:text-blue-600"
                     onclick="openAddSubtaskModal(${task.id})">
@@ -215,32 +232,24 @@ function renderTasks() {
             </button>
         </div>
     `
-        )
-        .join("");
+    )
+    .join("");
 
-    tasksContainer.innerHTML =
-        tasksHTML +
-        `
-        <button id="addTaskBtn" class="h-48 border-2 border-dashed rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
-                onclick="openModal('addTaskModal')">
-            <div class="text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                <span class="text-gray-500">Add New Task</span>
-            </div>
-        </button>
-    `;
+  tasksContainer.innerHTML =
+    tasksHTML +
+    `<button id="addTaskBtn" class="h-48 border-2 border-dashed rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+            onclick="openModal('addTaskModal')">
+        <div class="text-center">
+            <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <span class="text-gray-500">Add New Task</span>
+        </div>
+    </button>`;
 
-    boardsGrid.innerHTML = "";
-    boardsGrid.appendChild(tasksContainer);
+  boardsGrid.innerHTML = "";
+  boardsGrid.appendChild(tasksContainer);
 }
 
-// Subtask Functions
-function openAddSubtaskModal(taskId) {
-    // Implement subtask modal and functionality
-    console.log("Open subtask modal for task:", taskId);
-}
-
-// Initialize the app
+// Initialize
 renderWorkspaces();

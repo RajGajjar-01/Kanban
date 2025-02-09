@@ -1,164 +1,155 @@
 {% extends "board/Base.html" %}
 
 {% block content %}
-    <div class="font-poppins">
-        <nav class="fixed w-full px-6 py-4 bg-slate-50 shadow-md" data-aos="fade-down" data-aos-duration="300">
-            <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <!-- Logo -->
-                <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Logo</a>
-    
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden p-2" id="mobile-menu-button">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
-                        </path>
-                    </svg>
+<div class="font-poppins bg-violet-300 min-h-screen">
+    <nav class="fixed w-full py-4 bg-slate-50 shadow-md" data-aos="fade-down" data-aos-duration="300">
+        <div class="mx-auto flex items-center justify-between px-8">
+            <!-- Logo -->
+            <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Logo</a>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden p-2" id="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Navigation Links - Modified for mobile -->
+            <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
+                <div
+                    class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
+                    <a href="#" class="text-gray-700 hover:text-gray-950 transition-colors">Blogs</a>
+
+                    <!-- Buttons -->
+                    <a href="{% url 'user-profile' %}"
+                        class="font-semibold bg-rose-400 rounded-[50%] text-white transition-all">
+                        <div class="h-12 w-12 flex justify-center items-center">
+                            {{user_initial}}
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class=" mx-auto px-4 pt-[6.2rem]">
+        <div class="flex h-[calc(100vh-6.8rem)]">
+            <aside class="w-[20rem] bg-white shadow-md p-4 rounded-lg">
+                <h2 class="text-xl font-semibold mb-4">Workspaces</h2>
+                <button id="addWorkspaceBtn"
+                    class="mt-4 w-full py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500 transition-colors duration-200">
+                    + Add Workspace
                 </button>
-    
-                <!-- Navigation Links - Modified for mobile -->
-                <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
-                    <div class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
-                        <a href="#" class="text-gray-700 hover:text-gray-950 transition-colors">Blogs</a>
-    
-                        <!-- Buttons -->
-                        <a href="{% url 'user-profile' %}"
-                            class="font-semibold bg-rose-400 rounded-[50%] text-white transition-all">
-                            <div class="h-12 w-12 flex justify-center items-center">
+                <div id="workspaceList" class="space-y-2 mt-4"></div>
+            </aside>
 
-                                {{user_initial}}
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <div class="pt-[5.8rem]">
+            <main class="flex-1 p-6">
+                <h1 id="currentWorkspaceTitle" class="text-3xl font-semibold"></h1>
 
-        </div>
-        <div class="flex">
-            <!-- Sidebar -->
-            <div class="w-64 bg-white border-r flex flex-col">
-                <!-- Workspace Header -->
-                <div class="p-4 border-b">
-                    <div class="flex items-center justify-between">
-                        <h2 class="font-semibold text-lg">Workspaces</h2>
-                        <button id="addWorkspaceBtn" class="p-2 hover:bg-gray-100 rounded-lg">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                            </svg>
-                        </button>
-                    </div>
+                <div id="workspaceTabs" class="hidden mt-4 border-b border-gray-200 flex font-medium">
+                    <button
+                        class="tab-btn px-4 py-2 border-b-2 border-transparent hover:border-rose-500 hover:text-rose-600 transition-colors"
+                        data-tab="boards">
+                        Boards
+                    </button>
+                    <button
+                        class="tab-btn px-4 py-2 border-b-2 border-transparent hover:border-rose-500 hover:text-rose-600 transition-colors"
+                        data-tab="members">
+                        Members
+                    </button>
+                    <button
+                        class="tab-btn px-4 py-2 border-b-2 border-transparent hover:border-rose-500 hover:text-rose-600 transition-colors"
+                        data-tab="activites">
+                        Activities
+                    </button>
                 </div>
-    
-                <!-- Workspace List -->
-                <div id="workspaceList" class="flex-1 overflow-y-auto p-2 space-y-1">
-                    <!-- Workspaces will be added here dynamically -->
+
+                <div id="boardsGrid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 </div>
-            </div>
-    
-            <!-- Main Content -->
-            <div class="flex-1 flex flex-col">
-                <!-- Header -->
-                <header class="bg-white border-b p-4">
-                    <h1 id="currentWorkspaceTitle" class="text-xl font-semibold">Select a Workspace</h1>
-                </header>
-    
-                <!-- Content Area -->
-                <main class="flex-1 overflow-auto p-6">
-                    <!-- Tabs -->
-                    <div id="workspaceTabs" class="hidden mb-6">
-                        <div class="border-b">
-                            <nav class="flex space-x-8">
-                                <button class="tab-btn active px-4 py-2 border-b-2 border-transparent" data-tab="boards">
-                                    Boards
-                                </button>
-                                <button class="tab-btn px-4 py-2 border-b-2 border-transparent" data-tab="members">
-                                    Members
-                                </button>
-                                <button class="tab-btn px-4 py-2 border-b-2 border-transparent" data-tab="activities">
-                                    Activities
-                                </button>
-                            </nav>
-                        </div>
-                    </div>
-    
-                    <!-- Boards Grid -->
-                    <div id="boardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <!-- Boards will be added here dynamically -->
-                        <button id="addBoardBtn" class="h-48 border-2 border-dashed rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
-                            <div class="text-center">
-                                <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
-                                <span class="text-gray-500">Add Board</span>
-                            </div>
-                        </button>
-                    </div>
-                </main>
-            </div>
+
+                <button id="addBoardBtn" class="hidden mt-4 py-2 px-4">
+                    + Add Board
+                </button>
+            </main>
         </div>
-    
-        <!-- Modals -->
-        <!-- Add Workspace Modal -->
-        <div id="addWorkspaceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">Create New Workspace</h3>
+
+        <div id="addWorkspaceModal"
+            class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-[36rem]">
+                <h3 class="text-lg font-semibold mb-4">Add Workspace</h3>
                 <form id="addWorkspaceForm">
-                    <div class="mb-4">
-                        <label id="{{workspace_modal.workspace_name.id_for_label}}" class="block text-sm font-medium mb-1">Workspace Name</label>
-                        {{workspace_modal.workspace_name}}
-                    </div>
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" onclick="closeModal('addWorkspaceModal')">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Continue</button>
+                    <input type="text" placeholder="Workspace Name" required
+                        class="w-full p-2 border rounded-lg mb-4" />
+                    <div class="flex justify-end">
+                        <button type="button" onclick="closeModal('addWorkspaceModal')" class="px-4 py-2 text-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500 transition-colors duration-200">
+                            Add
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    
-        <!-- Add Board Modal -->
-        <div id="addBoardModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">Create New Board</h3>
+
+        <div id="addBoardModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-[36rem]">
+                <h3 class="text-lg font-semibold mb-4">Add Board</h3>
                 <form id="addBoardForm">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Board Title</label>
-                            <input type="text" required class="w-full p-2 border rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Description</label>
-                            <textarea class="w-full p-2 border rounded-lg" rows="3"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Theme Color</label>
-                            <input type="color" class="w-full p-1 border rounded-lg">
-                        </div>
-                    </div>
-                    <div class="flex justify-end space-x-2 mt-6">
-                        <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" onclick="closeModal('addBoardModal')">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Continue</button>
+                    <input type="text" name="title" placeholder="Board Title" required
+                        class="w-full p-2 border rounded-lg mb-4" />
+                    <input type="text" name="description" placeholder="Description"
+                        class="w-full p-2 border rounded-lg mb-4" />
+                    <input type="color" name="theme" defaultValue="#3498db" class="w-full p-2 border rounded-lg mb-4" />
+                    <div class="flex justify-end">
+                        <button type="button" onclick="closeModal('addBoardModal')" class="px-4 py-2 text-gray-500">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                            class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500 transition-colors duration-200">
+                            Add
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    
-        <!-- Add Task Modal -->
-        <div id="addTaskModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">Create New Task</h3>
+
+        <div id="addTaskModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">Add Task</h3>
                 <form id="addTaskForm">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Task Title</label>
-                        <input type="text" required class="w-full p-2 border rounded-lg">
-                    </div>
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" onclick="closeModal('addTaskModal')">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Continue</button>
+                    <input type="text" placeholder="Task Title" required class="w-full p-2 border rounded-lg mb-4" />
+                    <div class="flex justify-end">
+                        <button type="button" onclick="closeModal('addTaskModal')" class="px-4 py-2 text-gray-500">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                            class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500 transition-colors duration-200">
+                            Add
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    
     </div>
+
+    <div id="deleteWorkspaceModal"
+        class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-[30rem]">
+            <h3 class="text-lg font-semibold mb-4">Confirm Deletion</h3>
+            <p class="text-gray-600">Are you sure you want to delete this workspace?</p>
+            <div class="flex justify-end mt-4">
+                <button type="button" onclick="closeModal('deleteWorkspaceModal')" class="px-4 py-2 text-gray-500">
+                    Cancel
+                </button>
+                <button id="confirmDeleteWorkspace" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors duration-200">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
