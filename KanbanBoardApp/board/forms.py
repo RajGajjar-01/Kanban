@@ -17,6 +17,15 @@ class ContactForm(forms.Form):
     message = forms.CharField(label='Your Message', widget=forms.Textarea(attrs={'rows': 4}), required=True)
 
 class WorkspaceModalForm(forms.ModelForm):
+
     class Meta:
         model = Workspace
         fields = ['workspace_name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+        self.fields['workspace_name'].widget.attrs.update({
+            'placeholder' : "Workspace Name",
+            'class' : 'w-full p-2 border rounded-lg mb-4',
+        })
