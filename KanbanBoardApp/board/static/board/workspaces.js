@@ -16,6 +16,13 @@ const workspaceTabs = document.getElementById("workspaceTabs");
 
 addWorkspaceBtn.addEventListener("click", () => openModal("addWorkspaceModal"));
 cancelWorkspaceBtn.addEventListener("click", () => closeModal("addWorkspaceModal"));
+document.getElementById("confirmDeleteWorkspace").addEventListener("click", function () {
+    if (workspaceToDelete !== null) {
+        deleteWorkspace(workspaceToDelete); // ✅ Use workspaceToDelete
+        workspaceToDelete = null;
+        closeModal("deleteWorkspaceModal");
+    }
+});
 addWorkspaceForm.addEventListener("submit", handleAddWorkspace);
 cancelDeleteWorkspaceBtn.addEventListener("click", () => closeModal("deleteWorkspaceModal"))
 
@@ -44,11 +51,11 @@ export function renderWorkspaces() {
     });
 
     workspaces.forEach((workspace) => {
-        const deleteButton = document.getElementById(`delete-${workspace.id}`)
+        const deleteButton = document.getElementById(`delete-${workspace.id}`);
         if (deleteButton) {
-            deleteButton.addEventListener("click", ()=>confirmDeleteWorkspace(workspace.id))
+            deleteButton.addEventListener("click", () => confirmDeleteWorkspace(workspace.id)); // ✅ Pass workspace ID
         }
-    });
+    });    
 }
 
 async function handleAddWorkspace(e) {
@@ -80,8 +87,8 @@ async function handleAddWorkspace(e) {
 }
 
 function confirmDeleteWorkspace(workspaceId) {
-    workspaceToDelete = workspaceId; // Store ID
-    openModal("deleteWorkspaceModal"); // Show confirmation modal
+    workspaceToDelete = workspaceId;  // ✅ Store the workspace ID
+    openModal("deleteWorkspaceModal"); // ✅ Open modal
 }
 
 function selectWorkspace(workspaceId) {
@@ -93,15 +100,31 @@ function selectWorkspace(workspaceId) {
 }
 
 function deleteWorkspace(workspaceId) {
-    workspaces = workspaces.filter((workspace) => workspace.id !== workspaceId);
-
-    if (currentWorkspace && currentWorkspace.id === workspaceId) {
-        currentWorkspace = workspaces.length > 0 ? workspaces[0] : null;
-        currentWorkspaceTitle.textContent = currentWorkspace ? currentWorkspace.name : "";
-        renderBoards();
-    }
-    renderWorkspaces();
+    fetch('/delete-workspace/', {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRFToken() },
+        body: JSON.stringify({ workspace_id: workspaceId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Response:", data);
+        if (data.success) {
+            alert("Workspace deleted!");
+            location.reload();
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => console.error("Error deleting workspace:", error));
 }
+
+// Function to get CSRF token from cookies
+function getCSRFToken() {
+    return document.cookie.split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+}
+
 
 document.getElementById("confirmDeleteWorkspace").addEventListener("click", function () {
     if (workspaceToDelete !== null) {

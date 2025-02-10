@@ -58,4 +58,25 @@ def get_all_workspaces_view(request):
 
 @login_required
 def delete_workspace_view(request):
-    pass
+    if request.method == "DELETE":
+        print("DELETE request received")
+        try:
+            import json
+            data = json.loads(request.body) 
+            workspace_id = data.get("workspace_id") 
+
+            
+            workspace = models.Workspace.objects.filter(id=workspace_id, created_by=request.user).first()
+
+            if workspace:
+                workspace.delete()
+                return JsonResponse({"success": True, "message": "Workspace deleted successfully."})
+            else:
+                return JsonResponse({"success": False, "message": "Workspace not found or unauthorized."}, status=404)
+        
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    
+    return JsonResponse({"success": False, "message": "Invalid request method. Use DELETE."}, status=400)
+
+   
