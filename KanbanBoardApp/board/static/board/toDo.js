@@ -1,8 +1,8 @@
-import { openModal, closeModal, getCookie} from "./utils.js";
+import { openModal, closeModal, getCookie } from "./utils.js";
 
 let workspaces = [];
 let currentWorkspace = null;
-let workspaceToDelete = null; 
+let workspaceToDelete = null;
 
 const workspaceList = document.getElementById("workspaceList");
 const addWorkspaceBtn = document.getElementById("addWorkspaceBtn");
@@ -25,32 +25,35 @@ export function renderWorkspaces() {
     workspaceList.innerHTML = workspaces
         .map(
             (workspace) => `
-                <div class="flex justify-between border items-center w-full px-4 py-2 rounded-lg hover:bg-gray-200 ${currentWorkspace?.id === workspace.id ? 'bg-gray-100' : ""}">
-                    <button id="select-${workspace.id}">
-                        ${workspace.name}
-                    </button>
-                    <button id="delete-${workspace.id}">
-                        ${svg}
-                    </button>
-                </div>
-    `).join("");
+          <div class="flex justify-between items-center w-full px-4 py-2 rounded-lg hover:bg-gray-100 ${currentWorkspace?.id === workspace.id ? "bg-gray-100" : ""
+                }">
+              <button class="flex-1 text-left" id="select-${workspace.id}">
+                  ${workspace.name}
+              </button>
+              <button class="text-red-500 hover:text-red-700" onclick="confirmDeleteWorkspace(${workspace.id})">
+                  ${svg}
+              </button>
+          </div>
+      `
+        )
+        .join("");
 
     workspaces.forEach((workspace) => {
         const selectButton = document.getElementById(`select-${workspace.id}`)
         if (selectButton) {
-            selectButton.addEventListener("click", ()=>selectWorkspace(workspace.id))
+            selectButton.addEventListener("click", () => selectWorkspace(workspace.id))
         }
     });
 
     workspaces.forEach((workspace) => {
         const deleteButton = document.getElementById(`delete-${workspace.id}`)
         if (deleteButton) {
-            deleteButton.addEventListener("click", ()=>confirmDeleteWorkspace(workspace.id))
+            deleteButton.addEventListener("click", () => confirmDeleteWorkspace(workspace.id))
         }
     });
 }
 
-async function handleAddWorkspace(e) {
+function handleAddWorkspace(e) {
     e.preventDefault();
 
     const formData = new FormData(this);
@@ -62,15 +65,15 @@ async function handleAddWorkspace(e) {
             'X-CSRFToken': formData.get('csrfmiddlewaretoken')
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            fetchWorkspaces()
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                fetchWorkspaces()
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
 
     closeModal("addWorkspaceModal");
     selectWorkspace()
@@ -82,10 +85,32 @@ function confirmDeleteWorkspace(workspaceId) {
     openModal("deleteWorkspaceModal"); // Show confirmation modal
 }
 
-function selectWorkspace(workspaceId) {
+async function selectWorkspace(workspaceId) {
     currentWorkspace = workspaces.find((w) => w.id === workspaceId);
     currentWorkspaceTitle.textContent = currentWorkspace.name;
     workspaceTabs.classList.remove("hidden");
+    console.log("select")
+    try {
+        const response = await fetch(`/api/workspace-${workspaceId}/get-boards/`, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        console.log('Hello Board')
+        const data = await response.json();
+        if (data.success) {
+            console.log(data);
+        } else {
+            console.error('Error fetching boards:', data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching boards:', error);
+    }
     renderBoards();
 }
 
@@ -135,9 +160,9 @@ async function fetchWorkspaces() {
             workspaces = data.workspaces.map(workspace => ({
                 id: workspace.id,
                 name: workspace.workspace_name,
-                boards: [], 
+                boards: [],
             }));
-            renderWorkspaces(); 
+            renderWorkspaces();
             console.log(workspaces[0].id);
             selectWorkspace(workspaces[0].id);
         } else {
@@ -155,7 +180,7 @@ const addBoardModal = document.getElementById("addBoardModal");
 const addBoardForm = document.getElementById("addBoardForm");
 const currentWorkspaceTitle = document.getElementById("currentWorkspaceTitle");
 addBoardForm.addEventListener("submit", handleAddBoard);
-addBoardBtn.addEventListener("click", ()=>openModal("addBoardModal"))
+addBoardBtn.addEventListener("click", () => openModal("addBoardModal"))
 
 
 function handleAddBoard(e) {
@@ -173,7 +198,7 @@ function handleAddBoard(e) {
         description: formData.get("description"),
         theme: formData.get("theme"),
     };
-  
+
     currentWorkspace.boards.push(board);
     renderBoards();
     closeModal("addBoardModal");
@@ -185,7 +210,7 @@ async function renderBoards() {
         boardsGrid.innerHTML = "<p>Please select a workspace to view boards.</p>";
         return;
     }
-    
+    console.log("HII")
     const boardsHTML = currentWorkspace.boards
         .map(
             (board) => `
@@ -199,10 +224,11 @@ async function renderBoards() {
 }
 
 function switchTab(tabName) {
+    console.log(tabName)
     document.querySelectorAll(".tab-btn").forEach((btn) => {
-        btn.classList.remove("active", "border-blue-500", "text-blue-600");
+        btn.classList.remove("text-rose-600", "border-rose-600");
         if (btn.dataset.tab === tabName) {
-            btn.classList.add("active", "border-blue-500", "text-blue-600");
+            btn.classList.add("text-rose-600", "border-rose-600");
         }
     });
 

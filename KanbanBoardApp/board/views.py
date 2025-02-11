@@ -82,4 +82,8 @@ def get_all_boards_view(request, pk):
 def create_board_view(request):
     pass
 
+def api_board_view(request, pk):
+    if request.method == 'GET':
+        pass
+
 
