@@ -14,6 +14,7 @@ class Workspace(models.Model):
     @property
     def user_list(self):
             return Board.objects.filter(workspace=self).values_list('user__username', flat=True)
+    
 
 class Board(models.Model):
     user             = models.ManyToManyField(User, through='BoardMember', related_name='user')
@@ -24,7 +25,7 @@ class Board(models.Model):
         max_length=255,
         default = "linear-gradient(to right, #ff7e5f, #feb47b)"
     )
-    workspace        = models.ForeignKey(Workspace, on_delete=models.CASCADE)
+    workspace        = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name='boards')
 
     def save(self, *args, **kwargs):
         # Save the board instance

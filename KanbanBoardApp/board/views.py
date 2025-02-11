@@ -31,6 +31,10 @@ def contact_success_view(request):
     return render(request, 'board/Success.html')
 
 @login_required
+def board_view(request):
+    pass
+
+@login_required
 def save_workspace_view(request):
     if request.method == "POST":
         workspace_modal_form = forms.WorkspaceModalForm(request.POST)
@@ -59,3 +63,23 @@ def get_all_workspaces_view(request):
 @login_required
 def delete_workspace_view(request):
     pass
+
+@login_required
+def get_all_boards_view(request, pk):
+    if request.method == 'GET':
+        try:
+            boards = models.Board.objects.filter(workspace=pk).values(
+                'name', 'created_date', 'description', 'background_color', 'workspace'
+            )
+            board_list = list(boards)
+
+            return JsonResponse({"success": True, "board": board_list})
+        
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid method. Use GET to fetch workspaces."}, status=400)
+
+def create_board_view(request):
+    pass
+
+

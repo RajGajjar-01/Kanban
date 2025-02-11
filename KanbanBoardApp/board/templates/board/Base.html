@@ -21,12 +21,12 @@
     <div>
         {% block content %}{% endblock %}
     </div>
-    <script src="{% static 'board/toDo.js' %}" type="module"></script>
-
+    
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
-      AOS.init();
-    </script>
+        AOS.init();
+        </script>
+    <script src="{% static 'board/toDo.js' %}" type="module"></script>
 </body>
 
 </html>
