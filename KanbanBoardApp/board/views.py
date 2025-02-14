@@ -8,12 +8,12 @@ def landing_view(request):
 
 @login_required
 def home_view(request):
+    board_modal_form = forms.BoardModalForm(auto_id=True)
     workspace_modal_form = forms.WorkspaceModalForm(auto_id=True)
-    user_initial = request.user.username[:1].upper()
     context = {
-        'user_initial': user_initial,
         'hello': 'I am raj',
         'createworkspace': workspace_modal_form,
+        'createboard': board_modal_form,
     }
     return render(request, 'board/Home.html', context)
 
@@ -69,7 +69,7 @@ def get_all_boards_view(request, pk):
     if request.method == 'GET':
         try:
             boards = models.Board.objects.filter(workspace=pk).values(
-                'name', 'created_date', 'description', 'background_color', 'workspace'
+                'id', 'name', 'created_date', 'description', 'background_color', 'workspace'
             )
             board_list = list(boards)
 
@@ -79,11 +79,26 @@ def get_all_boards_view(request, pk):
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid method. Use GET to fetch workspaces."}, status=400)
 
-def create_board_view(request):
-    pass
+@login_required
+def create_board_view(request, pk):
+    if request.method == "POST":
+        try:
+            data = request.POST.copy()
+            workspace = models.Workspace.objects.filter(pk=pk).first()
+            data['workspace'] = workspace
+            print(data)
+            form = forms.BoardModalForm(data)
+            if form.is_valid():
+                board = form.save()
+            return JsonResponse({"success": True, "board": "b"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
+
+def board_data_view(request, pk ,id):
+    if request.method == 'GET':
+        return render(request, 'board/BoardIn.html')
 
 def api_board_view(request, pk):
     if request.method == 'GET':
         pass
-
-

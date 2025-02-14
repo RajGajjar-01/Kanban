@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_browser_reload',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,10 +35,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
-    #  Tailwind
-    'tailwind',
-    'theme',
-    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +126,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -160,13 +157,8 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = '/user/login/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-# Tailwind
-TAILWIND_APP_NAME = 'theme'
-INTERNAL_IPS = ['127.0.0.1']
 
 # Mail Related
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

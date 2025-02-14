@@ -136,12 +136,3 @@ class CardAttachment(models.Model):
     def __str__(self):
         return f"{self.card.card_name} - {self.name} - {self.uploaded_date}"
 
-
-
-
-    
-
-
-
-
-
