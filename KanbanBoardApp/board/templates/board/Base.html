@@ -45,7 +45,7 @@
     </style>
 </head>
 
-<body style="font-family: 'Poppins';">
+<body style="font-family: 'Poppins';" class="bg-violet-300">
     <div>
         {% block content %}{% endblock %}
     </div>
@@ -53,9 +53,9 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         AOS.init();
-        </script>
-    <script src="{% static 'js/toDo.js' %}" type="module"></script>
-    <script src="{% static 'js/boardIn.js' type="module" %}"></script>
+    </script>
+    <script src="{% static 'js/toDo.js' %}?v=1.0.1" type="module"></script>
+    <script src="{% static 'js/boardIn.js' %}?v=1.0.1" type="module"></script>
 </body>
 
 </html>

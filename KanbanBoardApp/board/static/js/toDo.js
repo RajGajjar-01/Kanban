@@ -1,7 +1,6 @@
 import { openModal, closeModal, getCookie } from "./utils.js";
 
-console.log("Hello");
-let workspaces = [];
+export let workspaces = [];
 let currentWorkspace = null;
 let workspaceToDelete = null;
 
@@ -86,7 +85,7 @@ function confirmDeleteWorkspace(workspaceId) {
     openModal("deleteWorkspaceModal"); 
 }
 
-async function selectWorkspace(workspaceId) {
+export async function selectWorkspace(workspaceId) {
     currentWorkspace = workspaces.find((w) => w.id === workspaceId);
     currentWorkspaceTitle.textContent = currentWorkspace.name;
     workspaceTabs.classList.remove("hidden");   
@@ -131,6 +130,7 @@ async function deleteWorkspace() {
             }
             const data = await response.json();
             if (data.success) {
+                console.log(data.message)
                 if (currentWorkspace && currentWorkspace.id === workspaceToDelete) {
                     currentWorkspace = workspaces.length > 0 ? workspaces[0] : null;
                     currentWorkspaceTitle.textContent = currentWorkspace ? currentWorkspace.name : "";
@@ -179,7 +179,8 @@ async function fetchWorkspaces() {
     }
 }
 
-let currentBoard = null;
+export let currentBoard = null;
+
 const boardsGrid = document.getElementById("boardsGrid");
 const addBoardModal = document.getElementById("addBoardModal");
 const addBoardForm = document.getElementById("addBoardForm");
@@ -257,6 +258,8 @@ async function renderBoards() {
         const boardbtn = document.getElementById(`${board.id}`);
         if (boardbtn) {
             boardbtn.addEventListener("click", ()=>{
+                currentBoard = board;
+                console.log(currentBoard);
                 window.location.href = `/workspace/${currentWorkspace.id}/get-board/${board.id}`;
             });
         }

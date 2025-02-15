@@ -57,8 +57,8 @@ class BoardMember(models.Model):
         return f"{self.user.username} - {self.board.name}"
 
 class List(models.Model):
-    board         = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
-    list_name     = models.CharField(max_length=255, default="Todo")
+    board         = models.ForeignKey(Board, on_delete=models.CASCADE, null=True, related_name='boardlists')
+    list_name     = models.CharField(max_length=255)
     list_position = models.IntegerField(default=0)
 
     def __str__(self):

@@ -13,4 +13,7 @@ urlpatterns = [
     path('api/workspace-<int:pk>/create-board/', views.create_board_view, name='create_board'),
     path('api/get-board/<int:pk>/',views.api_board_view, name='get-lists-by-board   '),
     path('workspace/<int:pk>/get-board/<int:id>/', views.board_data_view, name='get-board-by-id'),
+    path('api/board-<int:pk>/get-lists/', views.api_get_lists_view, name='get-lists-by-board'),
+    path('api/board/create-list/', views.create_list_view, name='create_list'),
+    
 ]   
