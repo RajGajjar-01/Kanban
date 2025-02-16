@@ -73,6 +73,31 @@ async function createListo(e) {
     }    
 }
 
+async function deleteList(listId) {
+    try {
+        const response = await fetch(`/api/board/delete-list-${listId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (data.success) {
+            console.log('Task deleted successfully');
+            fetchLists();
+        } else {
+            console.error('Error deleting task:', data.message);
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
+    }
+}
+
 function createList(listName) {
     listCounter++;
     const list = document.createElement("div");
@@ -98,23 +123,6 @@ function createList(listName) {
     list.addEventListener("dragstart", dragStart);
     list.addEventListener("dragover", dragOver);
     list.addEventListener("drop", drop);
-
-    list.querySelector(".add-task").addEventListener("click", () => {
-        selectedList = list;
-        document.getElementById("task-modal").classList.remove("hidden");
-    });
-
-    list.querySelector(".rename-list").addEventListener("click", () => {
-        selectedList = list;
-        const listName = list.querySelector("h3").innerText;
-        document.getElementById("edit-list-name").value = listName;
-        document.getElementById("edit-list-modal").classList.remove("hidden");
-    });
-
-    list.querySelector(".delete-list").addEventListener("click", () => {
-        selectedList = list;
-        document.getElementById("delete-list-modal").classList.remove("hidden");
-    });
 
     return list;
 }
@@ -159,7 +167,7 @@ function addTask(list, taskName) {
         selectedTask = task;
         const taskName = task.querySelector(".task-text").innerText;
         document.getElementById("edit-task-name").value = taskName;
-        document.getElementById("edit-task-modal").classList.remove("hidden");
+        openModal("edit-task-modal");
     });
 
     taskContainer.appendChild(task);
@@ -180,8 +188,9 @@ document.getElementById("close-edit-list-modal").addEventListener("click", () =>
 
 document.getElementById("confirm-delete-list").addEventListener("click", () => {
     if (selectedList) {
-        selectedList.remove();
-        document.getElementById("delete-list-modal").classList.add("hidden");
+        console.log(selectedList)
+        deleteList(selectedList.id);
+        closeModal("delete-list-modal");
     }
 });
 
@@ -215,6 +224,22 @@ function addDefaultLists(lists) {
     defaultLists.forEach(listName => {
         const list = createList(listName.list_name);
         listContainer.appendChild(list);
+        list.querySelector(".add-task").addEventListener("click", () => {
+            selectedList = listName;
+            openModal("task-modal");
+        });
+    
+        list.querySelector(".rename-list").addEventListener("click", () => {
+            selectedList = listName;
+            const listName = list.querySelector("h3").innerText;
+            document.getElementById("edit-list-name").value = listName;
+            openModal("edit-list-modal");
+        });
+    
+        list.querySelector(".delete-list").addEventListener("click", () => {
+            selectedList = listName;
+            openModal("delete-list-modal");
+        });
     });
     listContainer.appendChild(createAddListCard());
     listArray.push(...lists);
@@ -231,7 +256,7 @@ function createAddListCard() {
         </div>
     `;
     addListDiv.addEventListener("click", () => {
-        document.getElementById("list-modal").classList.remove("hidden");
+        openModal("list-modal");
     });
     return addListDiv;
 }
