@@ -120,7 +120,7 @@ async function deleteWorkspace() {
         workspaces = workspaces.filter((workspace) => workspace.id !== workspaceToDelete);
 
         try {
-            const response = await fetch(`/api/workspace-${workspaceToDelete}/delete/`, {
+            const response = await fetch(`/api/workspace/${workspaceToDelete}/delete/`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken'),
@@ -136,7 +136,7 @@ async function deleteWorkspace() {
                     currentWorkspaceTitle.textContent = currentWorkspace ? currentWorkspace.name : "";
                     fetchWorkspaces();
                 }
-                fetchWorkspaces();
+                await fetchWorkspaces();
                 closeModal("deleteWorkspaceModal");
                 workspaceToDelete = null;
                 renderBoards();

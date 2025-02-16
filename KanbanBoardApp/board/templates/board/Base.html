@@ -17,7 +17,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                primary: "#6C63FF",
+                "hero-purple": "#B4B1E8",
+                "button-purple": "#6C63FF",
+                "hero-purple": "#B4B1E8",
+                "feature-red": "#FF6B6B",
+                "feature-purple": "#6C63FF",
+                "feature-green": "#4CD964",
+                "feature-yellow": "#FFB946",
+              },
+              fontFamily: {
+                sans: ["Inter", "sans-serif"],
+              },
+            },
+          },
+        };
+      </script>
     <style>
+        body{
+            overflow-x: hidden;
+        }
+
         /* Custom scrollbar styles */
         ::-webkit-scrollbar {
             width: 8px;
@@ -42,6 +67,19 @@
             background: #555;
             /* Color of the scrollbar thumb on hover */
         }
+
+          /* Hide horizontal scrollbar */
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari, and Opera */
+    }
     </style>
 </head>
 

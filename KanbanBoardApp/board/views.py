@@ -2,6 +2,9 @@ from django.shortcuts import render
 from . import forms, models
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from .models import Workspace
+from django.shortcuts import get_object_or_404
+
 
 def landing_view(request):
     return render(request, 'board/Landing.html')    
@@ -61,8 +64,13 @@ def get_all_workspaces_view(request):
     return JsonResponse({"success": False, "message": "Invalid method. Use GET to fetch workspaces."}, status=400)
 
 @login_required
-def delete_workspace_view(request):
-    pass
+def delete_workspace_view(request, pk):
+    if request.method == "DELETE":
+        workspace = get_object_or_404(Workspace, id=pk)
+        workspace.delete()
+        return JsonResponse({"message": "Workspace deleted successfully"}, status=200)
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
 
 @login_required
 def get_all_boards_view(request, pk):
