@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="font-poppins bg-violet-300 min-h-screen">
-    <nav class="fixed w-full py-2 bg-slate-50 shadow-md" data-aos="fade-down" data-aos-duration="300">
+    <nav class="fixed w-full py-1 bg-slate-50 shadow-md" data-aos="fade-down" data-aos-duration="300">
         <div class="mx-auto flex items-center justify-between px-8">
             <!-- Logo -->
             <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Logo</a>
@@ -32,7 +32,7 @@
             </div>
         </div>
     </nav>
-    <div class=" mx-auto px-4 pt-[5.2rem]">
+    <div class=" mx-auto px-4 pt-[5rem]">
         <div class="flex h-[calc(100vh-5.8rem)]">
             <aside class="w-[20rem] bg-white shadow-md rounded-lg overflow-y-auto">
                 <h2 class="text-xl font-semibold my-4 mx-4 italic">Workspaces</h2>
@@ -91,7 +91,7 @@
         <div id="addBoardModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg shadow-lg w-[36rem]">
                 <h3 class="text-lg font-semibold mb-4">Add Board</h3>
-                <form id="addBoardForm" method="post" action="">
+                <form id="addBoardForm" method="post">
                     {% csrf_token %}
                     {{ createboard.name }}
                     {{ createboard.description }}                                           

@@ -104,14 +104,13 @@ def create_board_view(request, pk):
     return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
 
 def board_data_view(request, pk ,id):
-    if request.method == 'GET':
-        list_modal_form = forms.ListModalForm(auto_id=True)
-        board = models.Board.objects.filter(id = id).first()
-        context = {
-            'board': board,
-            'createList': list_modal_form,
-        }
-        return render(request, 'board/BoardIn.html', context)
+    list_modal_form = forms.ListModalForm(auto_id=True)
+    board = models.Board.objects.filter(id = id).first()
+    context = {
+        'board': board,
+        'createList': list_modal_form,
+    }
+    return render(request, 'board/BoardIn.html', context)
 
 def api_board_view(request, pk):
     if request.method == 'GET':
@@ -131,8 +130,7 @@ def api_get_lists_view(request, pk):
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
 
-@csrf_exempt
-def create_list_view(request):
+def api_create_list_view(request):
     if request.method == 'POST':
         try:
             print(request.POST)
@@ -144,3 +142,14 @@ def create_list_view(request):
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid request method"}, status=400)
+
+def api_delete_list_view(request, pk):
+    if request.method == 'DELETE':
+        try: 
+            list_to_delete = models.List.objects.filter(pk=pk).first()
+            if list_to_delete:
+                list_to_delete.delete()
+                return JsonResponse({"success": True, "message": "List deleted"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400)  

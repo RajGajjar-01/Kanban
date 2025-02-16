@@ -1,12 +1,11 @@
 {% extends "board/Base.html" %}
 {% block content %}
 <div class="min-h-screen">
-    <nav class="fixed w-full py-2 bg-slate-50 shadow-md" data-aos="fade-down" data-aos-duration="300">
+    <nav class="fixed w-full py-1 bg-slate-50 shadow-md">
         <div class="mx-auto flex items-center justify-between px-8">
             <!-- Logo -->
             <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Logo</a>
 
-            <!-- Mobile Menu Button -->
             <button class="md:hidden p-2" id="mobile-menu-button">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
@@ -14,7 +13,6 @@
                 </svg>
             </button>
 
-            <!-- Navigation Links - Modified for mobile -->
             <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
                 <div
                     class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
@@ -31,8 +29,8 @@
             </div>
         </div>
     </nav>
-    <div class=" mx-auto px-4 pt-[5.2rem]">
-        <div class="flex h-[calc(100vh-5.8rem)]">
+    <div class="mx-auto px-4 pt-[5rem]">
+        <div class="flex h-[calc(100vh-5.6rem)]">
             <aside id="sidebar" class="w-[20rem] flex-shrink-0 bg-white text-gray-800 border border-black rounded-lg shadow-md transition-all duration-[250ms] ease-in-out">
                 <div class="py-4 font-bold whitespace-nowrap rounded-lg text-center" id="wsp">
                     <span>{{board.workspace.workspace_name}}</span> <span class="text-gray-500 font-normal">- {{board.workspace.created_by}}</span>
@@ -41,7 +39,7 @@
 
                 <nav id="sidebar-nav">
                     <ul>
-                        <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-100 rounded ">Workspace</a></li>
+                        <li class="mb-2"><a href="{% url 'board-home' %}" class="block p-2 hover:bg-gray-100 rounded ">Workspaces</a></li>
                         <li class="mb-2"><a href="#" id="open-invite-modal"
                                 class="block p-2 hover:bg-gray-100 rounded">Members</a></li>
                         <li class="mb-2"><a href="#" id="open-background-modal"
@@ -52,11 +50,11 @@
                 </nav>
             </aside>
 
-            <!-- Main Content -->
             <main id="main-content" class="flex-1 py-2 mx-[1rem] px-4 h-full">
                 <!-- Board Title Section -->
                 <div class="mb-8">
                     <div class="flex items-center mb-4">
+                        <span id="board-id" class="hidden">{{ board.id }}</span>
                         <div id="editable-name" class="text-3xl font-bold text-gray-900 cursor-pointer">
                             <span id="display-name">{{ board.name }}</span>
                             <input id="edit-name" type="text" class="hidden bg-violet-300 border-none" />
@@ -76,12 +74,12 @@
             <div id="list-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
                 <div class="bg-white p-6 rounded-lg shadow-lg w-[36rem]">
                     <h2 class="text-lg font-semibold mb-4">Create New List</h2>
-                    <form id="addListForm" action="#" method="post">
+                    <form id="addListForm" action="" method="post">
                         {% csrf_token %}
                         {{createList.list_name}}
                         <div class="flex justify-end">
-                            <button id="close-list-modal" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
-                            <button id="save-list" type="submit"
+                            <button type="button" id="close-list-modal" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
+                            <button type="submit"
                                 class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500">Save</button>
                         </div>
                     </form>
@@ -95,7 +93,7 @@
                     <input id="edit-list-name" type="text" placeholder="List Name" class="w-full p-2 border rounded-lg mb-4">
                     <div class="flex justify-end">
                         <button id="close-edit-list-modal" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
-                        <button id="update-list"
+                        <button id="update-list" type="submit"
                             class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500">Update</button>
                     </div>
                 </div>
@@ -151,7 +149,7 @@
                         class="w-full p-2 border rounded-lg mb-4">
                     <div class="flex justify-end">
                         <button id="close-invite-modal" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
-                        <button id="send-invite"
+                        <button id="send-invite" type="submit"
                             class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500">Send</button>
                     </div>
                 </div>

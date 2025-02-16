@@ -41,16 +41,16 @@ export function renderWorkspaces() {
         .join("");
 
     workspaces.forEach((workspace) => {
-        const selectButton = document.getElementById(`select-${workspace.id}`)
+        const selectButton = document.getElementById(`select-${workspace.id}`);
         if (selectButton) {
-            selectButton.addEventListener("click", () => selectWorkspace(workspace.id))
+            selectButton.addEventListener("click", () => selectWorkspace(workspace.id));
         }
     });
 
     workspaces.forEach((workspace) => {
         const deleteButton = document.getElementById(`delete-${workspace.id}`)
         if (deleteButton) {
-            deleteButton.addEventListener("click", () => confirmDeleteWorkspace(workspace.id))
+            deleteButton.addEventListener("click", () => confirmDeleteWorkspace(workspace.id));
         }
     });
 }
@@ -75,7 +75,6 @@ function handleAddWorkspace(e) {
             }
         })
         .catch(error => console.error('Error:', error));
-
     closeModal("addWorkspaceModal");
     e.target.reset();
 }
@@ -227,7 +226,6 @@ async function handleAddBoard(e) {
 }
 
 async function renderBoards() {
-    console.log("rednering")
     if (!currentWorkspace) {
         boardsGrid.innerHTML = "<p>Please select a workspace to view boards.</p>";
         return;

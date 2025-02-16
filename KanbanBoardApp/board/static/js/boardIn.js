@@ -1,5 +1,6 @@
 import { openModal, closeModal, getCookie } from "./utils.js";
 
+const listArray = [];
 let listCounter = 0;
 let taskCounter = 0;
 let selectedList = null;
@@ -7,9 +8,18 @@ let selectedTask = null;
 let draggedTask = null;
 let dragOverTask = null;
 
+const boardId = document.getElementById("board-id").textContent;
+const addListForm = document.getElementById("addListForm");
+
+// List modal related
+const listModal = document.getElementById("list-modal");
+const closeListModalBtn = document.getElementById("close-list-modal");
+closeListModalBtn.addEventListener("click", () => closeModal("list-modal"));
+addListForm.addEventListener('submit', createListo);
+
 async function fetchLists() {
     try {
-        const response = await fetch("/api/all-workspaces/", {
+        const response = await fetch(`/api/board-${boardId}/get-lists/`, {
             method: 'GET',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -21,20 +31,46 @@ async function fetchLists() {
         }
         const data = await response.json();
         if (data.success) {
-            workspaces = data.workspaces.map(workspace => ({
-                id: workspace.id,
-                name: workspace.workspace_name,
-                boards: [],
-            }));
-            renderWorkspaces();
-            
-            selectWorkspace(workspaces[0].id);
+            addDefaultLists(data.boardlists.sort((a,b)=>a.list_position - b.list_position));
+            console.log(listArray.length);
         } else {
             console.error('Error fetching workspaces:', data.message);
         }
     } catch (error) {
         console.error('Error fetching workspaces:', error);
     }
+}
+
+async function createListo(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    formData.append('board', boardId);
+    formData.append('position', listArray.length + 1);
+
+    console.log(formData);
+    try {        
+        const response = await fetch('/api/board/create-list/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        });
+    
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+            console.log('hello');
+            fetchLists();
+            closeListModalBtn.click();
+        } else {
+            console.error('Error fetching lists:', data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching workspaces:', error);
+    }    
 }
 
 function createList(listName) {
@@ -165,22 +201,24 @@ document.getElementById("close-edit-task-modal").addEventListener("click", () =>
     document.getElementById("edit-task-modal").classList.add("hidden");
 });
 
-// Initialize default lists
 document.addEventListener("DOMContentLoaded", () => {
-    addDefaultLists();
     initializeSidebar();
     initializeBackgroundPicker();
     initializeBoardTitle();
+    fetchLists();
 });
 
-function addDefaultLists() {
-    const defaultLists = ["To Do", "Doing", "Completed"];
+function addDefaultLists(lists) {
+    const defaultLists = lists;
     const listContainer = document.getElementById("list-container");
+    listContainer.innerHTML = "";
     defaultLists.forEach(listName => {
-        const list = createList(listName);
+        const list = createList(listName.list_name);
         listContainer.appendChild(list);
     });
     listContainer.appendChild(createAddListCard());
+    listArray.push(...lists);
+    console.log(listArray);
 }
 
 function createAddListCard() {
@@ -233,24 +271,7 @@ function openSidebar() {
     wsp.classList.remove("transform", "rotate-[-90deg]", "translate-y-[280%]", "origin-center");
 }
 
-// List Modal
-document.getElementById("close-list-modal").addEventListener("click", () => {
-    document.getElementById("list-modal").classList.add("hidden");
-});
 
-document.getElementById("save-list").addEventListener("click", () => {
-    const listName = document.getElementById("list-name").value.trim();
-    if (listName) {
-        const listContainer = document.getElementById("list-container");
-        const addListCard = listContainer.lastElementChild;
-        const list = createList(listName);
-        listContainer.insertBefore(list, addListCard);
-        document.getElementById("list-name").value = "";
-        document.getElementById("list-modal").classList.add("hidden");
-    }
-});
-
-// Task Modal
 document.getElementById("close-task-modal").addEventListener("click", () => {
     document.getElementById("task-modal").classList.add("hidden");
 });
