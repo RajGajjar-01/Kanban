@@ -105,16 +105,27 @@ def create_board_view(request, pk):
 
 def board_data_view(request, pk ,id):
     list_modal_form = forms.ListModalForm(auto_id=True)
+    card_modal_form = forms.CardModalForm(auto_id=True)
     board = models.Board.objects.filter(id = id).first()
     context = {
         'board': board,
         'createList': list_modal_form,
+        'createCard': card_modal_form,
     }
     return render(request, 'board/BoardIn.html', context)
 
-def api_board_view(request, pk):
-    if request.method == 'GET':
-        pass
+def api_board_name_edit_view(request, pk):
+    if request.method == 'POST':
+        try:
+            print(request.POST)
+            new_name = request.POST.get('value')
+            updated = models.Board.objects.filter(id=pk).update(name=new_name)
+            if updated == 0:
+                return JsonResponse({"success": False, "message": "Board not found."}, status=404)
+            return JsonResponse({"success": True, "message": "Board name updated successfully."})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occured: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
 
 @csrf_exempt
 def api_get_lists_view(request, pk):
@@ -123,8 +134,16 @@ def api_get_lists_view(request, pk):
             boardlist = models.List.objects.filter(board=pk).values(
                 'id', 'list_name', 'list_position'
             )
+            
             board_lists = list(boardlist)
             print(board_lists)
+
+            for each_list in board_lists:
+                listcards = models.Card.objects.filter(list_id=each_list['id']).values(
+                    'id', 'card_name'
+                )
+                each_list['cards'] = list(listcards)
+                print(each_list)
             return JsonResponse({"success": True, "boardlists": board_lists})
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
@@ -138,7 +157,7 @@ def api_create_list_view(request):
             print(form.is_valid())
             if form.is_valid():
                 form.save()
-                return JsonResponse({"success": True})
+                return JsonResponse({"success": True, "message": "List created"})
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid request method"}, status=400)
@@ -153,3 +172,38 @@ def api_delete_list_view(request, pk):
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
+
+def api_create_card_view(request):
+    if request.method == 'POST':
+        try:
+            form = forms.CardModalForm(request.POST)
+            print(form.is_valid())
+            if form.is_valid():
+                form.save()
+                return JsonResponse({"success": True, "message": f"Card created"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
+
+def api_get_card_view(request, pk):
+    if request.method == 'GET':
+        try:
+            listcards = models.Card.objects.filter(list_id=pk).values(
+                'id', 'card_name'
+            )
+            cards = list(listcards)
+            return JsonResponse({"success": True, "cards": cards})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400)  
+
+def api_card_position_update_view(request, pk, id):
+    if request.method == 'PUT':
+        print('hello')
+        try:
+            updated = models.Card.objects.filter(pk=pk).update(list_id=id)
+            if updated:
+                return JsonResponse({"success": True, "message": "Position updated"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400) 

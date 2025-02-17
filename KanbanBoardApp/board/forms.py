@@ -1,5 +1,5 @@
 from django import forms
-from .models import Workspace, Board, List
+from .models import Workspace, Board, List, Card
 from django.core.exceptions import ValidationError
 
 class ContactForm(forms.Form):
@@ -53,8 +53,7 @@ class BoardModalForm(forms.ModelForm):
 class ListModalForm(forms.ModelForm):
     class Meta:
         model = List
-        fields = ['list_name','board']
-
+        fields = ['list_name','board','list_position']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,6 +63,19 @@ class ListModalForm(forms.ModelForm):
             'class' : 'w-full p-2 border rounded-lg mb-4',
         })
 
+class CardModalForm(forms.ModelForm):
+    class Meta:
+        model = Card
+        fields = ['list_id', 'card_name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['card_name'].widget.attrs.update({
+            'placeholder' : "Task Name",
+            'class' : 'w-full p-2 border rounded-lg mb-4',
+        })
+    
 
        
 

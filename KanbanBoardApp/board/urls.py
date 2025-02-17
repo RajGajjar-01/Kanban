@@ -12,8 +12,12 @@ urlpatterns = [
     path('api/workspace-<int:pk>/get-boards/', views.get_all_boards_view, name='get-boards-by-workspace'),
     path('api/workspace-<int:pk>/delete/', views.delete_workspace_view, name='delete-workspace-by-id'),
     path('api/workspace-<int:pk>/create-board/', views.create_board_view, name='create_board'),
-    path('api/get-board/<int:pk>/',views.api_board_view, name='get-lists-by-board   '),
     path('api/board-<int:pk>/get-lists/', views.api_get_lists_view, name='get-lists-by-board'),
     path('api/board/create-list/', views.api_create_list_view, name='create_list'),
-    path('api/board/delete-list-<int:pk>/', views.api_delete_list_view, name='delete-list'),    
+    path('api/board/delete-list-<int:pk>/', views.api_delete_list_view, name='delete-list'),   
+    path('api/board-name-edit/<int:pk>/', views.api_board_name_edit_view, name='edit-board-name'), 
+    path('api/list-<int:pk>/cards/', views.api_get_card_view, name='get-cards-by-list'),
+    path('api/list/create-card/', views.api_create_card_view, name='create_card'),
+    path('api/destination-list-<int:id>/card-<int:pk>/', views.api_card_position_update_view, name='card-position-update'),
+    
 ]   

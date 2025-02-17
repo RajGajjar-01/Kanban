@@ -164,11 +164,10 @@ async function fetchWorkspaces() {
         if (data.success) {
             workspaces = data.workspaces.map(workspace => ({
                 id: workspace.id,
-                name: workspace.workspace_name,
+                name: workspace.workspace_name, 
                 boards: [],
             }));
-            renderWorkspaces();
-            
+            renderWorkspaces(); 
             selectWorkspace(workspaces[0].id);
         } else {
             console.error('Error fetching workspaces:', data.message);
