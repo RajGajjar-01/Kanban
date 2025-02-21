@@ -10,6 +10,7 @@ let dragOverTask = null;
 
 const boardId = document.getElementById("board-id").textContent;
 const addListForm = document.getElementById("addListForm");
+const addTaskForm = document.getElementById("addTaskForm");
 
 // List modal related
 const listModal = document.getElementById("list-modal");
@@ -31,8 +32,7 @@ async function fetchLists() {
         }
         const data = await response.json();
         if (data.success) {
-            addDefaultLists(data.boardlists.sort((a,b)=>a.list_position - b.list_position));
-            console.log(listArray.length);
+            renderLists(data.boardlists.sort((a, b) => a.list_position - b.list_position));
         } else {
             console.error('Error fetching workspaces:', data.message);
         }
@@ -45,10 +45,10 @@ async function createListo(e) {
     e.preventDefault();
     const formData = new FormData(this);
     formData.append('board', boardId);
-    formData.append('position', listArray.length + 1);
+    formData.append('list_position', listArray.length + 1);
 
     console.log(formData);
-    try {        
+    try {
         const response = await fetch('/api/board/create-list/', {
             method: 'POST',
             body: formData,
@@ -56,7 +56,7 @@ async function createListo(e) {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
         });
-    
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -70,9 +70,10 @@ async function createListo(e) {
         }
     } catch (error) {
         console.error('Error fetching workspaces:', error);
-    }    
+    }
 }
 
+<<<<<<< HEAD
 async function deleteList(listId) {
     try {
         const response = await fetch(`/api/board/delete-list-${listId}/`, {
@@ -99,14 +100,17 @@ async function deleteList(listId) {
 }
 
 function createList(listName) {
+=======
+function createList(listObj) {
+>>>>>>> 49f4edac4e465abd3c3aeac12392dde6968b1968
     listCounter++;
     const list = document.createElement("div");
-    list.className = "bg-white p-4 rounded shadow w-72 h-fit";
+    list.className = "bg-white p-4 rounded-xl shadow-md w-72 h-fit border-2 border-violet-400";
     list.setAttribute("draggable", "true");
-    list.id = `list-${listCounter}`;
+    list.id = `list-${listObj.id}`;
     list.innerHTML = `
         <div class="flex justify-between items-center mb-2">
-            <h3 class="font-bold cursor-pointer">${listName}</h3>
+            <h3 class="font-bold cursor-pointer">${listObj.list_name}</h3>
             <div>
                 <button class="rename-list text-blue-500 hover:text-blue-700 mr-2">
                     <i class="fas fa-edit"></i>
@@ -127,16 +131,40 @@ function createList(listName) {
     return list;
 }
 
-function addTask(list, taskName) {
-    taskCounter++;
+async function deleteList(listId) {
+    try {
+        const response = await fetch(`/api/board/delete-list-${listId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            console.log('Task deleted successfully');
+            fetchLists();
+        } else {
+            console.error('Error deleting task:', data.message);
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
+    }
+}
+
+function addTask(list, taskCard) {
     const taskContainer = list.querySelector(".tasks");
     const task = document.createElement("div");
-    task.className = "bg-gray-100 p-2 rounded cursor-move group relative";
+    task.className = "bg-gray-200 p-3 rounded-md cursor-move group relative";
     task.setAttribute("draggable", "true");
-    task.id = `task-${taskCounter}`;
+    task.id = `task-${taskCard.id}`;
     task.innerHTML = `
         <div class="flex justify-between items-center">
-            <span class="task-text">${taskName}</span>
+            <span class="task-text">${taskCard.card_name}</span>
             <button class="edit-task text-blue-500 hover:text-blue-700 hidden group-hover:block absolute right-2">
                 <i class="fas fa-edit"></i>
             </button>
@@ -178,12 +206,12 @@ document.getElementById("update-list").addEventListener("click", () => {
     const newName = document.getElementById("edit-list-name").value.trim();
     if (newName && selectedList) {
         selectedList.querySelector("h3").innerText = newName;
-        document.getElementById("edit-list-modal").classList.add("hidden");
+        closeModal("edit-list-modal");
     }
 });
 
 document.getElementById("close-edit-list-modal").addEventListener("click", () => {
-    document.getElementById("edit-list-modal").classList.add("hidden");
+    closeModal("edit-list-modal");
 });
 
 document.getElementById("confirm-delete-list").addEventListener("click", () => {
@@ -195,7 +223,7 @@ document.getElementById("confirm-delete-list").addEventListener("click", () => {
 });
 
 document.getElementById("close-delete-list-modal").addEventListener("click", () => {
-    document.getElementById("delete-list-modal").classList.add("hidden");
+    closeModal("delete-list-modal")
 });
 
 document.getElementById("update-task").addEventListener("click", () => {
@@ -210,20 +238,21 @@ document.getElementById("close-edit-task-modal").addEventListener("click", () =>
     document.getElementById("edit-task-modal").classList.add("hidden");
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    initializeSidebar();
-    initializeBackgroundPicker();
-    initializeBoardTitle();
-    fetchLists();
+addTaskForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!selectedList) return; // Ensure a list is selected
+    createTasko(e, selectedList.id);
 });
 
-function addDefaultLists(lists) {
+function renderLists(lists) {
     const defaultLists = lists;
     const listContainer = document.getElementById("list-container");
     listContainer.innerHTML = "";
-    defaultLists.forEach(listName => {
-        const list = createList(listName.list_name);
+    listArray.length = 0;
+    defaultLists.forEach(listL => {
+        const list = createList(listL);
         listContainer.appendChild(list);
+<<<<<<< HEAD
         list.querySelector(".add-task").addEventListener("click", () => {
             selectedList = listName;
             openModal("task-modal");
@@ -240,10 +269,33 @@ function addDefaultLists(lists) {
             selectedList = listName;
             openModal("delete-list-modal");
         });
+=======
+
+        list.querySelector(".add-task").addEventListener("click", () => {
+            selectedList = listL;
+            console.log(selectedList);
+            openModal("task-modal");
+        });
+
+        list.querySelector(".rename-list").addEventListener("click", () => {
+            selectedList = listL;
+            const lis = list.querySelector("h3").innerText;
+            document.getElementById("edit-list-name").value = listL;
+            openModal("edit-list-modal");
+        });
+
+        list.querySelector(".delete-list").addEventListener("click", () => {
+            selectedList = listL;
+            openModal("delete-list-modal");
+        });
+
+        listL.cards.forEach(card => addTask(list, card))
+
+>>>>>>> 49f4edac4e465abd3c3aeac12392dde6968b1968
     });
     listContainer.appendChild(createAddListCard());
-    listArray.push(...lists);
-    console.log(listArray);
+    listArray.push(lists);
+    console.log("fxn done");
 }
 
 function createAddListCard() {
@@ -261,7 +313,6 @@ function createAddListCard() {
     return addListDiv;
 }
 
-// Sidebar functions
 const sidebar = document.getElementById("sidebar");
 const mainContent = document.getElementById("main-content");
 const sidebarnav = document.getElementById("sidebar-nav");
@@ -296,22 +347,12 @@ function openSidebar() {
     wsp.classList.remove("transform", "rotate-[-90deg]", "translate-y-[280%]", "origin-center");
 }
 
-
 document.getElementById("close-task-modal").addEventListener("click", () => {
     document.getElementById("task-modal").classList.add("hidden");
 });
 
-document.getElementById("save-task").addEventListener("click", () => {
-    const taskName = document.getElementById("task-name").value.trim();
-    if (taskName && selectedList) {
-        addTask(selectedList, taskName);
-        document.getElementById("task-name").value = "";
-        document.getElementById("task-modal").classList.add("hidden");
-    }
-});
-
-// Drag and Drop
 function handleTaskDragOver(e) {
+    console.log("drag over kya hota hai?");
     e.preventDefault();
     e.stopPropagation();
 
@@ -336,6 +377,7 @@ function handleTaskDragOver(e) {
 }
 
 function handleTaskDragLeave(e) {
+    console.log("drag leave");
     if (e.relatedTarget && !e.relatedTarget.closest(".tasks")) {
         document.querySelectorAll(".task-drop-preview").forEach(el => el.remove());
         dragOverTask = null;
@@ -343,9 +385,10 @@ function handleTaskDragLeave(e) {
 }
 
 function dragStart(e) {
+    console.log("drag start")
     if (!e.target.classList.contains("bg-gray-100")) {
         e.dataTransfer.setData("text/plain", e.target.id);
-        e.dataTransfer.setData("application/list", "false"); // Changed for lists
+        e.dataTransfer.setData("application/list", "false"); // if it's true ----> Bugggggssssss
     }
 }
 
@@ -365,6 +408,7 @@ function dragOver(e) {
 }
 
 function drop(e) {
+    console.log("drop");
     e.preventDefault();
     const draggedId = e.dataTransfer.getData("text/plain");
     const isTask = e.dataTransfer.getData("application/task") === "true";
@@ -391,8 +435,13 @@ function drop(e) {
         } else {
             tasksContainer.appendChild(draggedElement);
         }
+        const taskId = draggedElement.id.split('-')[1];
+        const listId = targetList.id.split('-')[1];
+        updateTaskParentList(taskId, listId);
+
     } else if (isList) { // Handle list swapping
         const dropZone = e.currentTarget;
+        console.log("lists");
         if (dropZone && dropZone !== draggedElement) {
             const tempHtml = dropZone.innerHTML;
             const tempId = dropZone.id;
@@ -442,32 +491,133 @@ function initializeBackgroundPicker() {
             backgroundModal.classList.add("hidden");
         });
     });
+
 }
 
-// Board Title (commented out as before)
-function initializeBoardTitle() {
-    // Existing commented code
-    // const boardTitle = document.getElementById('board-title');
-    // const editBoardTitleBtn = document.getElementById('edit-board-title');
-    // const boardTitleModal = document.getElementById('board-title-modal');
-    // const boardTitleInput = document.getElementById('board-title-input');
-    // const saveBoardTitleBtn = document.getElementById('save-board-title');
-    // const closeBoardTitleModalBtn = document.getElementById('close-board-title-modal');
+const input = document.getElementById('edit-name');
+adjustInputWidth(input);
+input.addEventListener('input', () => adjustInputWidth(input));
+input.addEventListener('keydown', handleKeyDown);
+const initialInputValue = input.value;
 
-    // editBoardTitleBtn.addEventListener('click', () => {
-    //     boardTitleInput.value = boardTitle.textContent;
-    //     boardTitleModal.classList.remove('hidden');
-    // });
+function adjustInputWidth(input) {
+    // Create a temporary span element to measure the width of the text
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.whiteSpace = 'pre';
+    tempSpan.style.fontSize = window.getComputedStyle(input).fontSize;
+    tempSpan.style.fontFamily = window.getComputedStyle(input).fontFamily;
+    tempSpan.style.fontWeight = window.getComputedStyle(input).fontWeight;
+    tempSpan.textContent = input.value;
 
-    // closeBoardTitleModalBtn.addEventListener('click', () => {
-    //     boardTitleModal.classList.add('hidden');
-    // });
+    // Append the span to the body to measure its width
+    document.body.appendChild(tempSpan);
+    const width = tempSpan.offsetWidth;
 
-    // saveBoardTitleBtn.addEventListener('click', () => {
-    //     const newTitle = boardTitleInput.value.trim();
-    //     if (newTitle) {
-    //         boardTitle.textContent = newTitle;
-    //         boardTitleModal.classList.add('hidden');
-    //     }
-    // });
+    // Remove the temporary span from the DOM
+    document.body.removeChild(tempSpan);
+
+    // Set the input width to the measured width
+    input.style.width = `${width}px`;
 }
+
+function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+        if (input.value === "") {
+            input.value = initialInputValue;
+            updateBoardName(input.value);
+            return;
+        }
+        event.target.blur();
+        updateBoardName(input.value);
+    }
+}
+
+async function updateBoardName(value) {
+    const formData = new FormData();
+    formData.append('value', value);
+
+    try {
+        const response = await fetch(`/api/board-name-edit/${boardId}/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            console.log("successsss");
+        } else {
+            console.error(data.message);
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function createTasko(e, listId) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    formData.append('list_id', listId);
+    try {
+        const response = await fetch(`/api/list/create-card/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        })
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+            console.log("yehe");
+            fetchLists();
+            closeModal("task-modal");
+        } else {
+            console.error('Error:', data.message);
+        }
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+    e.target.reset();
+}
+
+async function updateTaskParentList(taskId, listId) {
+    try {
+        const response = await fetch(`/api/destination-list-${listId}/card-${taskId}/`,{
+            method: 'PUT',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+            console.log("Hehe ho gaya baba");
+        } else {
+            console.error('Error:', data.message);
+        }
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initializeSidebar();
+    initializeBackgroundPicker();
+    fetchLists();
+});
+
+

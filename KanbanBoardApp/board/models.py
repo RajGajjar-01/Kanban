@@ -60,9 +60,6 @@ class List(models.Model):
     board         = models.ForeignKey(Board, on_delete=models.CASCADE, null=True, related_name='boardlists')
     list_name     = models.CharField(max_length=255)
     list_position = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.list_name
     
 class Card(models.Model):
 
@@ -73,7 +70,7 @@ class Card(models.Model):
         NOT_URGENT_NOT_IMPORTANT = 'neither important nor urgent'
         
     list_id          = models.ForeignKey(List, on_delete=models.CASCADE)
-    card_name        = models.CharField(max_length=255, default="card1")
+    card_name        = models.CharField(max_length=255)
     card_description = models.TextField(null=True, blank=True)
     created_date     = models.DateTimeField(auto_now_add=True)
     due_date         = models.DateTimeField(null=True, blank=True)

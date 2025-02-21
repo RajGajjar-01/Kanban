@@ -10,7 +10,7 @@ class WorkspaceAdmin(admin.ModelAdmin):
     list_display = ['id', 'workspace_name', 'created_by', 'user_list', 'created_date']
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ['id', 'card_name', 'card_description', 'created_date']
+    list_display = ['id', 'list_id' , 'card_name', 'card_description', 'created_date']
 
 class CardMemberAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'card', 'added_date']
