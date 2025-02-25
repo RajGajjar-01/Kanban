@@ -7,7 +7,7 @@ class BoardMemberAdmin(admin.ModelAdmin):
     list_display = ['id' ,'user', 'board']
 
 class WorkspaceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'workspace_name', 'created_by', 'user_list', 'created_date']
+    list_display = ['id', 'workspace_name', 'created_by', 'board_list', 'created_date']
 
 class CardAdmin(admin.ModelAdmin):
     list_display = ['id', 'list_id' , 'card_name', 'card_description', 'created_date']

@@ -19,5 +19,7 @@ urlpatterns = [
     path('api/list-<int:pk>/cards/', views.api_get_card_view, name='get-cards-by-list'),
     path('api/list/create-card/', views.api_create_card_view, name='create_card'),
     path('api/destination-list-<int:id>/card-<int:pk>/', views.api_card_position_update_view, name='card-position-update'),
-    
+    path('api/board-<int:pk>/invite/', views.api_send_invitation, name='send-invitation'),
+    path('accept-invitation/<str:token>/', views.api_accept_invitation, name='api_accept_invitation'),
+    path('api/workspace-<int:pk>/get-members/', views.api_get_members, name='get-members-of-workspace'),
 ]   

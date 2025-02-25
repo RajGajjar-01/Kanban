@@ -1,7 +1,7 @@
 {% extends "board/Base.html" %}
 {% block content %}
 <div>
-    <nav class="fixed z-10 w-full py-1 bg-slate-50 shadow-2xl" data-aos="fade-down" data-aos-duration="300">
+    <nav class="fixed z-10 w-full py-1 bg-sky-50 shadow-2xl" data-aos="fade-down" data-aos-duration="300">
         <div class="mx-auto flex items-center justify-between px-8">
           <!-- Logo -->
           <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Taskify</a>
@@ -20,22 +20,22 @@
           <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
             <div
               class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 bg-purple-400 md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
-              <a href="#" class="text-white hover:text-gray-300 transition-colors">About Us</a>
-              <a href="{% url 'board-contact' %}" class="text-white hover:text-gray-300 transition-colors">Contact</a>
-              <a href="#" class="text-white hover:text-gray-300 transition-colors">Blogs</a>
+              <a href="#" class="text-gray-600 hover:text-gray-300 transition-colors">About Us</a>
+              <a href="{% url 'board-contact' %}" class="text-gray-600 hover:text-gray-800 transition-colors">Contact</a>
+              <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">Blogs</a>
       
               {% if user.is_authenticated %}
               <a href="{% url 'board-home' %}"
-                class="px-12 py-3 font-semibold bg-slate-50 border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
+                class="px-12 py-3 font-semibold border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
                 Go to Boards
               </a>
               {% else %}
               <a href="{% url 'user-login' %}"
-                class="px-12 py-3 font-semibold bg-slate-50 border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
+                class="px-12 py-3 font-semibold border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
                 Sign in
               </a>
               <a href="{% url 'user-register' %}"
-                class="px-12 py-3 font-semibold bg-slate-50 border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
+                class="px-12 py-3 font-semibold border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
                 Get Started
               </a>
               {% endif %}
@@ -51,7 +51,7 @@
                     Simplify collaboration by bringing your tasks and team together with
                     Taskify.
                 </h1>
-                <p class="text-lg text-gray-800">
+                <p class="text-xl font-medium text-gray-800">
                     Keep everything in the same place—even if your team isn't.
                 </p>
 

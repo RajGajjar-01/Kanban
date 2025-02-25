@@ -1,8 +1,9 @@
 from . import forms
+from board import models
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.core.mail import send_mail
 from KanbanBoardApp.settings import EMAIL_HOST_USER
 
@@ -35,9 +36,20 @@ def login_view(request):
             email = login_form.cleaned_data['email']
             password = login_form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
-            print(user)
+
             if user is not None:
                 login(request, user)
+                token = request.session.get('board_invitation_token')
+                if token:
+                    invitation = get_object_or_404(models.BoardInvitaton, token = token)
+                    if request.user.email.lower() == invitation.email.lower():
+                        models.BoardMember.objects.create(
+                            user = user,
+                            board = invitation.board,
+                        )
+                        invitation.status = 'accepted'
+                        invitation.save()
+                        del request.session['board_invitation_token']
                 messages.success(request, "You have logged in successfully!")
                 return redirect('board-home')
             else:

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.crypto import get_random_string
+from django.utils import timezone
 
 class Workspace(models.Model):
     workspace_name = models.CharField(max_length=255)
@@ -10,11 +12,11 @@ class Workspace(models.Model):
         if not self.created_by and hasattr(self, 'request') and hasattr(self.request, 'user'):
             self.created_by = self.request.user
         super().save(*args, **kwargs)
-    
+        
     @property
-    def user_list(self):
-            return Board.objects.filter(workspace=self).values_list('user__username', flat=True)
-    
+    def board_list(self):
+        return Board.objects.filter(workspace=self)
+        
 
 class Board(models.Model):
     user             = models.ManyToManyField(User, through='BoardMember', related_name='user')
@@ -31,7 +33,7 @@ class Board(models.Model):
         # Save the board instance
         is_new = self.pk is None  # Check if this is a new board
         super().save(*args, **kwargs)
-        
+
         # Add the workspace creator to the board as a member
         if is_new and self.workspace.created_by:
             BoardMember.objects.get_or_create(
@@ -57,10 +59,10 @@ class BoardMember(models.Model):
         return f"{self.user.username} - {self.board.name}"
 
 class List(models.Model):
-    board         = models.ForeignKey(Board, on_delete=models.CASCADE, null=True, related_name='boardlists')
-    list_name     = models.CharField(max_length=255)
-    list_position = models.IntegerField(default=0)
-    
+        board         = models.ForeignKey(Board, on_delete=models.CASCADE, null=True, related_name='boardlists')
+        list_name     = models.CharField(max_length=255)
+        list_position = models.IntegerField(default=0)
+        
 class Card(models.Model):
 
     class LabelChoices(models.TextChoices):
@@ -68,7 +70,7 @@ class Card(models.Model):
         URGENT_NOT_IMP = 'urgent but not important'
         IMP_NOT_URGENT = 'important but not urgent'
         NOT_URGENT_NOT_IMPORTANT = 'neither important nor urgent'
-        
+            
     list_id          = models.ForeignKey(List, on_delete=models.CASCADE)
     card_name        = models.CharField(max_length=255)
     card_description = models.TextField(null=True, blank=True)
@@ -76,11 +78,11 @@ class Card(models.Model):
     due_date         = models.DateTimeField(null=True, blank=True)
     card_member      = models.ManyToManyField(User, through='CardMember', related_name='cards')
     label            = models.CharField(
-                        max_length=60,
-                        choices=LabelChoices.choices,
-                        null=True,
-                        blank=True
-                    )
+                            max_length=60,
+                            choices=LabelChoices.choices,
+                            null=True,
+                            blank=True
+                        )
 
     def __str__(self):
         return self.card_name
@@ -97,7 +99,7 @@ class CardMember(models.Model):
 
     class Meta:
         unique_together = ('user', 'card')
-    
+        
     def __str__(self):
         return f"{self.user.username} - {self.card.card_name}"
 
@@ -107,10 +109,10 @@ class Comment(models.Model):
     content      = models.TextField() 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True) 
-    
+        
     def __str__(self):
         return f"Comment by {self.user.username} on {self.card.card_name}"
-    
+        
 class CardActivity(models.Model):
     user         = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities')
     card         = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='activities', null=True)
@@ -123,7 +125,7 @@ class CardActivity(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.activity}"
-    
+        
 class CardAttachment(models.Model):
     card          = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='attachments')
     uploaded_date = models.DateTimeField(auto_now_add=True)
@@ -132,4 +134,28 @@ class CardAttachment(models.Model):
 
     def __str__(self):
         return f"{self.card.card_name} - {self.name} - {self.uploaded_date}"
+    
+class BoardInvitaton(models.Model):
+    STATUS_CHOICES = {
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('expired', "Expired"),
+    }
+
+    email = models.EmailField()
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    token = models.CharField(max_length=50, unique=True)
+    inviter = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='pending')
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = get_random_string(length=50)
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timezone.timedelta(days=7)
+        super().save(*args, **kwargs)
+
+    
 

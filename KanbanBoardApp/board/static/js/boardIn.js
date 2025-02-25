@@ -76,23 +76,23 @@ async function createListo(e) {
 function createList(listObj) {
     listCounter++;
     const list = document.createElement("div");
-    list.className = "bg-white p-4 rounded-xl shadow-md w-72 h-fit border-2 border-violet-400";
+    list.className = "bg-white p-4 rounded-xl shadow-md w-72 h-fit border border-black";
     list.setAttribute("draggable", "true");
     list.id = `list-${listObj.id}`;
     list.innerHTML = `
         <div class="flex justify-between items-center mb-2">
-            <h3 class="font-bold cursor-pointer">${listObj.list_name}</h3>
+            <h3 class="font-medium text-[1.2rem] cursor-pointer">${listObj.list_name}</h3>
             <div>
                 <button class="rename-list text-blue-500 hover:text-blue-700 mr-2">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="delete-list text-red-500 hover:text-red-700">
+                <button class="delete-list text-gray-400 hover:text-gray-800">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
         </div>
         <div class="tasks space-y-2"></div>
-        <button class="add-task bg-black text-white px-2 py-1 rounded text-sm hover:bg-gray-800 mt-2">Add Task</button>
+        <button class="add-task bg-black text-white font-medium px-2 py-2 rounded-md text-sm hover:bg-gray-800 mt-4">Add Task</button>
     `;
 
     list.addEventListener("dragstart", dragStart);
@@ -130,7 +130,7 @@ async function deleteList(listId) {
 function addTask(list, taskCard) {
     const taskContainer = list.querySelector(".tasks");
     const task = document.createElement("div");
-    task.className = "bg-gray-200 p-3 rounded-md cursor-move group relative";
+    task.className = "bg-gray-200 p-3 rounded-md border border-gray-200 shadow-sm cursor-move group relative hover:bg-gray-300 ";
     task.setAttribute("draggable", "true");
     task.id = `task-${taskCard.id}`;
     task.innerHTML = `
@@ -252,7 +252,7 @@ function renderLists(lists) {
 
 function createAddListCard() {
     const addListDiv = document.createElement("div");
-    addListDiv.className = "bg-white/50 p-4 rounded w-72 h-fit flex items-center justify-center cursor-pointer hover:bg-white/60";
+    addListDiv.className = "bg-white/50 p-4 rounded-xl w-72 h-fit flex items-center justify-center cursor-pointer hover:bg-white/60";
     addListDiv.innerHTML = `
         <div class="text-gray-600 text-center">
             <i class="fas fa-plus mb-2 text-2xl"></i>
@@ -566,10 +566,55 @@ async function updateTaskParentList(taskId, listId) {
     }
 }
 
+const addMemberBtn = document.getElementById('add-members-btn');
+addMemberBtn.addEventListener('click', () => {
+    openModal('invite-member-modal')
+});
+const closeInviteModalBtn = document.getElementById('close-invite-modal');
+closeInviteModalBtn.addEventListener('click', () => {
+    closeModal('invite-member-modal')
+});
+const inviteModalForm = document.getElementById('inviteModalForm');
+inviteModalForm.addEventListener('submit', sendInvitation)
+
+async function sendInvitation(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    console.log(formData);
+    const text = document.getElementById("wait-to-invite");
+    text.classList.remove("hidden");
+    text.innerHTML = "Just wait for a while...";
+    try {
+        const response = await fetch(`/api/board-${boardId}/invite`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        if(!response.ok){
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+            text.innerHTML = `<div data-aos="fade-out">Invitation send successfully</div>`;
+            setTimeout(()=>{
+                closeModal('invite-member-modal');
+                text.classList.add("hidden");
+            }, 1000);
+        } else {
+            console.error('Error:', data.message);
+        }
+    } catch (error) {
+        console.error('Error sending invitation', error);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     initializeSidebar();
     initializeBackgroundPicker();
     fetchLists();
 });
+
 
 

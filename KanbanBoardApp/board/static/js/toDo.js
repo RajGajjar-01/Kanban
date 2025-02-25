@@ -27,13 +27,12 @@ export function renderWorkspaces() {
     workspaceList.innerHTML = workspaces
         .map(
             (workspace) => `
-            <div class="flex justify-center items-center px-4 py-3 hover:bg-gray-300 ${currentWorkspace? "bg-gray-100" : ""
-                    }">
+            <div class="flex justify-center items-center px-4 py-3 hover:bg-gray-300 }">
                 <button class="flex-1 text-left" id="select-${workspace.id}">
                     ${workspace.name}
                 </button>
-                <button class="text-red-500 hover:text-red-200" id="delete-${workspace.id}">
-                    ${svg}
+                <button class="text-gray-400 hover:text-gray-800" id="delete-${workspace.id}">
+                    <i class="fas fa-trash"></i>
                 </button>
             </div>
       `
@@ -263,6 +262,29 @@ async function renderBoards() {
     })
 }
 
+async function fetchMembersList() {
+    try {
+        const response = await fetch(`/api/workspace-${currentWorkspace.id}/get-members/`, {
+            request: 'GET',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+            console.log("Hurrs");
+            console.log(data.members);
+        } else {
+            console.error('Error:', data.message);
+        }
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+}
+
 function switchTab(tabName) {
     document.querySelectorAll(".tab-btn").forEach((btn) => {
         btn.classList.remove("text-rose-600", "border-rose-600");
@@ -274,8 +296,11 @@ function switchTab(tabName) {
     if (tabName === "boards") {
         boardsGrid.innerHTML = '';
         renderBoards();
+    } else if (tabName === "members") {
+        boardsGrid.innerHTML = '';
+        fetchMembersList();
     } else {
-        boardsGrid.innerHTML = `<p>Content for ${tabName} tab</p>`;
+        boardsGrid.innerHTML = 'hello ';
     }
 }
 

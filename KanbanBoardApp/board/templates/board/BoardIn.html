@@ -1,6 +1,6 @@
 {% extends "board/Base.html" %}
 {% block content %}
-<div class="min-h-screen bg-violet-300">
+<div class="min-h-screen">
     <nav class="fixed w-full py-1 bg-slate-50 shadow-md">
         <div class="mx-auto flex items-center justify-between px-8">
             <!-- Logo -->
@@ -32,7 +32,7 @@
     <div class="mx-auto px-4 pt-[5rem]">
         <div class="flex h-[calc(100vh-5.6rem)]">
             <aside id="sidebar"
-                class="w-[20rem] flex-shrink-0 bg-white text-gray-800 border border-black rounded-lg shadow-md transition-all duration-[250ms] ease-in-out">
+                class="w-[20rem] flex-shrink-0 bg-white text-black border border-black rounded-xl shadow-md transition-all duration-[250ms] ease-in-out">
                 <div class="py-4 font-bold whitespace-nowrap rounded-lg text-center" id="wsp">
                     <span>{{board.workspace.workspace_name}}</span> <span class="text-gray-500 font-normal">-
                         {{board.workspace.created_by}}</span>
@@ -56,15 +56,19 @@
             <main id="main-content" class="flex-1 py-2 mx-[1rem] px-4 h-full">
                 <!-- Board Title Section -->
                 <div class="mb-8">
-                    <div class="flex items-center mb-4">
+                    <div class="flex items-center mb-4 justify-between">
                         <span id="board-id" class="hidden">{{ board.id }}</span>
                         <div id="editable-name" class="">
                             <input id="edit-name" type="text"
-                                class="bg-violet-300 text-3xl font-bold text-gray-900 cursor-pointer w-auto hover:bg-white/50 rounded-md"
+                                class="bg-transparent text-3xl font-bold cursor-pointer w-auto hover:bg-white/50 rounded-md"
                                 value="{{ board.name }}"/> 
                         </div>
+                        <div class="flex gap-[5rem] items-center">
+                            <div>Members</div>
+                            <div id="add-members-btn" class="bg-black text-white font-medium px-2 py-2 rounded-md text-sm hover:bg-gray-800">Add Members + </div>
+                        </div>
                     </div>
-                    <hr class="border-gray-300 border-t-2">
+                    <hr class="border-white border-t-2">
                 </div>
 
                 <div class="overflow-x-auto">
@@ -160,13 +164,16 @@
                 class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
                 <div class="bg-white p-6 rounded-lg shadow-lg w-[36rem]">
                     <h2 class="text-lg font-semibold mb-4">Invite to Workspace</h2>
-                    <input id="invite-email" type="email" placeholder="Enter email address"
-                        class="w-full p-2 border rounded-lg mb-4">
-                    <div class="flex justify-end">
-                        <button id="close-invite-modal" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
-                        <button id="send-invite" type="submit"
-                            class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500">Send</button>
-                    </div>
+                    <form id="inviteModalForm" method="post">
+                        {{inviteMember.email}}
+                        <div id="wait-to-invite" class="flex justify-center hidden">
+                        </div>
+                        <div class="flex justify-end">
+                            <button id="close-invite-modal" type="button" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
+                            <button id="send-invite" type="submit"
+                                class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500">Send</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 

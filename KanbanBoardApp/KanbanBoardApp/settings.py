@@ -168,4 +168,5 @@ EMAIL_HOST_USER = 'atlantic.march11@gmail.com'
 EMAIL_HOST_PASSWORD = 'wqum nrfq myjy gder'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'Taskify <noreply@yourapp.com>'
 

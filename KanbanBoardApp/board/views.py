@@ -1,8 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from . import forms, models
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+from django.core.mail import send_mail
+from KanbanBoardApp.settings import DEFAULT_FROM_EMAIL
+from django.utils import timezone
 
 def landing_view(request):
     return render(request, 'board/Landing.html')    
@@ -25,15 +29,8 @@ def contact_view(request):
 def about_view(request):
     pass
 
-def workspace_view(request):
-    pass
-
 def contact_success_view(request):
     return render(request, 'board/Success.html')
-
-@login_required
-def board_view(request):
-    pass
 
 @login_required
 def save_workspace_view(request):
@@ -65,12 +62,16 @@ def get_all_workspaces_view(request):
 def delete_workspace_view(request, pk):
     if request.method == "DELETE":
         try:
-            workspace = models.Workspace.objects.filter(pk=pk)
-            if workspace:
-                workspace.delete();
-            return JsonResponse({"success": True, "message": f"Workspace deleted"})
+            workspace = models.Workspace.objects.filter(pk=pk).first()
+            if workspace is None:
+                return JsonResponse({"success": False, "message": "Workspace not found"}, status=404)
+            
+            workspace.delete()
+            return JsonResponse({"success": True, "message": "Workspace deleted"})
+        
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    
     return JsonResponse({"success": False, "message": "Invalid method"}, status=400)
 
 @login_required
@@ -106,11 +107,13 @@ def create_board_view(request, pk):
 def board_data_view(request, pk ,id):
     list_modal_form = forms.ListModalForm(auto_id=True)
     card_modal_form = forms.CardModalForm(auto_id=True)
+    invite_modal_form = forms.InviteModalForm(auto_id=True)
     board = models.Board.objects.filter(id = id).first()
     context = {
         'board': board,
         'createList': list_modal_form,
         'createCard': card_modal_form,
+        'inviteMember': invite_modal_form
     }
     return render(request, 'board/BoardIn.html', context)
 
@@ -199,7 +202,6 @@ def api_get_card_view(request, pk):
 
 def api_card_position_update_view(request, pk, id):
     if request.method == 'PUT':
-        print('hello')
         try:
             updated = models.Card.objects.filter(pk=pk).update(list_id=id)
             if updated:
@@ -207,3 +209,78 @@ def api_card_position_update_view(request, pk, id):
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid."}, status=400) 
+
+def api_get_members(request, pk):
+    if request.method == 'GET':
+        try:
+            boards = models.Workspace.objects.filter(pk=pk).first().board_list
+            member_list = []
+            for board in list(boards):
+                mems = models.BoardMember.objects.filter(board=board.id).select_related('user', 'user__profile', 'board').values(
+                    'user__username',  
+                    'user__profile__image',  
+                    'board__name'  
+                )
+                member_list.append(list(mems))
+            print(member_list)
+            return JsonResponse({"success" : True, "members": sum(member_list,[])},status=200)
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid."}, status=400) 
+
+def api_send_invitation(request, pk):
+    # try :
+    board = get_object_or_404(models.Board, id=pk)
+
+    if not models.BoardMember.objects.filter(board=board, user=request.user).exists():
+        return JsonResponse({"success": False, "message": "You are not a board member"}, status = 403)
+        
+    email = request.POST.get('email')
+    invitation = models.BoardInvitaton.objects.create(
+        email = email,
+        board = board,
+        inviter = request.user
+    )
+
+    invitation_url = request.build_absolute_uri(
+        reverse('api_accept_invitation', args=[invitation.token])
+    )
+
+    send_mail(
+        f"Invitation to join board: {board.name}",
+        f"""You've been invited to join the board "{board.name}". 
+        Click here to accept: {invitation_url}
+        """,
+        DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
+    return JsonResponse({"success": True, "message": f"Invitation send successfully"})
+    
+    # except Exception as e:
+    #     return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+
+def api_accept_invitation(request, token):
+    invitation = get_object_or_404(models.BoardInvitaton, token = token)
+
+    if invitation.status != 'pending' or timezone.now() > invitation.expires_at:
+        return render(request, 'board/Landing.html')
+    
+    if request.user.is_authenticated:
+        if request.user.email.lower() != invitation.email.lower():
+            return render(request, 'board/Success.html')
+        
+        models.BoardMember.objects.get_or_create(
+            user = request.user,
+            board = invitation.board,
+        )
+        invitation.status = 'accepted'
+        invitation.save()
+        return redirect('board-home', board_id = invitation.board.id)
+    else :
+        request.session['board_invitation_token'] = token
+        return redirect('user-login')
+
+
+    
+
