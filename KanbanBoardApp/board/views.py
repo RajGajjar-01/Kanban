@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from KanbanBoardApp.settings import DEFAULT_FROM_EMAIL
 from django.utils import timezone
+from django.conf import settings
 
 def landing_view(request):
     return render(request, 'board/Landing.html')    
@@ -16,7 +17,6 @@ def home_view(request):
     board_modal_form = forms.BoardModalForm(auto_id=True)
     workspace_modal_form = forms.WorkspaceModalForm(auto_id=True)
     context = {
-        'hello': 'I am raj',
         'createworkspace': workspace_modal_form,
         'createboard': board_modal_form,
     }
@@ -90,6 +90,22 @@ def get_all_boards_view(request, pk):
     return JsonResponse({"success": False, "message": "Invalid method. Use GET to fetch workspaces."}, status=400)
 
 @login_required
+def get_particular_boards_view(request, pk):
+    if request.method == 'GET':
+        try:
+            boards = models.Board.objects.filter(workspace=pk, user=request.user).values(
+                'id', 'name', 'created_date', 'description', 'background_color', 'workspace'
+            )
+            board_list = list(boards)
+
+            return JsonResponse({"success": True, "board": board_list})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid method. Use GET to fetch workspaces."}, status=400)
+
+
+@login_required
 def create_board_view(request, pk):
     if request.method == "POST":
         try:
@@ -139,14 +155,12 @@ def api_get_lists_view(request, pk):
             )
             
             board_lists = list(boardlist)
-            print(board_lists)
-
             for each_list in board_lists:
                 listcards = models.Card.objects.filter(list_id=each_list['id']).values(
                     'id', 'card_name'
                 )
                 each_list['cards'] = list(listcards)
-                print(each_list)
+        
             return JsonResponse({"success": True, "boardlists": board_lists})
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
@@ -218,12 +232,17 @@ def api_get_members(request, pk):
             for board in list(boards):
                 mems = models.BoardMember.objects.filter(board=board.id).select_related('user', 'user__profile', 'board').values(
                     'user__username',  
+                    'user__email',
                     'user__profile__image',  
                     'board__name'  
                 )
+                for mem in list(mems):
+                    if mem['user__profile__image']:
+                        mem['user__profile__image'] = settings.MEDIA_URL + mem['user__profile__image']
+                    else:
+                        mem['user__profile__image'] = None 
                 member_list.append(list(mems))
-            print(member_list)
-            return JsonResponse({"success" : True, "members": sum(member_list,[])},status=200)
+            return JsonResponse({"success" : True, "members": member_list},status=200)
         except Exception as e:
             return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
     return JsonResponse({"success": False, "message": "Invalid."}, status=400) 
@@ -276,11 +295,23 @@ def api_accept_invitation(request, token):
         )
         invitation.status = 'accepted'
         invitation.save()
-        return redirect('board-home', board_id = invitation.board.id)
+        return redirect('board-home')
     else :
         request.session['board_invitation_token'] = token
         return redirect('user-login')
 
+@csrf_exempt
+def get_all_other_workspace_view(request):
+    if request.method == "GET":
+        try:
+            workspaces = models.Workspace.objects.filter(boards__user=request.user).exclude(created_by=request.user).distinct().values(
+                'id', 'workspace_name', 'created_by__username', 'created_date'
+            )
+            other_workspace_list = list(workspaces)
 
+            return JsonResponse({"success": True, "workspaces": other_workspace_list})      
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid method. Use GET to fetch workspaces."}, status=400)
     
 

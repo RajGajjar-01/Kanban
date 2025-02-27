@@ -1,10 +1,10 @@
 {% extends "board/Base.html" %}
 {% block content %}
 <div class="min-h-screen">
-    <nav class="fixed w-full py-1 bg-slate-50 shadow-md">
+    <nav class="fixed w-full py-2 bg-slate-50 shadow-md">
         <div class="mx-auto flex items-center justify-between px-8">
             <!-- Logo -->
-            <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Taskify</a>
+            <a href="{% url 'board-landing' %}" class="text-[2rem] font-bold text-black">Taskify</a>
 
             <button class="md:hidden p-2" id="mobile-menu-button">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,6 +22,7 @@
                     <a href="{% url 'user-profile' %}"
                         class="font-semibold bg-rose-400 rounded-[50%] text-white transition-all">
                         <div class="h-12 w-12 flex justify-center items-center">
+                            <span class="hidden" id="self-user">{{user.id}}</span>
                             {{ user.username|slice:":1"|capfirst }}
                         </div>
                     </a>
@@ -34,8 +35,9 @@
             <aside id="sidebar"
                 class="w-[20rem] flex-shrink-0 bg-white text-black border border-black rounded-xl shadow-md transition-all duration-[250ms] ease-in-out">
                 <div class="py-4 font-bold whitespace-nowrap rounded-lg text-center" id="wsp">
-                    <span>{{board.workspace.workspace_name}}</span> <span class="text-gray-500 font-normal">-
-                        {{board.workspace.created_by}}</span>
+                    <span>{{board.workspace.workspace_name}}</span> 
+                    <span class="text-gray-500 font-normal">-{{board.workspace.created_by}}</span>
+                    <span id="workspace-creator" class="hidden">{{board.workspace.created_by.id}}</span>
                     <span id="toggle-icon" class="ml-16 transform transition-transform duration-300">🡰</span>
                 </div>
 
@@ -61,11 +63,17 @@
                         <div id="editable-name" class="">
                             <input id="edit-name" type="text"
                                 class="bg-transparent text-3xl font-bold cursor-pointer w-auto hover:bg-white/50 rounded-md"
-                                value="{{ board.name }}"/> 
+                                autocomplete="false"
+                                value="{{ board.name }}" />
                         </div>
                         <div class="flex gap-[5rem] items-center">
                             <div>Members</div>
-                            <div id="add-members-btn" class="bg-black text-white font-medium px-2 py-2 rounded-md text-sm hover:bg-gray-800">Add Members + </div>
+                            <div id="add-mem-btn-div">
+                                <button id="add-members-btn"
+                                    class="bg-black text-white font-medium px-2 py-2 rounded-md text-sm hover:bg-gray-800">
+                                    Add Members + 
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <hr class="border-white border-t-2">
@@ -169,7 +177,8 @@
                         <div id="wait-to-invite" class="flex justify-center hidden">
                         </div>
                         <div class="flex justify-end">
-                            <button id="close-invite-modal" type="button" class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
+                            <button id="close-invite-modal" type="button"
+                                class="mr-2 px-4 py-2 text-gray-500">Cancel</button>
                             <button id="send-invite" type="submit"
                                 class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500">Send</button>
                         </div>
@@ -207,6 +216,88 @@
 
                     <div class="flex justify-end">
                         <button id="close-background-modal" class="px-4 py-2 text-gray-500">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="card-modal" class="fixed inset-0 bg-gray-200 flex items-center justify-center hidden">
+                <div class="w-[36rem] bg-white rounded-lg shadow-lg text-gray-800 relative p-6">
+                    <button id="card-modal-close-btn"
+                        class="absolute top-2 right-4 text-gray-500 hover:text-gray-700 text-xl">×</button>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" class="rounded-full border-2 border-gray-500 w-4 h-4">
+                                <h2 class="text-lg font-semibold">Project planning</h2>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 mb-4">in list <span class="cursor-pointer">TO DO ▾</span>
+                        </div>
+                        <div class="flex">
+                            <!-- Left Column -->
+                            <div class="flex-grow pr-4">
+                                <div class="mb-4">
+                                    <h3 class="text-sm font-medium">Labels:</h3>
+                                    <div id="labels" class="text-gray-600 flex flex-wrap gap-2 mt-2"></div>
+                                </div>
+                                <div class="mb-4">
+                                    <h3 class="text-sm font-medium mb-2">Description</h3>
+                                    <textarea class="w-full bg-gray-200 rounded-lg p-2 text-sm"
+                                        placeholder="Add a more detailed description..."></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <h3 class="text-sm font-medium">Activity</h3>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ718nztPNJfCbDJjZG8fOkejBnBAeQw5eAUA&s" alt="User"
+                                            class="w-8 h-8 rounded-full border-2 border-gray-400">
+                                        <input type="text" class="w-full bg-gray-200 rounded-lg p-2 text-sm"
+                                            placeholder="Write a comment...">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right Sidebar -->
+                            <div class="w-36 relative">
+                                <div class="space-y-1">
+                                    <button class="w-full text-left px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm">🚀
+                                        Join Now</button>
+                                    <button class="w-full text-left px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm">👥
+                                        Members</button>
+                                    <select id="labelSelect"
+                                        class="w-full bg-gray-200 rounded-lg text-sm p-2 outline-none"
+                                        onchange="updateLabels()">
+                                        <option value="" hidden>🏷️ Labels</option>
+                                        <option value="Important Urgent">Important Urgent</option>
+                                        <option value="Important Not Urgent">Important Not Urgent</option>
+                                        <option value="Not Important Urgent">Not Important But Urgent</option>
+                                        <option value="Not Important Not Urgent">Not Important Not Urgent</option>
+                                    </select>
+                                    <button class="w-full text-left px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm">✓
+                                        Checklist</button>
+                                    <button class="w-full text-left px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm">📅
+                                        Dates</button>
+                                    <button class="w-full text-left px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm">📎
+                                        Attachment</button>
+                                    <!-- Move To Dropdown -->
+                                    <div class="relative">
+                                        <button onclick="toggleMoveDropdown()"
+                                            class="w-full text-left px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm">Move
+                                            To ➡ </button>
+                                        <div id="moveDropdown"
+                                            class="absolute right-0 mt-1 w-40 bg-white shadow-lg rounded-lg hidden">
+                                            <ul class="text-sm text-gray-700">
+                                                <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">To Do</li>
+                                                <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">In Progress</li>
+                                                <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Done</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 text-right">
+                        <button onclick="saveLabel()"
+                            class="px-4 py-2 bg-rose-600 text-white rounded-lg shadow-md">Save</button>
                     </div>
                 </div>
             </div>

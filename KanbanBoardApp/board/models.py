@@ -30,11 +30,9 @@ class Board(models.Model):
     workspace        = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name='boards')
 
     def save(self, *args, **kwargs):
-        # Save the board instance
-        is_new = self.pk is None  # Check if this is a new board
+        is_new = self.pk is None
         super().save(*args, **kwargs)
 
-        # Add the workspace creator to the board as a member
         if is_new and self.workspace.created_by:
             BoardMember.objects.get_or_create(
                 user=self.workspace.created_by,
@@ -49,8 +47,8 @@ class Board(models.Model):
         return self.name
 
 class BoardMember(models.Model):
-    user  = models.ForeignKey(User, on_delete=models.CASCADE)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    user  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='boarduser')
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='memofboard')
 
     class Meta:
         unique_together = ('user', 'board')

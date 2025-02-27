@@ -18,6 +18,10 @@ const closeListModalBtn = document.getElementById("close-list-modal");
 closeListModalBtn.addEventListener("click", () => closeModal("list-modal"));
 addListForm.addEventListener('submit', createListo);
 
+const cardModal = document.getElementById("card-modal");
+const cardModalCloseBtn = document.getElementById("card-modal-close-btn");
+cardModalCloseBtn.addEventListener("click", ()=>closeModal("card-modal"));
+
 async function fetchLists() {
     try {
         const response = await fetch(`/api/board-${boardId}/get-lists/`, {
@@ -71,6 +75,7 @@ async function createListo(e) {
     } catch (error) {
         console.error('Error fetching workspaces:', error);
     }
+    e.target.reset();
 }
 
 function createList(listObj) {
@@ -98,7 +103,6 @@ function createList(listObj) {
     list.addEventListener("dragstart", dragStart);
     list.addEventListener("dragover", dragOver);
     list.addEventListener("drop", drop);
-
     return list;
 }
 
@@ -157,9 +161,16 @@ function addTask(list, taskCard) {
         dragOverTask = null;
         document.querySelectorAll(".task-drop-preview").forEach(el => el.remove());
     });
-
+    let clickTimeout;
+    task.addEventListener("click", () => {
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(() => {
+            openModal("card-modal");
+        }, 200); 
+    });
     task.addEventListener("dragover", handleTaskDragOver);
     task.addEventListener("dragleave", handleTaskDragLeave);
+
 
     const editBtn = task.querySelector(".edit-task");
     editBtn.addEventListener("click", () => {
@@ -610,10 +621,18 @@ async function sendInvitation(e) {
     }
 }
 
+const selfUserId = document.getElementById("self-user");
+const workspaceCreatorId = document.getElementById("workspace-creator");
+const addMemBtnDiv = document.getElementById("add-mem-btn-div");
+
+
 document.addEventListener("DOMContentLoaded", () => {
     initializeSidebar();
     initializeBackgroundPicker();
     fetchLists();
+    if ((selfUserId.textContent) !== (workspaceCreatorId.textContent)) {
+        addMemBtnDiv.classList.add("hidden");
+    }    
 });
 
 
