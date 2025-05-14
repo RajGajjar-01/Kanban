@@ -3,20 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tailwind Writing Mode</title>
+    <title>Tailwind CSS Gloss Effect</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="p-8">
-    <p class="writing-vertical-rl text-2xl font-bold bg-gray-200 p-4">
-        Vertical Text (Right-to-Left)
-    </p>
+<body class="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+    <div class="max-w-md w-full">
+        <!-- Card with gloss effect -->
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 p-8 text-white transition-all duration-300 hover:bg-opacity-90 hover:shadow-lg group">
+            <!-- Normal content -->
+            <h3 class="text-xl font-bold mb-2">Hover me for gloss effect</h3>
+            <p class="mb-4">This element has a nice glass/gloss effect on hover</p>
+            <button class="bg-white text-purple-600 px-4 py-2 rounded font-medium">Learn More</button>
+            
+            <!-- Gloss effect overlay that appears on hover -->
+            <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100"></div>
+        </div>
 
-    <p class="writing-vertical-lr text-2xl font-bold bg-gray-200 p-4 mt-8">
-        Vertical Text (Left-to-Right)
-    </p>
+        <!-- Add more examples with different colors and styles -->
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-r from-green-500 to-teal-600 p-8 text-white transition-all duration-300 hover:bg-opacity-90 hover:shadow-lg group mt-6">
+            <!-- Normal content -->
+            <h3 class="text-xl font-bold mb-2">Another gloss example</h3>
+            <p class="mb-4">Different colors, same beautiful effect</p>
+            <button class="bg-white text-teal-600 px-4 py-2 rounded font-medium">Explore</button>
+            
+            <!-- Gloss effect overlay that appears on hover -->
+            <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100"></div>
+        </div>
 
-    <p class="writing-horizontal text-2xl font-bold bg-gray-200 p-4 mt-8">
-        Horizontal Text
-    </p>
+        <!-- Another example with different colors -->
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-r from-red-500 to-pink-600 p-8 text-white transition-all duration-300 hover:bg-opacity-90 hover:shadow-lg group mt-6">
+            <!-- Normal content -->
+            <h3 class="text-xl font-bold mb-2">One more gloss effect</h3>
+            <p class="mb-4">Try hovering over all these examples</p>
+            <button class="bg-white text-pink-600 px-4 py-2 rounded font-medium">Get Started</button>
+            
+            <!-- Gloss effect overlay that appears on hover -->
+            <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100"></div>
+        </div>
+    </div>
 </body>
 </html>

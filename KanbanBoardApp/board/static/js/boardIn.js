@@ -1,4 +1,5 @@
-import { openModal, closeModal, getCookie } from "./utils.js";
+import { openModal, closeModal, getCookie, initThemeToggle } from "./utils.js"
+import { icon_left, icon_right } from "./constants.js";
 
 const listArray = [];
 let listCounter = 0;
@@ -20,7 +21,7 @@ addListForm.addEventListener('submit', createListo);
 
 const cardModal = document.getElementById("card-modal");
 const cardModalCloseBtn = document.getElementById("card-modal-close-btn");
-cardModalCloseBtn.addEventListener("click", ()=>closeModal("card-modal"));
+cardModalCloseBtn.addEventListener("click", () => closeModal("card-modal"));
 
 async function fetchLists() {
     try {
@@ -81,7 +82,7 @@ async function createListo(e) {
 function createList(listObj) {
     listCounter++;
     const list = document.createElement("div");
-    list.className = "bg-white p-4 rounded-xl shadow-md w-72 h-fit border border-black";
+    list.className = "bg-secondary dark:bg-[#383838] dark:border-border-dark/50 dark:text-white py-4 px-2 rounded-md w-80 h-fit border border-border/80";
     list.setAttribute("draggable", "true");
     list.id = `list-${listObj.id}`;
     list.innerHTML = `
@@ -97,7 +98,7 @@ function createList(listObj) {
             </div>
         </div>
         <div class="tasks space-y-2"></div>
-        <button class="add-task bg-black text-white font-medium px-2 py-2 rounded-md text-sm hover:bg-gray-800 mt-4">Add Task</button>
+        <button class="add-task bg-black dark:bg-indigo-600 text-white font-medium px-2 py-2 rounded-md text-sm hover:bg-gray-800 dark:hover:bg-indigo-500 transition duration-200 mt-4">Add Task</button>
     `;
 
     list.addEventListener("dragstart", dragStart);
@@ -134,16 +135,23 @@ async function deleteList(listId) {
 function addTask(list, taskCard) {
     const taskContainer = list.querySelector(".tasks");
     const task = document.createElement("div");
-    task.className = "bg-gray-200 p-3 rounded-md border border-gray-200 shadow-sm cursor-move group relative hover:bg-gray-300 ";
+    task.className = "bg-primary dark:bg-primary-dark p-4 rounded-md border border-stone-300  dark:border-border-dark/50 hover:shadow-lg cursor-move group relative hover:rotate-2 transition-transform duration-100 ease-in-out";
     task.setAttribute("draggable", "true");
     task.id = `task-${taskCard.id}`;
     task.innerHTML = `
-        <div class="flex justify-between items-center">
+        <div>
+            <div class="flex justify-between items-center">
             <span class="task-text">${taskCard.card_name}</span>
             <button class="edit-task text-blue-500 hover:text-blue-700 hidden group-hover:block absolute right-2">
-                <i class="fas fa-edit"></i>
+            <i class="fas fa-edit"></i>
             </button>
         </div>
+        <div class="flex items-center mt-2">
+            <div class="w-full"></div>
+            <span class="opacity-50"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square-icon lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg></span>
+        </div>
+        </div>
+      
     `;
 
     // Drag events
@@ -163,10 +171,10 @@ function addTask(list, taskCard) {
     });
     let clickTimeout;
     task.addEventListener("click", () => {
-            clearTimeout(clickTimeout);
-            clickTimeout = setTimeout(() => {
+        clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(() => {
             openModal("card-modal");
-        }, 200); 
+        }, 200);
     });
     task.addEventListener("dragover", handleTaskDragOver);
     task.addEventListener("dragleave", handleTaskDragLeave);
@@ -263,9 +271,9 @@ function renderLists(lists) {
 
 function createAddListCard() {
     const addListDiv = document.createElement("div");
-    addListDiv.className = "bg-white/50 p-4 rounded-xl w-72 h-fit flex items-center justify-center cursor-pointer hover:bg-white/60";
+    addListDiv.className = "bg-secondary p-4 rounded-xl w-72 h-fit flex items-center justify-center cursor-pointer hover:bg-white/60 dark:bg-secondary-dark dark:hover:bg-secondary/20 transition duration-200 ease-in-out border border-border/80 dark:border-border-dark/50";
     addListDiv.innerHTML = `
-        <div class="text-gray-600 text-center">
+        <div class="dark:text-[#7d828c] text-center">
             <i class="fas fa-plus mb-2 text-2xl"></i>
             <div>Add List</div>
         </div>
@@ -280,34 +288,73 @@ const sidebar = document.getElementById("sidebar");
 const mainContent = document.getElementById("main-content");
 const sidebarnav = document.getElementById("sidebar-nav");
 let isSidebarOpen = true;
-const wsp = document.getElementById("wsp");
-const toggleicon = document.getElementById("toggle-icon");
+const sidebarIcon = document.getElementById("wsp");
+const toggleicon = document.getElementsByClassName("toggle-icon");
+const headerlogo = document.getElementById("header-logo");
+const profile = document.getElementById("profile");
 
 function initializeSidebar() {
-    wsp.addEventListener("click", () => {
+
+    sidebarIcon.insertAdjacentHTML('beforeend', icon_left);
+    sidebarIcon.insertAdjacentHTML('beforeend', icon_right);
+    sidebarIcon.classList.add("hover:bg-[#e8e6dc]","dark:hover:bg-secondary/20", "p-1", "rounded-lg");
+
+    const panelIcon = sidebarIcon.querySelector(".lucide-panel-right");
+    const leftArrow = document.getElementById("arrow-left-icon");
+    const rightArrow = document.getElementById("arrow-right-icon");
+
+    // Add hover event listeners
+    sidebarIcon.addEventListener("mouseenter", () => {
+        panelIcon.classList.add("hidden");
+        if (isSidebarOpen) {
+            leftArrow.classList.remove("hidden");
+        } else {
+            rightArrow.classList.remove("hidden");
+        }
+    });
+
+    sidebarIcon.addEventListener("mouseleave", () => {
+        panelIcon.classList.remove("hidden");
+        leftArrow.classList.add("hidden");
+        rightArrow.classList.add("hidden");
+    });
+
+    sidebarIcon.addEventListener("click", () => {
         if (isSidebarOpen) {
             closeSidebar();
-            toggleicon.classList.add("hidden");
         } else {
             openSidebar();
-            toggleicon.classList.remove("hidden");
         }
         isSidebarOpen = !isSidebarOpen;
+
+        if (sidebarIcon.matches(':hover')) {
+            panelIcon.classList.add("hidden");
+            leftArrow.classList.add("hidden");
+            rightArrow.classList.add("hidden");
+
+            if (isSidebarOpen) {
+                leftArrow.classList.remove("hidden");
+            } else {
+                rightArrow.classList.remove("hidden");
+            }
+        }
     });
 }
 
 function closeSidebar() {
     sidebar.classList.remove("w-[20rem]");
-    sidebar.classList.add("w-[2rem]", "hover:bg-gray-200");
+    sidebar.classList.add("w-[3rem]", "items-center");
     sidebarnav.classList.add("hidden");
-    wsp.classList.add("transform", "rotate-[-90deg]", "translate-y-[280%]", "origin-center");
+    headerlogo.classList.add("hidden");
+    profile.classList.add("hidden");
 }
 
 function openSidebar() {
-    sidebar.classList.remove("w-[2rem]", "hover:bg-gray-200");
+    sidebar.classList.remove("w-[3rem]", "items-center");
     sidebar.classList.add("w-[20rem]");
     sidebarnav.classList.remove("hidden");
-    wsp.classList.remove("transform", "rotate-[-90deg]", "translate-y-[280%]", "origin-center");
+    headerlogo.classList.remove("hidden");
+    profile.classList.remove("hidden");
 }
 
 document.getElementById("close-task-modal").addEventListener("click", () => {
@@ -323,6 +370,7 @@ function handleTaskDragOver(e) {
     if (targetTask === draggedTask) return;
 
     dragOverTask = targetTask;
+    dragOver.classList.add("rotate-2")
 
     document.querySelectorAll(".task-drop-preview").forEach(el => el.remove());
 
@@ -557,7 +605,7 @@ async function createTasko(e, listId) {
 
 async function updateTaskParentList(taskId, listId) {
     try {
-        const response = await fetch(`/api/destination-list-${listId}/card-${taskId}/`,{
+        const response = await fetch(`/api/destination-list-${listId}/card-${taskId}/`, {
             method: 'PUT',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -603,13 +651,13 @@ async function sendInvitation(e) {
                 'X-CSRFToken': getCookie('csrftoken'),
             }
         })
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         if (data.success) {
             text.innerHTML = `<div data-aos="fade-out">Invitation send successfully</div>`;
-            setTimeout(()=>{
+            setTimeout(() => {
                 closeModal('invite-member-modal');
                 text.classList.add("hidden");
             }, 1000);
@@ -632,7 +680,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchLists();
     if ((selfUserId.textContent) !== (workspaceCreatorId.textContent)) {
         addMemBtnDiv.classList.add("hidden");
-    }    
+    }
 });
 
 
