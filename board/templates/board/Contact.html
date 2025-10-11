@@ -1,0 +1,80 @@
+{% extends "board/Base.html" %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center p-4 bg-violet-300 font-poppins">
+    <div class="w-[40rem] bg-white rounded-2xl shadow-xl p-12" data-aos="fade-down" data-aos-duration="400" data-aos-delay="400">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Get in Touch</h1>
+            <p class="text-gray-600">Please fill out the form below</p>
+        </div>
+
+        <!-- Form -->
+        <form class="space-y-6" action="https://api.web3forms.com/submit" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="access_key" value="77e1dff2-69ed-45f8-9823-d6c425e40de1">
+            <input type="hidden" name="redirect" value="http://127.0.0.1:8000/success">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+                    Your Name
+                </label>
+                <input type="text" id="name" name="name" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="Enter your name">
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                    Your Email
+                </label>
+                <input type="email" id="email" name="email" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="Enter your email">
+            </div>
+
+            <!-- Reason -->
+            <div>
+                <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">
+                    Reason for Contact
+                </label>
+                <select id="reason" name="reason" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white">
+                    <option value="" disabled selected>Select a reason</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="technical">Technical Support</option>
+                    <option value="feedback">Feedback</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Subject -->
+            <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">
+                    Subject
+                </label>
+                <input type="text" id="subject" name="subject" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="Enter subject">
+            </div>
+
+            <div>
+                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">
+                    Your Message
+                </label>
+                <textarea id="message" name="message" rows="4" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Enter your message"></textarea>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border
+                        text-sm font-medium rounded-lg text-white bg-rose-600 hover:bg-rose-500
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-400
+                        transition-colors duration-200">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
