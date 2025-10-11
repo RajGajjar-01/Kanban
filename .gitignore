@@ -1,1 +1,41 @@
-.venv 
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+media/
+staticfiles/
+static/dist/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# UV
+uv.lock
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Tailwind
+node_modules/
+.django_tailwind_cli/
+EOF
