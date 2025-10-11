@@ -1,0 +1,31 @@
+{% extends "board/Base.html" %}
+{% block content %}
+    <div class="min-h-screen flex items-center justify-center bg-violet-300 text-center p-4 font-poppins">
+        <main class="flex flex-col items-center justify-center space-y-4">
+            <!-- Success Icon -->
+            <div class="w-32 h-32 rounded-full border-2 border-rose-600 flex items-center justify-center mb-2" data-aos="zoom-out-down" data-aos-delay="200">
+                <svg class="w-14 h-14 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-aos="zoom-in-down" data-aos-delay="300">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <!-- Success Message -->
+            <div class="text-black text-3xl font-medium">    
+                Form submitted successfully!
+            </div>
+
+            <!-- Confirmation Text -->
+            <div class="space-y-1">
+                <p class="text-gray-900">Thank you! The form has been submitted successfully.</p>
+                <p class="text-gray-900">We will reply to you soon!</p>
+            </div>
+
+            <!-- Back Link -->
+            <a href="{% url 'board-home' %}">
+                <button class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
+                    Home
+                </button>
+            </a>
+        </main>
+    </div>
+{% endblock content %}
