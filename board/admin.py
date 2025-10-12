@@ -1,33 +1,54 @@
 from django.contrib import admin
-from .models import Board, BoardMember, Workspace, List, Card, Comment, CardActivity, CardAttachment, CardMember
+from .models import (
+    Board,
+    BoardMember,
+    Workspace,
+    List,
+    Card,
+    Comment,
+    CardActivity,
+    CardAttachment,
+    CardMember,
+)
+
+
 class BoardAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'created_date', 'workspace']
+    list_display = ["id", "name", "created_date", "workspace"]
+
 
 class BoardMemberAdmin(admin.ModelAdmin):
-    list_display = ['id' ,'user', 'board']
+    list_display = ["id", "user", "board"]
+
 
 class WorkspaceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'workspace_name', 'created_by', 'board_list', 'created_date']
+    list_display = ["id", "workspace_name", "created_by", "board_list", "created_date"]
+
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ['id', 'list_id' , 'card_name', 'card_description', 'created_date']
+    list_display = ["id", "list_id", "card_name", "card_description", "created_date"]
+
 
 class CardMemberAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'card', 'added_date']
+    list_display = ["id", "user", "card", "added_date"]
+
 
 class ListAdmin(admin.ModelAdmin):
-    list_display = ['id', 'board', 'list_name', 'list_position']
+    list_display = ["id", "board", "list_name", "list_position"]
+
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'card', 'created_date', 'updated_date']
-    list_filter = ['created_date', 'user']
-    search_fields = ['content', 'user__username', 'card__card_name']
+    list_display = ["id", "user", "card", "created_date", "updated_date"]
+    list_filter = ["created_date", "user"]
+    search_fields = ["content", "user__username", "card__card_name"]
+
 
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ['user', 'card', 'activity', 'created_date']
+    list_display = ["user", "card", "activity", "created_date"]
+
 
 class AttachmentAdmin(admin.ModelAdmin):
-    list_display = ['card', 'uploaded_date', 'name', 'location']
+    list_display = ["card", "uploaded_date", "name", "location"]
+
 
 admin.site.register(Board, BoardAdmin)
 admin.site.register(BoardMember, BoardMemberAdmin)

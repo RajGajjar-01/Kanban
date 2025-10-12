@@ -1,51 +1,8 @@
-{% extends "board/Base.html" %}
+{% extends "base.html" %}
 {% block content %}
 <div>
-    <nav class="fixed z-10 w-full py-1 bg-sky-50 shadow-2xl" data-aos="fade-down" data-aos-duration="300">
-        <div class="mx-auto flex items-center justify-between px-8">
-          <!-- Logo -->
-          <a href="{% url 'board-landing' %}" class="text-[2.4rem] font-bold text-black">Taskify</a>
-      
-          <!-- Wrap Button in a Fixed Container -->
-          <div class="flex ms-auto items-center md:hidden ">
-            <button id="mobile-menu-button" class="p-2 rounded-md hover:bg-gray-100 focus:outline-none">
-              <svg class="w-6 h-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-          </div>
-      
-          <!-- Navigation Links -->
-          <div class="hidden md:flex items-center space-x-8" id="mobile-menu">
-            <div
-              class="md:flex md:items-center md:space-x-8 absolute md:relative left-0 right-0 top-[72px] md:top-0 bg-purple-400 md:bg-transparent p-4 md:p-0 border-b md:border-0 flex flex-col md:flex-row space-y-4 md:space-y-0">
-              <a href="#" class="text-gray-600 hover:text-gray-300 transition-colors">About Us</a>
-              <a href="{% url 'board-contact' %}" class="text-gray-600 hover:text-gray-800 transition-colors">Contact</a>
-              <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">Blogs</a>
-              <button id="theme-toggle" class="group p-2 rounded border bg-transparent dark:border-gray-700">
-              </button>
-      
-              {% if user.is_authenticated %}
-              <a href="{% url 'board-home' %}"
-                class="px-12 py-3 font-semibold border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
-                Go to Boards
-              </a>
-              {% else %}
-              <a href="{% url 'user-login' %}"
-                class="px-12 py-3 font-semibold border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
-                Sign in
-              </a>
-              <a href="{% url 'user-register' %}"
-                class="px-12 py-3 font-semibold border border-rose-600 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white hover:scale-105 hover:translate-y-[-2px] transition-all">
-                Get Started
-              </a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </nav>
-          <div class="max-w-7xl mx-auto px-4 pt-[12rem] pb-[8rem]">
+    
+        <div class="max-w-7xl mx-auto px-4 pt-[12rem] pb-[8rem]">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Left Column - Text Content -->
             <div class="space-y-8" data-aos="fade in" data-aos-delay="200" data-aos-duration="400">

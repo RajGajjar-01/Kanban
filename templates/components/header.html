@@ -1,0 +1,39 @@
+<nav class="navbar" data-component="navbar">
+  <div class="navbar-container">
+    <a href="{% url 'board-landing' %}" class="navbar-logo">
+      Taskify
+    </a>
+
+    <button class="navbar-toggle" data-navbar-toggle aria-label="Toggle menu">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
+    <div class="navbar-menu" data-navbar-menu>
+      <div class="navbar-links">
+        <a href="#" class="btn-link">About Us</a>
+        <a href="{% url 'board-contact' %}" class="btn-link">Contact</a>
+        <a href="#" class="btn-link">Blogs</a>
+      </div>
+
+      <div class="navbar-actions">
+        <button data-theme-toggle class="navbar-theme-toggle" aria-label="Toggle theme">
+        </button>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'board-home' %}" class="btn btn-default btn-default-size">
+            Go to Boards
+          </a>
+        {% else %}
+          <a href="{% url 'user-login' %}" class="btn btn-secondary btn-default-size">
+            Sign in
+          </a>
+          <a href="{% url 'user-register' %}" class="btn btn-default btn-default-size">
+            Get Started
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

@@ -4,15 +4,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('board', '0001_initial'),
+        ("board", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='boardinvitaton',
-            name='status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('expired', 'Expired')], default='pending', max_length=12),
+            model_name="boardinvitaton",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "Pending"),
+                    ("accepted", "Accepted"),
+                    ("expired", "Expired"),
+                ],
+                default="pending",
+                max_length=12,
+            ),
         ),
     ]
