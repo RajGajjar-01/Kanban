@@ -46,7 +46,7 @@ known-first-party = ["Kanban"]
 
 [tool.djlint]
 profile = "django"
-ignore = "H031"  # Ignore specific rules if needed
+ignore = "H031,H005,H030"  
 indent = 2
 max_line_length = 120
 
