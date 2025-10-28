@@ -1,0 +1,15 @@
+<c-vars 
+    variant="legend"
+/>
+
+<legend
+    data-slot="field-legend"
+    data-variant="{{ variant }}"
+    class="mb-3 font-medium
+    {% if variant == 'legend' %}text-base
+    {% elif variant == 'label' %}text-sm
+    {% endif %}"
+    {{ attrs }}
+>
+    {{ slot }}
+</legend>

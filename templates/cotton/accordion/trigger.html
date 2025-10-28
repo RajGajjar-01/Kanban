@@ -1,0 +1,29 @@
+<c-vars 
+    value=""
+/>
+
+<button 
+    type="button"
+    @click="toggle('{{ value }}')"
+    :data-state="isOpen('{{ value }}') ? 'open' : 'closed'"
+    data-slot="accordion-trigger"
+    class="flex flex-1 items-center justify-between py-4 text-sm font-medium transition-all hover:underline text-left w-full"
+    {{ attrs }}
+>
+    {{ slot }}
+    <svg 
+        class="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" 
+        :class="{ 'rotate-180': isOpen('{{ value }}') }"
+        xmlns="http://www.w3.org/2000/svg" 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        stroke-width="2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+    >
+        <path d="m6 9 6 6 6-6"/>
+    </svg>
+</button>
