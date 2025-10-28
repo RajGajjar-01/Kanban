@@ -1,124 +1,130 @@
 {% extends "base.html" %}
 {% block content %}
 <div>
-    
-        <div class="max-w-7xl mx-auto px-4 pt-[12rem] pb-[8rem]">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <!-- Left Column - Text Content -->
-            <div class="space-y-8" data-aos="fade in" data-aos-delay="200" data-aos-duration="400">
-                <h1 class="text-4xl md:text-5xl lg:text-[2.75rem] font-bold leading-tight text-black">
-                    Simplify collaboration by bringing your tasks and team together with
-                    Taskify.
-                </h1>
-                <p class="text-xl font-medium text-gray-800">
-                    Keep everything in the same place—even if your team isn't.
-                </p>
 
-                <p>
-                    <a href="{% url 'user-register' %}">
-                        <button
-                            class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
-                            Get Started
-                        </button>
-                    </a>
-                </p>
-            </div>
-
-            <!-- Right Column - UI Mockup -->
-            <div class="relative" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="600">
-                <!-- Sidebar Navigation -->
-                <div class="flex flex-col space-y-4  pr-4">
-                    <img src="https://images.ctfassets.net/rz1oowkt5gyp/75rDABL8fyMtNLlUAtBxrg/c5e145977a86c41c47e17c69410c64f7/TrelloUICollage_4x.png?w=1140&fm=webp"
-                        alt="">
-                </div>
-            </div>
+  <div class="max-w-7xl mx-auto px-4 pt-[12rem] pb-[8rem]">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Left Column - Text Content -->
+      <div class="space-y-8" data-aos="fade in" data-aos-delay="200" data-aos-duration="400">
+        <h1 class="text-4xl md:text-5xl lg:text-[2.75rem] font-bold leading-tight text-black">
+          Simplify collaboration by bringing your tasks and team together with
+          Taskify.
+        </h1>
+        <div>
+          <c-card title="Trees">
+            We have the best trees
+          </c-card>
         </div>
+        <p class="text-xl font-medium text-gray-800">
+          Keep everything in the same place—even if your team isn't.
+        </p>
+
+        <p>
+          <a href="{% url 'user-register' %}">
+            <button
+              class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
+              Get Started
+            </button>
+          </a>
+        </p>
+      </div>
+
+      <!-- Right Column - UI Mockup -->
+      <div class="relative" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="600">
+        <!-- Sidebar Navigation -->
+        <div class="flex flex-col space-y-4  pr-4">
+          <img
+            src="https://images.ctfassets.net/rz1oowkt5gyp/75rDABL8fyMtNLlUAtBxrg/c5e145977a86c41c47e17c69410c64f7/TrelloUICollage_4x.png?w=1140&fm=webp"
+            alt="">
+        </div>
+      </div>
     </div>
-    <div class="mt-4 mx-auto px-4">
-        <!-- Features Section -->
-        <section class="py-[8rem] bg-white rounded-lg">
-          <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
-            Features
-          </h2>
-          <!-- Rest of the sections remain unchanged -->
-          <div id="features-container" class="overflow-x-auto hide-scrollbar whitespace-nowrap p-8">
-            <!-- Feature cards will be dynamically inserted here -->
-          </div>
-          <script>
-            document.addEventListener("DOMContentLoaded", function () {
-              const featuresContainer =
-                document.getElementById("features-container");
-              const headingSection = document.getElementById("heading-section");
-  
-              const features = [
-                {
-                  title: "Task Management",
-                  description:
-                    "Organize and prioritize your tasks with our intuitive drag-and-drop interface.",
-                  color: "red",
-                },
-                {
-                  title: "Team Collaboration",
-                  description:
-                    "Work seamlessly with your team members, share ideas, and stay in sync.",
-                  color: "blue",
-                },
-                {
-                  title: "Project Timeline",
-                  description:
-                    "Visualize your project progress with interactive Gantt charts and timelines.",
-                  color: "green",
-                },
-                {
-                  title: "File Sharing",
-                  description:
-                    "Securely share and manage files within your team and with external stakeholders.",
-                  color: "yellow",
-                },
-                {
-                  title: "Customizable Workflows",
-                  description:
-                    "Create and customize workflows that fit your team's unique processes.",
-                  color: "purple",
-                },
-                {
-                  title: "Time Tracking",
-                  description:
-                    "Monitor time spent on tasks and projects to improve productivity and billing.",
-                  color: "pink",
-                },
-                {
-                  title: "Reporting & Analytics",
-                  description:
-                    "Gain insights into your team's performance with detailed reports and dashboards.",
-                  color: "indigo",
-                },
-                {
-                  title: "Mobile App",
-                  description:
-                    "Stay connected and productive on-the-go with our powerful mobile application.",
-                  color: "orange",
-                },
-                {
-                  title: "Integration Support",
-                  description:
-                    "Connect with your favorite tools and services for a seamless workflow.",
-                  color: "teal",
-                },
-                {
-                  title: "Data Security",
-                  description:
-                    "Rest easy knowing your data is protected with enterprise-grade security measures.",
-                  color: "gray",
-                },
-              ];
-  
-              // Create and append feature cards
-              features.forEach((feature, index) => {
-                const featureCard = document.createElement("div");
-                featureCard.className = `inline-block bg-white p-6 rounded-lg shadow-md border relative overflow-hidden mr-4 w-[25%] h-64 `;
-                featureCard.style.verticalAlign = "top";
-                featureCard.innerHTML = `
+  </div>
+  <div class="mt-4 mx-auto px-4">
+    <!-- Features Section -->
+    <section class="py-[8rem] bg-white rounded-lg">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
+        Features
+      </h2>
+      <!-- Rest of the sections remain unchanged -->
+      <div id="features-container" class="overflow-x-auto hide-scrollbar whitespace-nowrap p-8">
+        <!-- Feature cards will be dynamically inserted here -->
+      </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const featuresContainer =
+            document.getElementById("features-container");
+          const headingSection = document.getElementById("heading-section");
+
+          const features = [
+            {
+              title: "Task Management",
+              description:
+                "Organize and prioritize your tasks with our intuitive drag-and-drop interface.",
+              color: "red",
+            },
+            {
+              title: "Team Collaboration",
+              description:
+                "Work seamlessly with your team members, share ideas, and stay in sync.",
+              color: "blue",
+            },
+            {
+              title: "Project Timeline",
+              description:
+                "Visualize your project progress with interactive Gantt charts and timelines.",
+              color: "green",
+            },
+            {
+              title: "File Sharing",
+              description:
+                "Securely share and manage files within your team and with external stakeholders.",
+              color: "yellow",
+            },
+            {
+              title: "Customizable Workflows",
+              description:
+                "Create and customize workflows that fit your team's unique processes.",
+              color: "purple",
+            },
+            {
+              title: "Time Tracking",
+              description:
+                "Monitor time spent on tasks and projects to improve productivity and billing.",
+              color: "pink",
+            },
+            {
+              title: "Reporting & Analytics",
+              description:
+                "Gain insights into your team's performance with detailed reports and dashboards.",
+              color: "indigo",
+            },
+            {
+              title: "Mobile App",
+              description:
+                "Stay connected and productive on-the-go with our powerful mobile application.",
+              color: "orange",
+            },
+            {
+              title: "Integration Support",
+              description:
+                "Connect with your favorite tools and services for a seamless workflow.",
+              color: "teal",
+            },
+            {
+              title: "Data Security",
+              description:
+                "Rest easy knowing your data is protected with enterprise-grade security measures.",
+              color: "gray",
+            },
+          ];
+
+          // Create and append feature cards
+          features.forEach((feature, index) => {
+            const featureCard = document.createElement("div");
+            featureCard.className = `inline-block bg-white p-6 rounded-lg shadow-md border relative overflow-hidden mr-4 w-[25%] h-64 `;
+            featureCard.style.verticalAlign = "top";
+            featureCard.innerHTML = `
                             <div class="absolute top-0 left-0 w-full h-12 bg-${feature.color}-200 flex">
                                 <div class="top-5 left-5 w-12 h-12 bg-${feature.color}-500 rounded-full border-4 border-white absolute"></div>
                             </div>
@@ -127,344 +133,345 @@
                                 ${feature.description}
                             </p>
                         `;
-                if (index === features.length - 1) {
-                  featureCard.id = "last-feature";
-                }
-                featuresContainer.appendChild(featureCard);
-              });
-  
-              // Horizontal scroll and auto-scroll functionality
-              featuresContainer.addEventListener("scroll", function () {
-                const containerScrollWidth = featuresContainer.scrollWidth;
-                const containerClientWidth = featuresContainer.clientWidth;
-                const currentScrollPosition = featuresContainer.scrollLeft;
-  
-                if (
-                  currentScrollPosition + containerClientWidth >=
-                  containerScrollWidth - 10
-                ) {
-                  setTimeout(() => {
-                    headingSection.scrollIntoView({ behavior: "smooth" });
-                  }, 500);
-                }
-              });
-            });
-          </script>
-        </section>
+            if (index === features.length - 1) {
+              featureCard.id = "last-feature";
+            }
+            featuresContainer.appendChild(featureCard);
+          });
+
+          // Horizontal scroll and auto-scroll functionality
+          featuresContainer.addEventListener("scroll", function () {
+            const containerScrollWidth = featuresContainer.scrollWidth;
+            const containerClientWidth = featuresContainer.clientWidth;
+            const currentScrollPosition = featuresContainer.scrollLeft;
+
+            if (
+              currentScrollPosition + containerClientWidth >=
+              containerScrollWidth - 10
+            ) {
+              setTimeout(() => {
+                headingSection.scrollIntoView({ behavior: "smooth" });
+              }, 500);
+            }
+          });
+        });
+      </script>
+    </section>
+  </div>
+
+
+  <div class="max-w-7xl mx-auto px-4 py-20" data-aos="fade-up" data-aos-duration="600" data-aos-easing="ease-in-sine"
+    data-aos-offset="300">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Left Column - Content -->
+      <div class="space-y-6 text-black">
+        <h2 class="text-4xl font-bold">
+          Features to help your team succeed
+        </h2>
+        <p class="leading-relaxed">
+          Powering a productive team means using a powerful tool (and plenty
+          of snacks). From meetings and projects to events and goal setting,
+          Kanban's intuitive features give any team the ability to quickly
+          set up and customize workflows for just about anything
+        </p>
+        <button
+          class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
+          Learn more about Heading
+        </button>
       </div>
-  
 
-    <div class="max-w-7xl mx-auto px-4 py-20" data-aos="fade-up" data-aos-duration="600" data-aos-easing="ease-in-sine" data-aos-offset="300">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <!-- Left Column - Content -->
-            <div class="space-y-6 text-black">
-              <h2 class="text-4xl font-bold">
-                Features to help your team succeed
-              </h2>
-              <p class="leading-relaxed">
-                Powering a productive team means using a powerful tool (and plenty
-                of snacks). From meetings and projects to events and goal setting,
-                Kanban's intuitive features give any team the ability to quickly
-                set up and customize workflows for just about anything
-              </p>
-              <button
-                class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
-                Learn more about Heading
-              </button>
-            </div>
-
-             <!-- Right Column - Gradient Card -->
-            <div class="aspect-[16/10] w-full">
-                <div class="w-full h-full bg-red-100 rounded-3xl shadow-xl">
-                <img
-                    src="https://images.ctfassets.net/rz1oowkt5gyp/4kCNudjaBYj90CGgG7Lict/cbafa67336b2007278f50d99ceabfb22/Boards_2x.png?w=1824&fm=webp" />
-                </div>
-            </div>
+      <!-- Right Column - Gradient Card -->
+      <div class="aspect-[16/10] w-full">
+        <div class="w-full h-full bg-red-100 rounded-3xl shadow-xl">
+          <img
+            src="https://images.ctfassets.net/rz1oowkt5gyp/4kCNudjaBYj90CGgG7Lict/cbafa67336b2007278f50d99ceabfb22/Boards_2x.png?w=1824&fm=webp" />
         </div>
-    </div>
-
-    <div class="max-w-7xl max-h-100 mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center" data-aos="fade-up"
-        data-aos-duration="600" data-aos-easing="ease-in-sine">
-          <!-- Left Column - Gradient Card -->
-            <div class="aspect-[16/10] w-full">
-                <div class="w-full h-full bg-red-100 rounded-3xl shadow-xl">
-                <img
-                    src="https://images.ctfassets.net/rz1oowkt5gyp/6qNFanQxzRQEUQGMwc72KG/e0d4a143dfd448cfc14e89813924f3da/PremiumLP_HeroImage_2x.png?w=1280&fm=webp" />
-                </div>
-            </div>
-            <!-- Right Column - Content -->
-            <div class="space-y-6 text-black">
-                <h2 class="text-4xl font-bold">The board is just the beginning</h2>
-                <p class="leading-relaxed">
-                  Lists and cards are the building blocks of organizing work on a
-                  Trello board. Grow from there with task assignments, timelines,
-                  productivity metrics, calendars, and more.
-                </p>
-                <button
-                  class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
-                  Learn more about Heading
-                </button>
-              </div>
-
-
-    </div>
-    <div class="mt-4 mx-auto px-4">
-        <section class="bg-white rounded-lg shadow-lg py-5 px-6">
-          <!-- FAQ Section -->
-          <section class="max-w-4xl mx-auto px-4 py-12">
-            <h2 class="text-3xl font-bold text-center mb-8">
-              Frequently Asked Questions
-            </h2>
-            <div class="space-y-4">
-              <!-- FAQ Item 1 -->
-              <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-right">
-                <button
-                  class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
-                  How do I get started?
-                  <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div
-                  class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                  <div class="py-4">
-                    Simply sign up for an account, create your first project, and start adding tasks. Our intuitive
-                    interface makes it easy to get started.
-                  </div>
-                </div>
-              </div>
-  
-              <!-- FAQ Item 2 -->
-              <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-left">
-                <button
-                  class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
-                  What is the purpose of this platform?
-                  <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div
-                  class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                  <div class="py-4">
-                    Our platform is designed to simplify collaboration and task management for teams and individuals. It
-                    helps you organize tasks, track progress, and stay productive.
-                  </div>
-                </div>
-              </div>
-  
-              <!-- FAQ Item 3 -->
-              <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-right">
-                <button
-                  class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
-                  Can I collaborate with my team?
-                  <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div
-                  class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                  <div class="py-4">
-                    Yes, our platform is built for collaboration. You can invite team members, assign tasks, and track
-                    progress together.
-                  </div>
-                </div>
-              </div>
-  
-              <!-- FAQ Item 4 -->
-              <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-left">
-                <button
-                  class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
-                  Can I set deadlines for tasks?
-                  <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div
-                  class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                  <div class="py-4">
-                    Absolutely! You can set deadlines, reminders, and priorities for each task to ensure timely
-                    completion.
-                  </div>
-                </div>
-              </div>
-  
-              <!-- FAQ Item 5 -->
-              <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-right">
-                <button
-                  class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
-                  Can I use KanbanBoard for project management?
-                  <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div
-                  class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                  <div class="py-4">
-                    Yes, it is designed to help manage projects by providing a clear view of tasks, timelines, and team
-                    responsibilities.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </section>
       </div>
-      <footer class="pt-6 w-full">
-        <!-- Footer Content -->
-        <div class="bg-black text-white px-18 py-40">
-          <div class="max-w-7xl mx-auto grid grid-cols-4 gap-8">
-            <!-- Logo -->
-            <div>
-              <h3 class="text-2xl font-bold mb-6">Logo</h3>
+    </div>
+  </div>
+
+  <div class="max-w-7xl max-h-100 mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center" data-aos="fade-up"
+    data-aos-duration="600" data-aos-easing="ease-in-sine">
+    <!-- Left Column - Gradient Card -->
+    <div class="aspect-[16/10] w-full">
+      <div class="w-full h-full bg-red-100 rounded-3xl shadow-xl">
+        <img
+          src="https://images.ctfassets.net/rz1oowkt5gyp/6qNFanQxzRQEUQGMwc72KG/e0d4a143dfd448cfc14e89813924f3da/PremiumLP_HeroImage_2x.png?w=1280&fm=webp" />
+      </div>
+    </div>
+    <!-- Right Column - Content -->
+    <div class="space-y-6 text-black">
+      <h2 class="text-4xl font-bold">The board is just the beginning</h2>
+      <p class="leading-relaxed">
+        Lists and cards are the building blocks of organizing work on a
+        Trello board. Grow from there with task assignments, timelines,
+        productivity metrics, calendars, and more.
+      </p>
+      <button
+        class="px-6 py-3 bg-rose-600 text-white rounded-lg hover:scale-105 hover:translate-y-[-2px] transition-all font-medium">
+        Learn more about Heading
+      </button>
+    </div>
+
+
+  </div>
+  <div class="mt-4 mx-auto px-4">
+    <section class="bg-white rounded-lg shadow-lg py-5 px-6">
+      <!-- FAQ Section -->
+      <section class="max-w-4xl mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-center mb-8">
+          Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-right">
+            <button
+              class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
+              How do I get started?
+              <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="py-4">
+                Simply sign up for an account, create your first project, and start adding tasks. Our intuitive
+                interface makes it easy to get started.
+              </div>
             </div>
-  
-            <!-- Use Cases -->
-            <div>
-              <h3 class="font-semibold mb-6">Use Cases</h3>
-              <ul class="space-y-3">
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Project Builder</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Productivity</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Small Business</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Task Management</a>
-                </li>
-              </ul>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-left">
+            <button
+              class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
+              What is the purpose of this platform?
+              <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="py-4">
+                Our platform is designed to simplify collaboration and task management for teams and individuals. It
+                helps you organize tasks, track progress, and stay productive.
+              </div>
             </div>
-  
-            <!-- Company -->
-            <div>
-              <h3 class="font-semibold mb-6">Company</h3>
-              <ul class="space-y-3">
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">FAQs</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Teams</a>
-                </li>
-                <li>
-                  <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a>
-                </li>
-              </ul>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-right">
+            <button
+              class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
+              Can I collaborate with my team?
+              <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="py-4">
+                Yes, our platform is built for collaboration. You can invite team members, assign tasks, and track
+                progress together.
+              </div>
             </div>
-  
-            <!-- Follow us -->
-            <div>
-              <h3 class="font-semibold mb-6">Follow us</h3>
-              <div class="flex space-x-4">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  <span class="sr-only">GitHub</span>
-                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                  </svg>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  <span class="sr-only">Twitter</span>
-                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                  </svg>
-                </a>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-left">
+            <button
+              class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
+              Can I set deadlines for tasks?
+              <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="py-4">
+                Absolutely! You can set deadlines, reminders, and priorities for each task to ensure timely
+                completion.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-right">
+            <button
+              class="bg-purple-200 faq-question w-full flex justify-between items-center px-6 py-4 font-medium text-gray-800 hover:bg-gray-100 focus:outline-none">
+              Can I use KanbanBoard for project management?
+              <svg class="faq-arrow w-4 h-4 text-gray-600 transition-transform duration-500"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              class="faq-answer px-6 py-0 text-gray-600 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="py-4">
+                Yes, it is designed to help manage projects by providing a clear view of tasks, timelines, and team
+                responsibilities.
               </div>
             </div>
           </div>
         </div>
-      </footer>
-    <script>
+      </section>
+    </section>
+  </div>
+  <footer class="pt-6 w-full">
+    <!-- Footer Content -->
+    <div class="bg-black text-white px-18 py-40">
+      <div class="max-w-7xl mx-auto grid grid-cols-4 gap-8">
+        <!-- Logo -->
+        <div>
+          <h3 class="text-2xl font-bold mb-6">Logo</h3>
+        </div>
 
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+        <!-- Use Cases -->
+        <div>
+          <h3 class="font-semibold mb-6">Use Cases</h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Project Builder</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Productivity</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Small Business</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Task Management</a>
+            </li>
+          </ul>
+        </div>
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        document.addEventListener("DOMContentLoaded", () => {
-        const featuresContainer = document.getElementById("features-container");
+        <!-- Company -->
+        <div>
+          <h3 class="font-semibold mb-6">Company</h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">FAQs</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Teams</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a>
+            </li>
+          </ul>
+        </div>
 
-        // Add smooth scrolling behavior
-        featuresContainer.addEventListener("wheel", (e) => {
-          e.preventDefault();
-          featuresContainer.scrollLeft += e.deltaY;
-        });
+        <!-- Follow us -->
+        <div>
+          <h3 class="font-semibold mb-6">Follow us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+              <span class="sr-only">GitHub</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+              <span class="sr-only">Twitter</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
 
-        // Add touch scrolling with smooth transition
-        let isDown = false;
-        let startX;
-        let scrollLeft;
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-        featuresContainer.addEventListener("mousedown", (e) => {
-          isDown = true;
-          startX = e.pageX - featuresContainer.offsetLeft;
-          scrollLeft = featuresContainer.scrollLeft;
-        });
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+      const featuresContainer = document.getElementById("features-container");
 
-        featuresContainer.addEventListener("mouseleave", () => {
-          isDown = false;
-        });
+      // Add smooth scrolling behavior
+      featuresContainer.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        featuresContainer.scrollLeft += e.deltaY;
+      });
 
-        featuresContainer.addEventListener("mouseup", () => {
-          isDown = false;
-        });
+      // Add touch scrolling with smooth transition
+      let isDown = false;
+      let startX;
+      let scrollLeft;
 
-        featuresContainer.addEventListener("mousemove", (e) => {
-          if (!isDown) return;
-          e.preventDefault();
-          const x = e.pageX - featuresContainer.offsetLeft;
-          const walk = (x - startX) * 2;
-          featuresContainer.scrollLeft = scrollLeft - walk;
-        });
+      featuresContainer.addEventListener("mousedown", (e) => {
+        isDown = true;
+        startX = e.pageX - featuresContainer.offsetLeft;
+        scrollLeft = featuresContainer.scrollLeft;
+      });
 
-        const faqQuestions = document.querySelectorAll(".faq-question");
-        faqQuestions.forEach((question) => {
-          question.addEventListener("click", () => {
-            const answer = question.nextElementSibling;
-            const arrow = question.querySelector(".faq-arrow");
+      featuresContainer.addEventListener("mouseleave", () => {
+        isDown = false;
+      });
 
-            // Toggle the rotation of the arrow
-            arrow.style.transform = answer.classList.contains("max-h-0")
-              ? "rotate(180deg)"
-              : "rotate(0deg)";
+      featuresContainer.addEventListener("mouseup", () => {
+        isDown = false;
+      });
 
-            // Toggle the answer height
-            if (answer.classList.contains("max-h-0")) {
-              answer.classList.remove("max-h-0");
-              answer.classList.add("max-h-96"); // Adjust this value based on your content
-            } else {
-              answer.classList.remove("max-h-96");
-              answer.classList.add("max-h-0");
+      featuresContainer.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - featuresContainer.offsetLeft;
+        const walk = (x - startX) * 2;
+        featuresContainer.scrollLeft = scrollLeft - walk;
+      });
+
+      const faqQuestions = document.querySelectorAll(".faq-question");
+      faqQuestions.forEach((question) => {
+        question.addEventListener("click", () => {
+          const answer = question.nextElementSibling;
+          const arrow = question.querySelector(".faq-arrow");
+
+          // Toggle the rotation of the arrow
+          arrow.style.transform = answer.classList.contains("max-h-0")
+            ? "rotate(180deg)"
+            : "rotate(0deg)";
+
+          // Toggle the answer height
+          if (answer.classList.contains("max-h-0")) {
+            answer.classList.remove("max-h-0");
+            answer.classList.add("max-h-96"); // Adjust this value based on your content
+          } else {
+            answer.classList.remove("max-h-96");
+            answer.classList.add("max-h-0");
+          }
+
+          // Close other answers
+          faqQuestions.forEach((otherQuestion) => {
+            if (otherQuestion !== question) {
+              const otherAnswer = otherQuestion.nextElementSibling;
+              const otherArrow = otherQuestion.querySelector(".faq-arrow");
+
+              otherAnswer.classList.remove("max-h-96");
+              otherAnswer.classList.add("max-h-0");
+              otherArrow.style.transform = "rotate(0deg)";
             }
-
-            // Close other answers
-            faqQuestions.forEach((otherQuestion) => {
-              if (otherQuestion !== question) {
-                const otherAnswer = otherQuestion.nextElementSibling;
-                const otherArrow = otherQuestion.querySelector(".faq-arrow");
-                
-                otherAnswer.classList.remove("max-h-96");
-                otherAnswer.classList.add("max-h-0");
-                otherArrow.style.transform = "rotate(0deg)";
-              }
-            });
           });
         });
       });
-    </script>
+    });
+  </script>
 </div>
 {% endblock content %}
