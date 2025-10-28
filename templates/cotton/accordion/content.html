@@ -1,0 +1,16 @@
+<c-vars 
+    value=""
+/>
+
+<div 
+    x-show="isOpen('{{ value }}')"
+    x-collapse
+    :data-state="isOpen('{{ value }}') ? 'open' : 'closed'"
+    data-slot="accordion-content"
+    class="overflow-hidden text-sm"
+    {{ attrs }}
+>
+    <div class="pb-4 pt-0">
+        {{ slot }}
+    </div>
+</div>

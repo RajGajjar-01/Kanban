@@ -1,6 +1,7 @@
-{% extends "board/Base.html" %}
-{% block content %}
+{% extends "base_auth.html" %}
 {% load socialaccount %}
+
+{% block content %}
 <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-xl" data-aos="fade-down" data-aos-duration="400" data-aos-delay="400">
         <!-- Header -->
@@ -14,104 +15,75 @@
         <!-- Sign Up Form -->
         <form class="mt-8 space-y-6" action="#" method="POST">
             {% csrf_token %}
-            <div class="rounded-md shadow-sm space-y-4">
+            <div class="space-y-4">
                 <!-- Username Input -->
-                <div>
-                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                        {{form.username.label}}
-                    </label>
+                <c-field>
+                    <c-field.label for="{{ form.username.id_for_label }}">{{form.username.label}}</c-field.label>
                     {{ form.username }}
                     {% if form.username.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {{ form.username.errors }}
-                        </div>
+                        <c-field.error>{{ form.username.errors }}</c-field.error>
                     {% endif %}
-                </div>
+                </c-field>
 
                 <!-- Email Input -->
-                <div>
-                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                        {{ form.email.label }}
-                    </label>
+                <c-field>
+                    <c-field.label for="{{ form.email.id_for_label }}">{{ form.email.label }}</c-field.label>
                     {{ form.email }}
                     {% if form.email.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {{ form.email.errors }}
-                        </div>
+                        <c-field.error>{{ form.email.errors }}</c-field.error>
                     {% endif %}
-                </div>
+                </c-field>
+
                 <div class="flex space-x-4">
                     <!-- Password Input -->
-                    <div>
-                        <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                            {{ form.password.label }}
-                        </label>
+                    <c-field class="flex-1">
+                        <c-field.label for="{{ form.password.id_for_label }}">{{ form.password.label }}</c-field.label>
                         {{ form.password }}
-                    </div>
+                    </c-field>
 
                     <!-- Confirm Password Input -->
-                    <div>
-                        <label for="{{ form.confirm_password.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                            {{ form.confirm_password.label }}
-                        </label>
+                    <c-field class="flex-1">
+                        <c-field.label for="{{ form.confirm_password.id_for_label }}">{{ form.confirm_password.label }}</c-field.label>
                         {{ form.confirm_password }}
-                    </div>
-                    {% if form.password.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {{ form.password.errors }}
-                        </div>
-                    {% endif %}
+                    </c-field>
                 </div>
+                {% if form.password.errors %}
+                    <c-field.error>{{ form.password.errors }}</c-field.error>
+                {% endif %}
             </div>
 
             <!-- Terms and Conditions Checkbox -->
-            <div class="flex items-center">
-                <input id="terms" name="terms" type="checkbox" required
-                    class="h-4 w-4 text-accent focus:ring-accent border-gray-300 rounded" />
-                <label for="terms" class="ml-2 block text-sm text-gray-900">
+            <c-field orientation="horizontal">
+                <c-checkbox id="terms" name="terms" required />
+                <c-field.label for="terms">
                     I agree to the
-                    <a href="#" class="text-accent hover:underline">Terms and Conditions</a>
-                </label>
-            </div>
+                    <a href="#" class="text-primary hover:underline">Terms and Conditions</a>
+                </c-field.label>
+            </c-field>
 
             <!-- Submit Button -->
-            <div>
-                <button type="submit"
-                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium bg-rose-600 text-white rounded-lg hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-colors duration-200">
-                    Sign Up
-                </button>
-            </div>
+            <c-button type="submit" class="w-full">
+                Sign up
+            </c-button>
 
             <!-- Sign In Link -->
-            <div class="text-center text-sm">
-                <span class="text-gray-600">Already have an account?</span>
-                <a href="{% url 'user-login' %}" class="font-medium text-accent hover:text-accent/80 ml-1">
+            <div class="text-center text-sm text-muted-foreground">
+                Already have an account?
+                <a href="{% url 'user-login' %}" class="font-medium text-primary hover:underline ml-1">
                     Sign in
                 </a>
             </div>
 
             <!-- Or Divider -->
-            <div class="mt-6 relative">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-gray-300"></div>
-                </div>
-                <div class="relative flex justify-center text-sm">
-                    <span class="px-2 bg-white text-gray-500"> Or </span>
-                </div>
-            </div>
+            <c-separator />
 
             <!-- Continue with Google -->
-            <div>
-                <a href="{% provider_login_url 'google' %}"
-                    class="group relative w-full mt-4 flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-lg text-rose-500  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accen transition-colors duration-200">
-
-                    <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
-                    </svg>
-                    Continue with Google
-                </a>
-            </div>
+            <c-button variant="outline" href="{% provider_login_url 'google' %}" class="w-full">
+                <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                </svg>
+                Continue with Google
+            </c-button>
         </form>
     </div>
 </div>
