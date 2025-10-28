@@ -12,6 +12,7 @@ dependencies = [
     "pillow>=11.1.0",
     "requests>=2.32.5",
     "jwt>=1.4.0",
+    "django-cotton>=2.1.3",
 ]
 
 

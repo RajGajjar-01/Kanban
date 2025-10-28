@@ -34,4 +34,9 @@ Thumbs.db
 # Environment variables
 .env
 
+# Tailwind CSS Generated Files #
+static/css/tailwind.css
+static/css/tailwind.css.map
 
+tailwindcss-*
+!tailwindcss-*.exe
