@@ -14,6 +14,7 @@ dependencies = [
     "jwt>=1.4.0",
 ]
 
+
 [tool.ruff]
 line-length = 79  # Strict PEP 8, or use 88 for Black compatibility
 target-version = "py311"
@@ -41,3 +42,15 @@ ignore = []
 
 [tool.ruff.lint.isort]
 known-first-party = ["Kanban"]
+
+
+[tool.djlint]
+profile = "django"
+ignore = "H031"  # Ignore specific rules if needed
+indent = 2
+max_line_length = 120
+
+[dependency-groups]
+dev = [
+    "djlint>=1.36.4",
+]
