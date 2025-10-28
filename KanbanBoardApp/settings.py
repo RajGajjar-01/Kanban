@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "board",
     "users",
+    'KanbanBoardApp',
     # Related to Google Authentication. For more info go to Notes.md or allauth documentation
     "allauth",
     "allauth.account",
