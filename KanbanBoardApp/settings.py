@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_browser_reload',
+    'KanbanBoardApp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,12 +59,16 @@ MIDDLEWARE = [
 
     # Related to Google Authentication. For more info go to Notes.md or allauth documentation
     "allauth.account.middleware.AccountMiddleware",
+
+    # Related to tailwind
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 # Related to Google Authentication. For more info go to Notes.md or allauth documentation
 SITE_ID = 2
 
 AUTHENTICATION_BACKENDS = [
+    'users.auth_backends.EmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
@@ -142,9 +148,14 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST_USER = 'noreply@kanban.com'
-DEFAULT_FROM_EMAIL = 'noreply@kanban.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'atlantic.march11@gmail.com'
+EMAIL_HOST_PASSWORD = 'wqum nrfq myjy gder'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'Taskify <noreply@yourapp.com>'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -165,6 +176,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/home"
 LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = '/user/login/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
