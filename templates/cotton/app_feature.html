@@ -1,149 +1,39 @@
 <c-vars />
 <!-- Features Section -->
 <c-ui.section spacing="md" id="features">
-<c-ui.container>
-<div class="space-y-12">
-  <!-- Badge - Centered at Top -->
-  <div class="flex justify-center">
-    <c-ui.badge variant="outline">
-    <svg class="h-4 w-4"
-         viewBox="0 0 24 24"
-         fill="none"
-         stroke="currentColor"
-         stroke-width="2">
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-    <span>Features</span>
-    </c-ui.badge>
-  </div>
-  <!-- Section Header -->
-  <div class="text-center space-y-4">
-    <h2 class="text-3xl md:text-4xl font-bold">Everything you need to succeed</h2>
-    <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-      Powerful features to help your team collaborate and stay productive
-    </p>
-  </div>
-  <!-- Feature Cards Grid -->
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-    <!-- Feature 1 -->
-    <c-ui.card class="h-full">
-    <c-ui.card.header>
-    <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-      <svg class="h-7 w-7 text-primary"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2">
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-      </svg>
+  <c-ui.container>
+    <div class="space-y-12">
+      <div class="flex justify-center">
+        <c-ui.badge variant="outline">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span>Features</span>
+        </c-ui.badge>
+      </div>
+      <div class="text-center space-y-4">
+        <h2 class="text-3xl md:text-4xl font-bold">Everything you need to succeed</h2>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Powerful features to help your team collaborate and stay productive
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for item in features.items %}
+        <c-ui.card hover="true" class="h-full cursor-pointer">
+          <c-ui.card.header>
+            <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+              <svg class="h-7 w-7 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                {{ item.icon|safe }}  
+              </svg>
+            </div>
+            <c-ui.card.title>{{ item.title }}</c-ui.card.title>
+            <c-ui.card.description>
+              {{ item.description }}
+            </c-ui.card.description>
+          </c-ui.card.header>
+        </c-ui.card>
+        {% endfor %}
+      </div>
     </div>
-    <c-ui.card.title>Kanban Boards</c-ui.card.title>
-    <c-ui.card.description>
-    Visualize your workflow with intuitive drag-and-drop boards
-    </c-ui.card.description>
-    </c-ui.card.header>
-    </c-ui.card>
-    <!-- Feature 2 -->
-    <c-ui.card class="h-full">
-    <c-ui.card.header>
-    <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-      <svg class="h-7 w-7 text-primary"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    </div>
-    <c-ui.card.title>Team Collaboration</c-ui.card.title>
-    <c-ui.card.description>
-    Work together seamlessly with real-time updates and comments
-    </c-ui.card.description>
-    </c-ui.card.header>
-    </c-ui.card>
-    <!-- Feature 3 -->
-    <c-ui.card class="h-full">
-    <c-ui.card.header>
-    <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-      <svg class="h-7 w-7 text-primary"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    </div>
-    <c-ui.card.title>Secure & Private</c-ui.card.title>
-    <c-ui.card.description>
-    Enterprise-grade security to keep your data safe and protected
-    </c-ui.card.description>
-    </c-ui.card.header>
-    </c-ui.card>
-    <!-- Feature 4 -->
-    <c-ui.card class="h-full">
-    <c-ui.card.header>
-    <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-      <svg class="h-7 w-7 text-primary"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2">
-        <circle cx="12" cy="12" r="10" />
-        <polyline points="12 6 12 12 16 14" />
-      </svg>
-    </div>
-    <c-ui.card.title>Time Tracking</c-ui.card.title>
-    <c-ui.card.description>
-    Track time spent on tasks and generate detailed reports
-    </c-ui.card.description>
-    </c-ui.card.header>
-    </c-ui.card>
-    <!-- Feature 5 -->
-    <c-ui.card class="h-full">
-    <c-ui.card.header>
-    <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-      <svg class="h-7 w-7 text-primary"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="7 10 12 15 17 10" />
-        <line x1="12" y1="15" x2="12" y2="3" />
-      </svg>
-    </div>
-    <c-ui.card.title>File Attachments</c-ui.card.title>
-    <c-ui.card.description>
-    Attach files, images, and documents directly to your tasks
-    </c-ui.card.description>
-    </c-ui.card.header>
-    </c-ui.card>
-    <!-- Feature 6 -->
-    <c-ui.card class="h-full">
-    <c-ui.card.header>
-    <div class="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-      <svg class="h-7 w-7 text-primary"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2">
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-      </svg>
-    </div>
-    <c-ui.card.title>Custom Workflows</c-ui.card.title>
-    <c-ui.card.description>
-    Create custom workflows that match your team's process
-    </c-ui.card.description>
-    </c-ui.card.header>
-    </c-ui.card>
-  </div>
-  <!-- End Feature Cards Grid -->
-</div>
-</c-ui.container>
+  </c-ui.container>
 </c-ui.section>

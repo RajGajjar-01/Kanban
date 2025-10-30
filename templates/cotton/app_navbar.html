@@ -19,11 +19,40 @@
 <c-ui.navbar.link href="#features">Features</c-ui.navbar.link>
 <c-ui.navbar.link href="{% url 'board-contact' %}">Contact</c-ui.navbar.link>
 <c-ui.navbar.link href="#pricing">Pricing</c-ui.navbar.link>
-<c-ui.navbar.link href="#about">About</c-ui.navbar.link>
+<c-ui.navbar.link href="{% url 'board-about' %}">About</c-ui.navbar.link>
 </c-ui.navbar.menu>
-<!-- Desktop Actions -->
+<div class="flex items-center gap-2 md:hidden">
+<button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.documentElement.classList.toggle('dark', darkMode)"
+        class="p-2 rounded-md hover:bg-accent transition-colors"
+        aria-label="Toggle dark mode">
+  <svg x-show="!darkMode"
+       class="h-5 w-5"
+       viewBox="0 0 24 24"
+       fill="none"
+       stroke="currentColor"
+       stroke-width="2">
+    <circle cx="12" cy="12" r="5" />
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+  <svg x-show="darkMode"
+       class="h-5 w-5"
+       viewBox="0 0 24 24"
+       fill="none"
+       stroke="currentColor"
+       stroke-width="2"
+       style="display: none">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+</button>
+</div>
 <c-ui.navbar.actions class="hidden md:flex">
-<!-- Dark Mode Toggle -->
 <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.documentElement.classList.toggle('dark', darkMode)"
         class="p-2 rounded-md hover:bg-accent transition-colors"
         aria-label="Toggle dark mode">

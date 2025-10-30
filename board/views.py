@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from . import forms, models
+from .landing_context import get_landing_context, get_about_context
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,7 +12,12 @@ from django.conf import settings
 
 
 def landing_view(request):
-    return render(request, "boards/landing.html")
+    landing_data = get_landing_context()
+    context = {
+        "features": landing_data["features"]["items"],
+        **landing_data
+    }
+    return render(request, "boards/landing.html", context)
 
 
 @login_required
@@ -31,7 +37,8 @@ def contact_view(request):
 
 
 def about_view(request):
-    pass
+    context = get_about_context()
+    return render(request, "board/AboutUs.html", context)
 
 
 def contact_success_view(request):
