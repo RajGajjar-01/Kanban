@@ -1,7 +1,19 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+
 from . import views
 
+# DRF Router for API ViewSets
+router = DefaultRouter()
+router.register(r"workspaces", views.WorkspaceViewSet, basename="workspace")
+router.register(r"boards", views.BoardViewSet, basename="board")
+router.register(r"lists", views.ListViewSet, basename="list")
+router.register(r"cards", views.CardViewSet, basename="card")
+router.register(r"board-members", views.BoardMemberViewSet, basename="boardmember")
+router.register(r"invitations", views.BoardInvitationViewSet, basename="invitation")
+
 urlpatterns = [
+    # Frontend template views
     path("", views.landing_view, name="board-landing"),
     path("home/", views.home_view, name="board-home"),
     path("contact/", views.contact_view, name="board-contact"),
@@ -12,67 +24,14 @@ urlpatterns = [
         views.board_data_view,
         name="get-board-by-id",
     ),
-    path("api/save-workspace/", views.save_workspace_view, name="save_workspace"),
-    path("api/all-workspaces/", views.get_all_workspaces_view, name="all-workspaces"),
-    path(
-        "api/workspace-<int:pk>/get-boards/",
-        views.get_all_boards_view,
-        name="get-boards-by-workspace",
-    ),
-    path(
-        "api/workspace-<int:pk>/get-particular-boards/",
-        views.get_particular_boards_view,
-        name="get-boards-by-workspace",
-    ),
-    path(
-        "api/workspace-<int:pk>/delete/",
-        views.delete_workspace_view,
-        name="delete-workspace-by-id",
-    ),
-    path(
-        "api/workspace-<int:pk>/create-board/",
-        views.create_board_view,
-        name="create_board",
-    ),
-    path(
-        "api/board-<int:pk>/get-lists/",
-        views.api_get_lists_view,
-        name="get-lists-by-board",
-    ),
-    path("api/board/create-list/", views.api_create_list_view, name="create_list"),
-    path(
-        "api/board/delete-list-<int:pk>/",
-        views.api_delete_list_view,
-        name="delete-list",
-    ),
-    path(
-        "api/board-name-edit/<int:pk>/",
-        views.api_board_name_edit_view,
-        name="edit-board-name",
-    ),
-    path("api/list-<int:pk>/cards/", views.api_get_card_view, name="get-cards-by-list"),
-    path("api/list/create-card/", views.api_create_card_view, name="create_card"),
-    path(
-        "api/destination-list-<int:id>/card-<int:pk>/",
-        views.api_card_position_update_view,
-        name="card-position-update",
-    ),
-    path(
-        "api/board-<int:pk>/invite", views.api_send_invitation, name="send-invitation"
-    ),
+    # Invitation acceptance (kept for email links)
     path(
         "accept-invitation/<str:token>/",
         views.api_accept_invitation,
         name="api_accept_invitation",
     ),
-    path(
-        "api/workspace-<int:pk>/get-members/",
-        views.api_get_members,
-        name="get-members-of-workspace",
-    ),
-    path(
-        "api/get-all-other-workspaces/",
-        views.get_all_other_workspace_view,
-        name="get-all-other-workspaces",
-    ),
+    # ============================================
+    # Django REST Framework API (v1)
+    # ============================================
+    path("api/v1/", include(router.urls)),
 ]
