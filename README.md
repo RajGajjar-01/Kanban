@@ -146,7 +146,7 @@ python manage.py runserver
 ```
 
 ```bash
-tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
+tailwindcss-linux-x64 -i ./static/src/input.css -o ./static/src/output.css --watch
 ```
 
 or another command for tailwind
