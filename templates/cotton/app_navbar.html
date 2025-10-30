@@ -44,9 +44,51 @@
     </button>
 
     <!-- Auth Buttons (Desktop) -->
-    <div class="hidden md:flex items-center gap-2">
+    <div class="hidden md:flex items-center gap-3">
       {% if user.is_authenticated %}
         <c-ui.button href="{% url 'board-home' %}">Go to Boards</c-ui.button>
+        
+        <!-- Profile Menu -->
+        <c-ui.menu>
+          <c-ui.menu.trigger>
+            <c-ui.avatar class="h-9 w-9 cursor-pointer ring-2 ring-transparent hover:ring-primary/20 transition-all">
+              {% if user.profile.image %}
+                <c-ui.avatar.image src="{{ user.profile.image.url }}" alt="{{ user.username }}" />
+              {% endif %}
+              <c-ui.avatar.fallback>{{ user.username|slice:":2"|upper }}</c-ui.avatar.fallback>
+            </c-ui.avatar>
+          </c-ui.menu.trigger>
+          
+          <c-ui.menu.content align="right">
+            <c-ui.menu.label>{{ user.username }}</c-ui.menu.label>
+            <c-ui.menu.separator />
+            <c-ui.menu.item href="{% url 'user-profile' %}">
+              <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Profile
+            </c-ui.menu.item>
+            <c-ui.menu.item href="{% url 'board-home' %}">
+              <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+              </svg>
+              My Boards
+            </c-ui.menu.item>
+            <c-ui.menu.separator />
+            <c-ui.menu.item href="{% url 'user-logout' %}">
+              <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Logout
+            </c-ui.menu.item>
+          </c-ui.menu.content>
+        </c-ui.menu>
       {% else %}
         <c-ui.button variant="ghost" href="{% url 'user-login' %}">Sign in</c-ui.button>
         <c-ui.button href="{% url 'user-register' %}">Get Started</c-ui.button>
@@ -89,7 +131,45 @@
       
       <div class="pt-4 border-t space-y-2">
         {% if user.is_authenticated %}
-          <c-ui.button href="{% url 'board-home' %}" class="w-full">Go to Boards</c-ui.button>
+          <!-- User Info -->
+          <div class="flex items-center gap-3 px-2 py-3 bg-accent/50 rounded-md">
+            <c-ui.avatar class="h-10 w-10">
+              {% if user.profile.image %}
+                <c-ui.avatar.image src="{{ user.profile.image.url }}" alt="{{ user.username }}" />
+              {% endif %}
+              <c-ui.avatar.fallback>{{ user.username|slice:":2"|upper }}</c-ui.avatar.fallback>
+            </c-ui.avatar>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium truncate">{{ user.username }}</p>
+              <p class="text-xs text-muted-foreground truncate">{{ user.email }}</p>
+            </div>
+          </div>
+          
+          <!-- Menu Items -->
+          <c-ui.button href="{% url 'board-home' %}" class="w-full justify-start" variant="ghost">
+            <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Go to Boards
+          </c-ui.button>
+          <c-ui.button href="{% url 'user-profile' %}" class="w-full justify-start" variant="ghost">
+            <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Profile
+          </c-ui.button>
+          <c-ui.button href="{% url 'user-logout' %}" class="w-full justify-start" variant="ghost">
+            <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Logout
+          </c-ui.button>
         {% else %}
           <c-ui.button variant="ghost" href="{% url 'user-login' %}" class="w-full">Sign in</c-ui.button>
           <c-ui.button href="{% url 'user-register' %}" class="w-full">Get Started</c-ui.button>
