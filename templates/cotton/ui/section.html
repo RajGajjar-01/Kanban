@@ -1,0 +1,4 @@
+<c-vars spacing="default" />
+<section data-slot="section" class="w-full {% if spacing == 'none' %}py-0 {% elif spacing == 'sm' %}py-8 sm:py-12 {% elif spacing == 'md' %}py-12 sm:py-16 {% elif spacing == 'lg' %}py-16 sm:py-20 {% elif spacing == 'xl' %}py-20 sm:py-24 {% else %}py-12 sm:py-16 {% endif %}" {{ attrs }}>
+  {{ slot }}
+</section>
