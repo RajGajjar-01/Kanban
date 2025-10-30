@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 
+
 class Workspace(models.Model):
     workspace_name = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
