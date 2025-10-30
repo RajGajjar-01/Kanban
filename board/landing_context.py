@@ -103,24 +103,33 @@ def get_about_context():
                 "role": "Full Stack Developer",
                 "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Raj",
                 "description": "Passionate about creating seamless user experiences",
+                "linkedin_url": "https://linkedin.com/in/raj-gajjar",
+                "github_url": "https://github.com/rajgajjar-01",
             },
             {
                 "name": "Shlok Maktarpara",
                 "role": "Frontend Developer",
                 "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
                 "description": "Expert in scalable architecture and database design",
+                "linkedin_url": "https://www.linkedin.com/in/shlok-maktarpara/",
+                "github_url": "https://github.com/Shlok-Maktarpara-23",
             },
             {
                 "name": "Sakshi Sudra",
                 "role": "Frontend Developer",
                 "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
                 "description": "Crafting beautiful and responsive interfaces",
+                "linkedin_url": "#",
+                "github_url": "#",
             },
             {
                 "name": "Sanket Mehta",
                 "role": "Full Stack Engineer",
                 "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
                 "description": "Ensuring smooth deployments and system reliability",
+                "linkedin_url": "https://www.linkedin.com/in/sanket-mehta-89456627b/",
+                "github_url": "#",
             },
         ]
     }
+

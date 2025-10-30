@@ -1,22 +1,15 @@
-from django.db import models
 from django.contrib.auth.models import User
-from django.utils.crypto import get_random_string
+from django.db import models
 from django.utils import timezone
-
+from django.utils.crypto import get_random_string
 
 class Workspace(models.Model):
     workspace_name = models.CharField(max_length=255)
-    created_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, blank=True, null=True
-    )
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if (
-            not self.created_by
-            and hasattr(self, "request")
-            and hasattr(self.request, "user")
-        ):
+        if not self.created_by and hasattr(self, "request") and hasattr(self.request, "user"):
             self.created_by = self.request.user
         super().save(*args, **kwargs)
 
@@ -30,21 +23,15 @@ class Board(models.Model):
     name = models.CharField(max_length=255, default="Untitled")
     created_date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
-    background_color = models.CharField(
-        max_length=255, default="linear-gradient(to right, #ff7e5f, #feb47b)"
-    )
-    workspace = models.ForeignKey(
-        Workspace, on_delete=models.CASCADE, related_name="boards"
-    )
+    background_color = models.CharField(max_length=255, default="linear-gradient(to right, #ff7e5f, #feb47b)")
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="boards")
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         super().save(*args, **kwargs)
 
         if is_new and self.workspace.created_by:
-            BoardMember.objects.get_or_create(
-                user=self.workspace.created_by, board=self
-            )
+            BoardMember.objects.get_or_create(user=self.workspace.created_by, board=self)
 
     @property
     def user_count(self):
@@ -56,9 +43,7 @@ class Board(models.Model):
 
 class BoardMember(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="boarduser")
-    board = models.ForeignKey(
-        Board, on_delete=models.CASCADE, related_name="memofboard"
-    )
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="memofboard")
 
     class Meta:
         unique_together = ("user", "board")
@@ -68,9 +53,7 @@ class BoardMember(models.Model):
 
 
 class List(models.Model):
-    board = models.ForeignKey(
-        Board, on_delete=models.CASCADE, null=True, related_name="boardlists"
-    )
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True, related_name="boardlists")
     list_name = models.CharField(max_length=255)
     list_position = models.IntegerField(default=0)
 
@@ -87,12 +70,8 @@ class Card(models.Model):
     card_description = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(null=True, blank=True)
-    card_member = models.ManyToManyField(
-        User, through="CardMember", related_name="cards"
-    )
-    label = models.CharField(
-        max_length=60, choices=LabelChoices.choices, null=True, blank=True
-    )
+    card_member = models.ManyToManyField(User, through="CardMember", related_name="cards")
+    label = models.CharField(max_length=60, choices=LabelChoices.choices, null=True, blank=True)
 
     def __str__(self):
         return self.card_name
@@ -117,9 +96,7 @@ class CardMember(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
-    card = models.ForeignKey(
-        Card, on_delete=models.CASCADE, related_name="comments", null=True
-    )
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="comments", null=True)
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -130,9 +107,7 @@ class Comment(models.Model):
 
 class CardActivity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="activities")
-    card = models.ForeignKey(
-        Card, on_delete=models.CASCADE, related_name="activities", null=True
-    )
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="activities", null=True)
     activity = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
