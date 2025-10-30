@@ -154,3 +154,4 @@ or another command for tailwind
 python manage.py tailwind --watch
 ```
 
+custom color used in hero section achieve more text checkout 'custom-primary' in input.css

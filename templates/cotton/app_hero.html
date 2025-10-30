@@ -1,82 +1,60 @@
 <c-vars />
-<c-ui.section spacing="md" class="relative overflow-hidden">
-<!-- Background Gradient -->
-<div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
-<c-ui.container>
-<div class="relative z-10 space-y-8">
-  <!-- Badge - Centered at Top -->
-  <div class="flex justify-center">
-    <c-ui.badge variant="outline">
-    <svg class="h-4 w-4"
-         viewBox="0 0 24 24"
-         fill="none"
-         stroke="currentColor"
-         stroke-width="2">
-      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-    </svg>
-    <span>Supercharge your productivity</span>
-    </c-ui.badge>
-  </div>
-  <!-- Two Column Layout -->
-  <div class="grid lg:grid-cols-2 gap-12 items-center">
-    <!-- Left Column - Content -->
-    <div class="space-y-8">
-      <!-- Heading -->
-      <h1 class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
-        Organize work,
-        <span class="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">achieve more</span>
-      </h1>
-      <!-- Description -->
-      <p class="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl">
-        Taskify brings your tasks, team, and tools together. Stay organized, collaborate seamlessly, and ship faster.
-      </p>
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row gap-4">
-        <c-ui.button href="{% url 'user-register' %}" size="lg" class="w-full sm:w-auto">
-        Get Started Free
-        <svg class="h-4 w-4"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
-        </c-ui.button>
-        <c-ui.button href="#features" variant="outline" size="lg" class="w-full sm:w-auto">
-        Learn More
-        </c-ui.button>
+<c-ui.section>
+  <c-ui.container>
+    <div class="space-y-8 bg">
+      <div class="flex justify-center">
+        <c-ui.badge variant="outline">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          <span>Supercharge your productivity</span>
+        </c-ui.badge>
       </div>
-      <!-- Social Proof -->
-      <div class="pt-4">
-        <div class="flex items-center gap-3 text-sm text-muted-foreground">
-          <div class="flex -space-x-2">
-            <c-ui.avatar class="border-2 border-background h-10 w-10">
-            <c-ui.avatar.fallback>JD</c-ui.avatar.fallback>
-            </c-ui.avatar>
-            <c-ui.avatar class="border-2 border-background h-10 w-10">
-            <c-ui.avatar.fallback>AB</c-ui.avatar.fallback>
-            </c-ui.avatar>
-            <c-ui.avatar class="border-2 border-background h-10 w-10">
-            <c-ui.avatar.fallback>CD</c-ui.avatar.fallback>
-            </c-ui.avatar>
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8">
+          <h1 class="text-5xl lg:text-6xl xl:text-7xl font-semibold leading-tight tracking-tight text-center md:text-left">
+            Organize work,
+            <span class="inline-block text-primary">achieve more</span>
+          </h1>
+          <p class="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl text-center md:text-left">
+            Taskify brings your tasks, team, and tools together. Stay organized, collaborate seamlessly, and ship
+            faster.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <c-ui.button href="{% url 'user-register' %}" size="lg" class="w-full sm:w-auto">
+              Get Started Free
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </c-ui.button>
+            <c-ui.button href="#features" variant="outline" size="lg" class="w-full sm:w-auto">
+              Learn More
+            </c-ui.button>
           </div>
-          <span class="font-medium">Trusted by 10,000+ teams worldwide</span>
+          <div class="pt-4">
+            <div class="flex items-center gap-3 text-sm text-muted-foreground">
+              <div class="flex -space-x-2">
+                <c-ui.avatar class="border-2 border-background h-10 w-10">
+                  <c-ui.avatar.fallback>JD</c-ui.avatar.fallback>
+                </c-ui.avatar>
+                <c-ui.avatar class="border-2 border-background h-10 w-10">
+                  <c-ui.avatar.fallback>AB</c-ui.avatar.fallback>
+                </c-ui.avatar>
+                <c-ui.avatar class="border-2 border-background h-10 w-10">
+                  <c-ui.avatar.fallback>CD</c-ui.avatar.fallback>
+                </c-ui.avatar>
+              </div>
+              <span class="font-medium">Trusted by 10,000+ teams worldwide</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative order-last">
+          <div class="rounded-lg overflow-hidden flex items-center justify-center">
+            <img
+              src="https://images.ctfassets.net/rz1oowkt5gyp/75rDABL8fyMtNLlUAtBxrg/c5e145977a86c41c47e17c69410c64f7/TrelloUICollage_4x.png?w=1140&fm=webp"
+              alt="Taskify Dashboard Preview" class="w-[20rem] md:w-full h-auto object-cover" loading="lazy" />
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Right Column - Image -->
-    <div class="relative lg:order-last order-first">
-      <div class="relative rounded-lg overflow-hidden shadow-2xl">
-        <img src="https://images.ctfassets.net/rz1oowkt5gyp/75rDABL8fyMtNLlUAtBxrg/c5e145977a86c41c47e17c69410c64f7/TrelloUICollage_4x.png?w=1140&fm=webp"
-             alt="Taskify Dashboard Preview"
-             class="w-full h-auto object-cover"
-             loading="lazy" />
-        <!-- Decorative Elements -->
-        <div class="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl -z-10"></div>
-        <div class="absolute -top-4 -left-4 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10"></div>
-      </div>
-    </div>
-    <!-- End Two Column Layout -->
-  </div>
   </c-ui.container>
-  </c-ui.section>
+</c-ui.section>
