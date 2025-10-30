@@ -1,22 +1,20 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from . import forms, models
-from .landing_context import get_landing_context, get_about_context
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.urls import reverse
-from django.core.mail import send_mail
-from KanbanBoardApp.settings import DEFAULT_FROM_EMAIL
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.conf import settings
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from . import forms, models, serializers
+from . import permissions as custom_permissions
+from .landing_context import get_about_context, get_landing_context
 
 
 def landing_view(request):
     landing_data = get_landing_context()
-    context = {
-        "features": landing_data["features"]["items"],
-        **landing_data
-    }
+    context = {"features": landing_data["features"]["items"], **landing_data}
     return render(request, "boards/landing.html", context)
 
 
@@ -45,137 +43,6 @@ def contact_success_view(request):
     return render(request, "board/success.html")
 
 
-@login_required
-def save_workspace_view(request):
-    if request.method == "POST":
-        workspace_modal_form = forms.WorkspaceModalForm(request.POST)
-        if workspace_modal_form.is_valid():
-            workspace = workspace_modal_form.save(commit=False)
-            workspace.request = request
-            workspace.save()
-        return JsonResponse({"success": True, "name": workspace.workspace_name})
-    return JsonResponse({"success": False, "message": "Invalid method"})
-
-
-@login_required
-def get_all_workspaces_view(request):
-    if request.method == "GET":
-        try:
-            workspaces = models.Workspace.objects.filter(
-                created_by=request.user
-            ).values("id", "workspace_name", "created_by", "created_date")
-            workspace_list = list(workspaces)
-
-            return JsonResponse({"success": True, "workspaces": workspace_list})
-
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse(
-        {"success": False, "message": "Invalid method. Use GET to fetch workspaces."},
-        status=400,
-    )
-
-
-@login_required
-def delete_workspace_view(request, pk):
-    if request.method == "DELETE":
-        try:
-            workspace = models.Workspace.objects.filter(pk=pk).first()
-            if workspace is None:
-                return JsonResponse(
-                    {"success": False, "message": "Workspace not found"}, status=404
-                )
-
-            workspace.delete()
-            return JsonResponse({"success": True, "message": "Workspace deleted"})
-
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-
-    return JsonResponse({"success": False, "message": "Invalid method"}, status=400)
-
-
-@login_required
-def get_all_boards_view(request, pk):
-    if request.method == "GET":
-        try:
-            boards = models.Board.objects.filter(workspace=pk).values(
-                "id",
-                "name",
-                "created_date",
-                "description",
-                "background_color",
-                "workspace",
-            )
-            board_list = list(boards)
-
-            return JsonResponse({"success": True, "board": board_list})
-
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse(
-        {"success": False, "message": "Invalid method. Use GET to fetch workspaces."},
-        status=400,
-    )
-
-
-@login_required
-def get_particular_boards_view(request, pk):
-    if request.method == "GET":
-        try:
-            boards = models.Board.objects.filter(
-                workspace=pk, user=request.user
-            ).values(
-                "id",
-                "name",
-                "created_date",
-                "description",
-                "background_color",
-                "workspace",
-            )
-            board_list = list(boards)
-
-            return JsonResponse({"success": True, "board": board_list})
-
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse(
-        {"success": False, "message": "Invalid method. Use GET to fetch workspaces."},
-        status=400,
-    )
-
-
-@login_required
-def create_board_view(request, pk):
-    if request.method == "POST":
-        try:
-            data = request.POST.copy()
-            workspace = models.Workspace.objects.filter(pk=pk).first()
-            data["workspace"] = workspace
-            form = forms.BoardModalForm(data)
-            if form.is_valid():
-                form.save()
-                return JsonResponse({"success": True, "board": "b"})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
 def board_data_view(request, pk, id):
     list_modal_form = forms.ListModalForm(auto_id=True)
     card_modal_form = forms.CardModalForm(auto_id=True)
@@ -190,195 +57,8 @@ def board_data_view(request, pk, id):
     return render(request, "board/boardIn.html", context)
 
 
-def api_board_name_edit_view(request, pk):
-    if request.method == "POST":
-        try:
-            print(request.POST)
-            new_name = request.POST.get("value")
-            updated = models.Board.objects.filter(id=pk).update(name=new_name)
-            if updated == 0:
-                return JsonResponse(
-                    {"success": False, "message": "Board not found."}, status=404
-                )
-            return JsonResponse(
-                {"success": True, "message": "Board name updated successfully."}
-            )
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occured: {str(e)}"}, status=500
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-@csrf_exempt
-def api_get_lists_view(request, pk):
-    if request.method == "GET":
-        try:
-            boardlist = models.List.objects.filter(board=pk).values(
-                "id", "list_name", "list_position"
-            )
-
-            board_lists = list(boardlist)
-            for each_list in board_lists:
-                listcards = models.Card.objects.filter(list_id=each_list["id"]).values(
-                    "id", "card_name"
-                )
-                each_list["cards"] = list(listcards)
-
-            return JsonResponse({"success": True, "boardlists": board_lists})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-def api_create_list_view(request):
-    if request.method == "POST":
-        try:
-            print(request.POST)
-            form = forms.ListModalForm(request.POST)
-            print(form.is_valid())
-            if form.is_valid():
-                form.save()
-                return JsonResponse({"success": True, "message": "List created"})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse(
-        {"success": False, "message": "Invalid request method"}, status=400
-    )
-
-
-def api_delete_list_view(request, pk):
-    if request.method == "DELETE":
-        try:
-            list_to_delete = models.List.objects.filter(pk=pk).first()
-            if list_to_delete:
-                list_to_delete.delete()
-                return JsonResponse({"success": True, "message": "List deleted"})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-def api_create_card_view(request):
-    if request.method == "POST":
-        try:
-            form = forms.CardModalForm(request.POST)
-            print(form.is_valid())
-            if form.is_valid():
-                form.save()
-                return JsonResponse({"success": True, "message": "Card created"})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-def api_get_card_view(request, pk):
-    if request.method == "GET":
-        try:
-            listcards = models.Card.objects.filter(list_id=pk).values("id", "card_name")
-            cards = list(listcards)
-            return JsonResponse({"success": True, "cards": cards})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-def api_card_position_update_view(request, pk, id):
-    if request.method == "PUT":
-        try:
-            updated = models.Card.objects.filter(pk=pk).update(list_id=id)
-            if updated:
-                return JsonResponse({"success": True, "message": "Position updated"})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-def api_get_members(request, pk):
-    if request.method == "GET":
-        try:
-            boards = models.Workspace.objects.filter(pk=pk).first().board_list
-            member_list = []
-            for board in list(boards):
-                mems = (
-                    models.BoardMember.objects.filter(board=board.id)
-                    .select_related("user", "user__profile", "board")
-                    .values(
-                        "user__username",
-                        "user__email",
-                        "user__profile__image",
-                        "board__name",
-                    )
-                )
-                for mem in list(mems):
-                    if mem["user__profile__image"]:
-                        mem["user__profile__image"] = (
-                            settings.MEDIA_URL + mem["user__profile__image"]
-                        )
-                    else:
-                        mem["user__profile__image"] = None
-                member_list.append(list(mems))
-            return JsonResponse({"success": True, "members": member_list}, status=200)
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
-            )
-    return JsonResponse({"success": False, "message": "Invalid."}, status=400)
-
-
-def api_send_invitation(request, pk):
-    # try :
-    board = get_object_or_404(models.Board, id=pk)
-
-    if not models.BoardMember.objects.filter(board=board, user=request.user).exists():
-        return JsonResponse(
-            {"success": False, "message": "You are not a board member"}, status=403
-        )
-
-    email = request.POST.get("email")
-    invitation = models.BoardInvitaton.objects.create(
-        email=email, board=board, inviter=request.user
-    )
-
-    invitation_url = request.build_absolute_uri(
-        reverse("api_accept_invitation", args=[invitation.token])
-    )
-
-    send_mail(
-        f"Invitation to join board: {board.name}",
-        f"""You've been invited to join the board "{board.name}". 
-        Click here to accept: {invitation_url}
-        """,
-        DEFAULT_FROM_EMAIL,
-        [email],
-        fail_silently=False,
-    )
-    return JsonResponse({"success": True, "message": "Invitation send successfully"})
-
-    # except Exception as e:
-    #     return JsonResponse({"success": False, "message": f"An error occurred: {str(e)}"}, status=500)
-
-
 def api_accept_invitation(request, token):
+    """Accept board invitation - kept for backward compatibility"""
     invitation = get_object_or_404(models.BoardInvitaton, token=token)
 
     if invitation.status != "pending" or timezone.now() > invitation.expires_at:
@@ -400,25 +80,256 @@ def api_accept_invitation(request, token):
         return redirect("user-login")
 
 
-@csrf_exempt
-def get_all_other_workspace_view(request):
-    if request.method == "GET":
-        try:
-            workspaces = (
-                models.Workspace.objects.filter(boards__user=request.user)
-                .exclude(created_by=request.user)
-                .distinct()
-                .values("id", "workspace_name", "created_by__username", "created_date")
-            )
-            other_workspace_list = list(workspaces)
+# ============================================================================
+# DJANGO REST FRAMEWORK API VIEWS
+# ============================================================================
 
-            return JsonResponse({"success": True, "workspaces": other_workspace_list})
-        except Exception as e:
-            return JsonResponse(
-                {"success": False, "message": f"An error occurred: {str(e)}"},
-                status=500,
+
+class WorkspaceViewSet(viewsets.ModelViewSet):
+    """DRF ViewSet for Workspace CRUD operations"""
+
+    permission_classes = [IsAuthenticated]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    search_fields = ["workspace_name"]
+    ordering_fields = ["created_date", "workspace_name"]
+    ordering = ["-created_date"]
+
+    def get_queryset(self):
+        return models.Workspace.objects.filter(created_by=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.WorkspaceListSerializer
+        return serializers.WorkspaceSerializer
+
+    def get_permissions(self):
+        if self.action in ["update", "partial_update", "destroy"]:
+            return [IsAuthenticated(), custom_permissions.IsWorkspaceOwner()]
+        return [IsAuthenticated()]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        workspace = serializer.save()
+        return Response(
+            {
+                "success": True,
+                "name": workspace.workspace_name,
+                "data": serializers.WorkspaceSerializer(workspace).data,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            {"success": True, "message": "Workspace deleted"},
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=False, methods=["get"], url_path="other-workspaces")
+    def other_workspaces(self, request):
+        workspaces = models.Workspace.objects.filter(boards__user=request.user).exclude(created_by=request.user).distinct()
+        serializer = serializers.WorkspaceListSerializer(workspaces, many=True)
+        return Response({"success": True, "workspaces": serializer.data})
+
+
+class BoardViewSet(viewsets.ModelViewSet):
+    """DRF ViewSet for Board CRUD operations"""
+
+    permission_classes = [IsAuthenticated]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["workspace"]
+    search_fields = ["name", "description"]
+    ordering_fields = ["created_date", "name"]
+    ordering = ["-created_date"]
+
+    def get_queryset(self):
+        workspace_id = self.request.query_params.get("workspace") or self.kwargs.get("workspace_pk")
+        if workspace_id:
+            return models.Board.objects.filter(workspace_id=workspace_id)
+        return models.Board.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.BoardListSerializer
+        elif self.action == "update_name":
+            return serializers.BoardNameUpdateSerializer
+        return serializers.BoardSerializer
+
+    def create(self, request, *args, **kwargs):
+        workspace_id = kwargs.get("workspace_pk") or request.data.get("workspace")
+        if not workspace_id:
+            return Response(
+                {"success": False, "message": "Workspace ID is required"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-    return JsonResponse(
-        {"success": False, "message": "Invalid method. Use GET to fetch workspaces."},
-        status=400,
+
+        workspace = get_object_or_404(models.Workspace, pk=workspace_id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        board = serializer.save(workspace=workspace)
+
+        return Response(
+            {
+                "success": True,
+                "board": serializers.BoardSerializer(board).data,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    @action(detail=True, methods=["post"], url_path="update-name")
+    def update_name(self, request, pk=None):
+        board = self.get_object()
+        serializer = serializers.BoardNameUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        board.name = serializer.validated_data["value"]
+        board.save()
+        return Response({"success": True, "message": "Board name updated successfully."})
+
+
+class ListViewSet(viewsets.ModelViewSet):
+    """DRF ViewSet for List CRUD operations"""
+
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ["board"]
+    ordering_fields = ["list_position", "list_name"]
+    ordering = ["list_position"]
+
+    def get_queryset(self):
+        board_id = self.request.query_params.get("board") or self.kwargs.get("board_pk")
+        if board_id:
+            return models.List.objects.filter(board_id=board_id)
+        return models.List.objects.filter(board__user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return serializers.ListCreateSerializer
+        return serializers.ListSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = serializers.ListSerializer(queryset, many=True)
+        return Response({"success": True, "boardlists": serializer.data})
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(
+            {
+                "success": True,
+                "message": "List created",
+                "data": serializer.data,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            {"success": True, "message": "List deleted"},
+            status=status.HTTP_200_OK,
+        )
+
+
+class CardViewSet(viewsets.ModelViewSet):
+    """DRF ViewSet for Card CRUD operations"""
+
+    permission_classes = [IsAuthenticated]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["list_id", "label"]
+    search_fields = ["card_name", "card_description"]
+    ordering_fields = ["created_date", "due_date"]
+    ordering = ["-created_date"]
+
+    def get_queryset(self):
+        list_id = self.request.query_params.get("list_id") or self.kwargs.get("list_pk")
+        if list_id:
+            return models.Card.objects.filter(list_id=list_id)
+        return models.Card.objects.filter(list_id__board__user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.CardListSerializer
+        return serializers.CardSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = serializers.CardListSerializer(queryset, many=True)
+        return Response({"success": True, "cards": serializer.data})
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(
+            {
+                "success": True,
+                "message": "Card created",
+                "data": serializer.data,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    @action(
+        detail=True,
+        methods=["put"],
+        url_path="move-to-list/(?P<list_id>[^/.]+)",
     )
+    def update_position(self, request, pk=None, list_id=None):
+        card = self.get_object()
+        destination_list = get_object_or_404(models.List, pk=list_id)
+        card.list_id = destination_list
+        card.save()
+        return Response({"success": True, "message": "Position updated"})
+
+
+class BoardMemberViewSet(viewsets.ReadOnlyModelViewSet):
+    """DRF ViewSet for viewing board members"""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.BoardMemberSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["board"]
+
+    def get_queryset(self):
+        workspace_id = self.request.query_params.get("workspace") or self.kwargs.get("workspace_pk")
+        if workspace_id:
+            workspace = get_object_or_404(models.Workspace, pk=workspace_id)
+            boards = workspace.board_list.all()
+            return models.BoardMember.objects.filter(board__in=boards)
+        return models.BoardMember.objects.filter(board__user=self.request.user)
+
+    def list(self, request, *args, **kwargs):
+        workspace_id = kwargs.get("workspace_pk") or request.query_params.get("workspace")
+        if not workspace_id:
+            return Response(
+                {"success": False, "message": "Workspace ID is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        workspace = get_object_or_404(models.Workspace, pk=workspace_id)
+        boards = workspace.board_list.all()
+        member_list = []
+        for board in boards:
+            members = models.BoardMember.objects.filter(board=board).select_related("user", "user__profile", "board")
+            serializer = self.get_serializer(members, many=True, context={"request": request})
+            member_list.append(serializer.data)
+
+        return Response({"success": True, "members": member_list})

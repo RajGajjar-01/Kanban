@@ -1,5 +1,6 @@
 from django import forms
-from .models import Workspace, Board, List, Card, BoardInvitaton
+
+from .models import Board, BoardInvitaton, Card, List, Workspace
 
 
 class ContactForm(forms.Form):
@@ -12,12 +13,12 @@ class ContactForm(forms.Form):
     ]
     name = forms.CharField(label="Your Name", max_length=100, required=True)
     email = forms.EmailField(label="Your Email", required=True)
-    reason = forms.ChoiceField(
-        label="Reason for Contact", choices=REASON_CHOICES, required=True
-    )
+    reason = forms.ChoiceField(label="Reason for Contact", choices=REASON_CHOICES, required=True)
     subject = forms.CharField(label="Subject", max_length=200, required=False)
     message = forms.CharField(
-        label="Your Message", widget=forms.Textarea(attrs={"rows": 4}), required=True
+        label="Your Message",
+        widget=forms.Textarea(attrs={"rows": 4}),
+        required=True,
     )
 
 

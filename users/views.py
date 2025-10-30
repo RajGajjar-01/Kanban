@@ -1,11 +1,13 @@
-from . import forms
-from board import models
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render, get_object_or_404
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect, render
+
+from board import models
 from KanbanBoardApp.settings import EMAIL_HOST_USER
+
+from . import forms
 
 
 def register_view(request):
@@ -20,7 +22,11 @@ def register_view(request):
             message = f"Thank you {username} for joining us."
             recipient_list = [email]
             send_mail(
-                subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True
+                subject,
+                message,
+                EMAIL_HOST_USER,
+                recipient_list,
+                fail_silently=True,
             )
             return redirect("user-login")
     else:
@@ -72,9 +78,7 @@ def profile_view(request):
     print(request.method)
     if request.method == "POST":
         u_form = forms.UserUpdateForm(request.POST, instance=request.user)
-        p_form = forms.ProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.profile
-        )
+        p_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
         print(u_form.is_valid)
         print(p_form.is_valid)

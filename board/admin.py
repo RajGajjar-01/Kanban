@@ -1,14 +1,15 @@
 from django.contrib import admin
+
 from .models import (
     Board,
     BoardMember,
-    Workspace,
-    List,
     Card,
-    Comment,
     CardActivity,
     CardAttachment,
     CardMember,
+    Comment,
+    List,
+    Workspace,
 )
 
 
@@ -21,11 +22,23 @@ class BoardMemberAdmin(admin.ModelAdmin):
 
 
 class WorkspaceAdmin(admin.ModelAdmin):
-    list_display = ["id", "workspace_name", "created_by", "board_list", "created_date"]
+    list_display = [
+        "id",
+        "workspace_name",
+        "created_by",
+        "board_list",
+        "created_date",
+    ]
 
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ["id", "list_id", "card_name", "card_description", "created_date"]
+    list_display = [
+        "id",
+        "list_id",
+        "card_name",
+        "card_description",
+        "created_date",
+    ]
 
 
 class CardMemberAdmin(admin.ModelAdmin):
