@@ -1,0 +1,287 @@
+<c-vars />
+<!-- Pricing Section -->
+<c-ui.section spacing="md" id="pricing">
+<c-ui.container>
+<div class="space-y-12">
+  <!-- Badge - Centered at Top -->
+  <div class="flex justify-center">
+    <c-ui.badge variant="outline">
+    <svg class="h-4 w-4"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2">
+      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    </svg>
+    <span>Pricing</span>
+    </c-ui.badge>
+  </div>
+  <!-- Section Header -->
+  <div class="text-center space-y-4">
+    <h2 class="text-3xl md:text-4xl font-bold">Simple, transparent pricing</h2>
+    <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+      Choose the perfect plan for your team. Always know what you'll pay.
+    </p>
+  </div>
+  <!-- Pricing Cards Grid -->
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <!-- Free Plan -->
+    <c-ui.card class="h-full flex flex-col">
+    <c-ui.card.header class="text-center">
+    <div class="flex justify-center mb-2">
+      <c-ui.card.title class="text-3xl font-bold">Free</c-ui.card.title>
+    </div>
+    <div class="flex justify-center mb-2">
+      <c-ui.card.description class="mb-6">
+      Perfect for trying out Taskify
+      </c-ui.card.description>
+    </div>
+    <div class="mb-6">
+      <div class="flex items-baseline justify-center gap-2">
+        <span class="text-5xl font-bold">$0</span>
+        <span class="text-muted-foreground">/month</span>
+      </div>
+    </div>
+    <c-ui.button variant="outline" class="w-full" href="{% url 'user-register' %}">
+    Get Started
+    </c-ui.button>
+    </c-ui.card.header>
+    <c-ui.card.content class="flex-1">
+    <div class="space-y-4">
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Up to 3 boards</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Unlimited tasks</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Basic collaboration</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Mobile app access</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-muted-foreground/30 mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+        <span class="text-sm text-muted-foreground">Advanced features</span>
+      </div>
+    </div>
+    </c-ui.card.content>
+    </c-ui.card>
+    <!-- Pro Plan (Popular) -->
+    <c-ui.card class="h-full flex flex-col border-primary border-2 relative shadow-lg">
+    <c-ui.card.header class="text-center pt-8">
+    <div class="flex justify-center mb-2">
+      <c-ui.card.title class="text-3xl font-bold">Pro</c-ui.card.title>
+    </div>
+    <div class="flex justify-center mb-2">
+      <c-ui.card.description class="mb-6">
+      For growing teams and businesses
+      </c-ui.card.description>
+    </div>
+    <div class="mb-6">
+      <div class="flex items-baseline justify-center gap-2">
+        <span class="text-5xl font-bold">$12</span>
+        <span class="text-muted-foreground">/month</span>
+      </div>
+    </div>
+    <c-ui.button class="w-full" href="{% url 'user-register' %}">
+    Start Free Trial
+    </c-ui.button>
+    </c-ui.card.header>
+    <c-ui.card.content class="flex-1">
+    <div class="space-y-4">
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Unlimited boards</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Advanced collaboration</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Custom workflows</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Priority support</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Advanced analytics</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Integrations</span>
+      </div>
+    </div>
+    </c-ui.card.content>
+    </c-ui.card>
+    <!-- Enterprise Plan -->
+    <c-ui.card class="h-full flex flex-col">
+    <c-ui.card.header class="text-center">
+    <div class="flex justify-center mb-2">
+      <c-ui.card.title class="text-3xl font-bold">Enterprise</c-ui.card.title>
+    </div>
+    <div class="flex justify-center mb-2">
+      <c-ui.card.description class="mb-6">
+      For large organizations
+      </c-ui.card.description>
+    </div>
+    <div class="mb-6">
+      <div class="flex items-baseline justify-center gap-2">
+        <span class="text-5xl font-bold">Custom</span>
+      </div>
+    </div>
+    <c-ui.button variant="outline" class="w-full" href="{% url 'board-contact' %}">
+    Contact Sales
+    </c-ui.button>
+    </c-ui.card.header>
+    <c-ui.card.content class="flex-1">
+    <div class="space-y-4">
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Everything in Pro</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Dedicated support</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">SSO & advanced security</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Custom integrations</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">SLA guarantee</span>
+      </div>
+      <div class="flex items-start gap-3">
+        <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span class="text-sm">Onboarding & training</span>
+      </div>
+    </div>
+    </c-ui.card.content>
+    </c-ui.card>
+  </div>
+  <!-- End Pricing Cards Grid -->
+  <!-- Additional Info -->
+  <div class="text-center pt-8">
+    <p class="text-sm text-muted-foreground">
+      All plans include a 14-day free trial. No credit card required. Cancel
+      anytime.
+    </p>
+  </div>
+</div>
+</c-ui.container>
+</c-ui.section>

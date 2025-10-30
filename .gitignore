@@ -40,7 +40,7 @@ static/css/tailwind.css
 static/css/tailwind.css.map
 
 tailwindcss-*
-!tailwindcss-*.exe
+tailwindcss-*.exe
 =======
 .venv 
 >>>>>>> 8a489c7 (The Beginning)
