@@ -10,7 +10,7 @@ router.register(r"boards", views.BoardViewSet, basename="board")
 router.register(r"lists", views.ListViewSet, basename="list")
 router.register(r"cards", views.CardViewSet, basename="card")
 router.register(r"board-members", views.BoardMemberViewSet, basename="boardmember")
-router.register(r"invitations", views.BoardInvitationViewSet, basename="invitation")
+# router.register(r"invitations", views.BoardInvitationViewSet, basename="invitation")
 
 urlpatterns = [
     # Frontend template views

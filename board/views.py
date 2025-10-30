@@ -80,10 +80,6 @@ def api_accept_invitation(request, token):
         return redirect("user-login")
 
 
-# ============================================================================
-# DJANGO REST FRAMEWORK API VIEWS
-# ============================================================================
-
 
 class WorkspaceViewSet(viewsets.ModelViewSet):
     """DRF ViewSet for Workspace CRUD operations"""
