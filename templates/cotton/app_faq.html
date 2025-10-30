@@ -1,89 +1,41 @@
 <c-vars />
 <!-- FAQ Section -->
 <c-ui.section spacing="md" id="faq">
-<c-ui.container>
-<div class="space-y-12">
-  <!-- Badge - Centered at Top -->
-  <div class="flex justify-center">
-    <c-ui.badge variant="outline">
-    <svg class="h-4 w-4"
-         viewBox="0 0 24 24"
-         fill="none"
-         stroke="currentColor"
-         stroke-width="2">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-      <path d="M12 17h.01" />
-    </svg>
-    <span>FAQ</span>
-    </c-ui.badge>
-  </div>
-  <!-- Section Header -->
-  <div class="text-center space-y-4">
-    <h2 class="text-3xl md:text-4xl font-bold">Frequently Asked Questions</h2>
-    <p class="text-lg text-muted-foreground max-w-2xl mx-auto">Find answers to common questions about our platform</p>
-  </div>
-  <!-- FAQ Accordion -->
-  <div class="max-w-3xl mx-auto">
-    <c-ui.accordion type="single" collapsible="true">
-    <!-- Question 1 -->
-    <c-ui.accordion.item value="item-1">
-    <c-ui.accordion.trigger value="item-1">
-    How do I get started?
-    </c-ui.accordion.trigger>
-    <c-ui.accordion.content value="item-1">
-    <p class="text-muted-foreground">
-      Simply sign up for an account, create your first project, and start adding tasks. Our intuitive interface makes it easy to get started.
-    </p>
-    </c-ui.accordion.content>
-    </c-ui.accordion.item>
-    <!-- Question 2 -->
-    <c-ui.accordion.item value="item-2">
-    <c-ui.accordion.trigger value="item-2">
-    What is the purpose of this platform?
-    </c-ui.accordion.trigger>
-    <c-ui.accordion.content value="item-2">
-    <p class="text-muted-foreground">
-      Our platform is designed to simplify collaboration and task management for teams and individuals. It helps you organize tasks, track progress, and stay productive.
-    </p>
-    </c-ui.accordion.content>
-    </c-ui.accordion.item>
-    <!-- Question 3 -->
-    <c-ui.accordion.item value="item-3">
-    <c-ui.accordion.trigger value="item-3">
-    Can I collaborate with my team?
-    </c-ui.accordion.trigger>
-    <c-ui.accordion.content value="item-3">
-    <p class="text-muted-foreground">
-      Yes, our platform is built for collaboration. You can invite team members, assign tasks, and track progress together.
-    </p>
-    </c-ui.accordion.content>
-    </c-ui.accordion.item>
-    <!-- Question 4 -->
-    <c-ui.accordion.item value="item-4">
-    <c-ui.accordion.trigger value="item-4">
-    Can I set deadlines for tasks?
-    </c-ui.accordion.trigger>
-    <c-ui.accordion.content value="item-4">
-    <p class="text-muted-foreground">
-      Absolutely! You can set deadlines, reminders, and priorities for each task to ensure timely completion.
-    </p>
-    </c-ui.accordion.content>
-    </c-ui.accordion.item>
-    <!-- Question 5 -->
-    <c-ui.accordion.item value="item-5">
-    <c-ui.accordion.trigger value="item-5">
-    Can I use KanbanBoard for project management?
-    </c-ui.accordion.trigger>
-    <c-ui.accordion.content value="item-5">
-    <p class="text-muted-foreground">
-      Yes, it is designed to help manage projects by providing a clear view of tasks, timelines, and team responsibilities.
-    </p>
-    </c-ui.accordion.content>
-    </c-ui.accordion.item>
-    </c-ui.accordion>
-  </div>
-  <!-- End FAQ Accordion -->
-</div>
-</c-ui.container>
+  <c-ui.container>
+    <div class="space-y-12">
+      <!-- Badge - Centered at Top -->
+      <div class="flex justify-center">
+        <c-ui.badge variant="outline">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <path d="M12 17h.01" />
+          </svg>
+          <span>{{ faq.badge_text }}</span>
+        </c-ui.badge>
+      </div>
+      <!-- Section Header -->
+      <div class="text-center space-y-4">
+        <h2 class="text-3xl md:text-4xl font-bold">{{ faq.heading }}</h2>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">{{ faq.description }}</p>
+      </div>
+      <!-- FAQ Accordion -->
+      <div class="max-w-3xl mx-auto">
+        <c-ui.accordion type="single" collapsible="true">
+          {% for item in faq.items %}
+          <c-ui.accordion.item value="item-{{ forloop.counter }}">
+            <c-ui.accordion.trigger value="item-{{ forloop.counter }}">
+              {{ item.question }}
+            </c-ui.accordion.trigger>
+            <c-ui.accordion.content value="item-{{ forloop.counter }}">
+              <p class="text-muted-foreground">
+                {{ item.answer }}
+              </p>
+            </c-ui.accordion.content>
+          </c-ui.accordion.item>
+          {% endfor %}
+        </c-ui.accordion>
+      </div>
+    </div>
+  </c-ui.container>
 </c-ui.section>
