@@ -6,19 +6,19 @@
   <!-- Badge - Centered at Top -->
   <div class="flex justify-center">
     <c-ui.badge variant="outline">
-    <svg class="h-4 w-4"
+    <svg class="h-4 w-4 text-primary"
          viewBox="0 0 24 24"
          fill="none"
          stroke="currentColor"
          stroke-width="2">
       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
     </svg>
-    <span>Pricing</span>
+    Pricing
     </c-ui.badge>
   </div>
   <!-- Section Header -->
   <div class="text-center space-y-4">
-    <h2 class="text-3xl md:text-4xl font-bold">Simple, transparent pricing</h2>
+    <h2 class="text-3xl md:text-4xl font-bold text-foreground">Simple, transparent pricing</h2>
     <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
       Choose the perfect plan for your team. Always know what you'll pay.
     </p>
@@ -26,28 +26,19 @@
   <!-- Pricing Cards Grid -->
   <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
     <!-- Free Plan -->
-    <c-ui.card class="h-full flex flex-col">
-    <c-ui.card.header class="text-center">
-    <div class="flex justify-center mb-2">
-      <c-ui.card.title class="text-3xl font-bold">Free</c-ui.card.title>
-    </div>
-    <div class="flex justify-center mb-2">
-      <c-ui.card.description class="mb-6">
-      Perfect for trying out Taskify
-      </c-ui.card.description>
-    </div>
-    <div class="mb-6">
-      <div class="flex items-baseline justify-center gap-2">
-        <span class="text-5xl font-bold">$0</span>
-        <span class="text-muted-foreground">/month</span>
+    <div class="bg-card border border-border rounded-xl h-full flex flex-col shadow-sm hover:shadow-lg transition-all duration-300">
+      <div class="p-8 text-center">
+        <h3 class="text-3xl font-bold mb-2 text-foreground">Free</h3>
+        <p class="text-muted-foreground mb-6">Perfect for trying out Taskify</p>
+        <div class="mb-6">
+          <div class="flex items-baseline justify-center gap-2">
+            <span class="text-5xl font-bold text-foreground">$0</span>
+            <span class="text-muted-foreground">/month</span>
+          </div>
+        </div>
+        <c-ui.button href="{% url 'user-register' %}" variant="outline" class="w-full mb-8">Get Started</c-ui.button>
       </div>
-    </div>
-    <c-ui.button variant="outline" class="w-full" href="{% url 'user-register' %}">
-    Get Started
-    </c-ui.button>
-    </c-ui.card.header>
-    <c-ui.card.content class="flex-1">
-    <div class="space-y-4">
+      <div class="p-8 pt-0 space-y-4">
       <div class="flex items-start gap-3">
         <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
              viewBox="0 0 24 24"
@@ -89,7 +80,7 @@
         <span class="text-sm">Mobile app access</span>
       </div>
       <div class="flex items-start gap-3">
-        <svg class="h-5 w-5 text-muted-foreground/30 mt-0.5 flex-shrink-0"
+        <svg class="h-5 w-5 opacity-30 mt-0.5 flex-shrink-0"
              viewBox="0 0 24 24"
              fill="none"
              stroke="currentColor"
@@ -97,34 +88,27 @@
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
-        <span class="text-sm text-muted-foreground">Advanced features</span>
+        <span class="text-sm opacity-50">Advanced features</span>
+      </div>
       </div>
     </div>
-    </c-ui.card.content>
-    </c-ui.card>
     <!-- Pro Plan (Popular) -->
-    <c-ui.card class="h-full flex flex-col border-primary border-2 relative shadow-lg">
-    <c-ui.card.header class="text-center pt-8">
-    <div class="flex justify-center mb-2">
-      <c-ui.card.title class="text-3xl font-bold">Pro</c-ui.card.title>
-    </div>
-    <div class="flex justify-center mb-2">
-      <c-ui.card.description class="mb-6">
-      For growing teams and businesses
-      </c-ui.card.description>
-    </div>
-    <div class="mb-6">
-      <div class="flex items-baseline justify-center gap-2">
-        <span class="text-5xl font-bold">$12</span>
-        <span class="text-muted-foreground">/month</span>
+    <div class="bg-card border-2 border-primary rounded-xl h-full flex flex-col shadow-xl hover:shadow-2xl transition-all duration-300 relative">
+      <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+        <c-ui.badge variant="default" class="shadow-lg">Most Popular</c-ui.badge>
       </div>
-    </div>
-    <c-ui.button class="w-full" href="{% url 'user-register' %}">
-    Start Free Trial
-    </c-ui.button>
-    </c-ui.card.header>
-    <c-ui.card.content class="flex-1">
-    <div class="space-y-4">
+      <div class="p-8 text-center pt-10">
+        <h3 class="text-3xl font-bold mb-2 text-foreground">Pro</h3>
+        <p class="text-muted-foreground mb-6">For growing teams and businesses</p>
+        <div class="mb-6">
+          <div class="flex items-baseline justify-center gap-2">
+            <span class="text-5xl font-bold text-foreground">$12</span>
+            <span class="text-muted-foreground">/month</span>
+          </div>
+        </div>
+        <c-ui.button href="{% url 'user-register' %}" class="w-full mb-8">Start Free Trial</c-ui.button>
+      </div>
+      <div class="p-8 pt-0 space-y-4">
       <div class="flex items-start gap-3">
         <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
              viewBox="0 0 24 24"
@@ -185,31 +169,21 @@
         </svg>
         <span class="text-sm">Integrations</span>
       </div>
-    </div>
-    </c-ui.card.content>
-    </c-ui.card>
-    <!-- Enterprise Plan -->
-    <c-ui.card class="h-full flex flex-col">
-    <c-ui.card.header class="text-center">
-    <div class="flex justify-center mb-2">
-      <c-ui.card.title class="text-3xl font-bold">Enterprise</c-ui.card.title>
-    </div>
-    <div class="flex justify-center mb-2">
-      <c-ui.card.description class="mb-6">
-      For large organizations
-      </c-ui.card.description>
-    </div>
-    <div class="mb-6">
-      <div class="flex items-baseline justify-center gap-2">
-        <span class="text-5xl font-bold">Custom</span>
       </div>
     </div>
-    <c-ui.button variant="outline" class="w-full" href="{% url 'board-contact' %}">
-    Contact Sales
-    </c-ui.button>
-    </c-ui.card.header>
-    <c-ui.card.content class="flex-1">
-    <div class="space-y-4">
+    <!-- Enterprise Plan -->
+    <div class="bg-card border border-border rounded-xl h-full flex flex-col shadow-sm hover:shadow-lg transition-all duration-300">
+      <div class="p-8 text-center">
+        <h3 class="text-3xl font-bold mb-2 text-foreground">Enterprise</h3>
+        <p class="text-muted-foreground mb-6">For large organizations</p>
+        <div class="mb-6">
+          <div class="flex items-baseline justify-center gap-2">
+            <span class="text-5xl font-bold text-foreground">Custom</span>
+          </div>
+        </div>
+        <c-ui.button href="{% url 'board-contact' %}" variant="outline" class="w-full mb-8">Contact Sales</c-ui.button>
+      </div>
+      <div class="p-8 pt-0 space-y-4">
       <div class="flex items-start gap-3">
         <svg class="h-5 w-5 text-primary mt-0.5 flex-shrink-0"
              viewBox="0 0 24 24"
@@ -270,9 +244,8 @@
         </svg>
         <span class="text-sm">Onboarding & training</span>
       </div>
+      </div>
     </div>
-    </c-ui.card.content>
-    </c-ui.card>
   </div>
   <!-- End Pricing Cards Grid -->
   <!-- Additional Info -->

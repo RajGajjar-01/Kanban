@@ -6,35 +6,32 @@
       <!-- Badge - Centered at Top -->
       <div class="flex justify-center">
         <c-ui.badge variant="outline">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10" />
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
             <path d="M12 17h.01" />
           </svg>
-          <span>{{ faq.badge_text }}</span>
+          {{ faq.badge_text }}
         </c-ui.badge>
       </div>
       <!-- Section Header -->
       <div class="text-center space-y-4">
-        <h2 class="text-3xl md:text-4xl font-bold">{{ faq.heading }}</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground">{{ faq.heading }}</h2>
         <p class="text-lg text-muted-foreground max-w-2xl mx-auto">{{ faq.description }}</p>
       </div>
       <!-- FAQ Accordion -->
-      <div class="max-w-3xl mx-auto">
-        <c-ui.accordion type="single" collapsible="true">
-          {% for item in faq.items %}
-          <c-ui.accordion.item value="item-{{ forloop.counter }}">
-            <c-ui.accordion.trigger value="item-{{ forloop.counter }}">
-              {{ item.question }}
-            </c-ui.accordion.trigger>
-            <c-ui.accordion.content value="item-{{ forloop.counter }}">
-              <p class="text-muted-foreground">
-                {{ item.answer }}
-              </p>
-            </c-ui.accordion.content>
-          </c-ui.accordion.item>
-          {% endfor %}
-        </c-ui.accordion>
+      <div class="max-w-3xl mx-auto space-y-2">
+        {% for item in faq.items %}
+        <div class="collapse collapse-arrow bg-card border border-border rounded-lg">
+          <input type="radio" name="faq-accordion" {% if forloop.first %}checked="checked"{% endif %} />
+          <div class="collapse-title text-lg font-medium">
+            {{ item.question }}
+          </div>
+          <div class="collapse-content">
+            <p class="text-muted-foreground">{{ item.answer }}</p>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </c-ui.container>

@@ -3,15 +3,15 @@
 <c-ui.section>
   <c-ui.container>
     <div class="text-center mb-16">
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Meet Our Team</h1>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">Meet Our Team</h1>
       <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
         We're a passionate team of developers dedicated to building the best project management tools for teams worldwide.
       </p>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       {% for dev in developers %}
-      <c-ui.card class="text-center" hover="true">
-        <c-ui.card.content class="pt-6">
+      <div class="bg-card border border-border rounded-lg text-center hover:shadow-xl transition-shadow">
+        <div class="p-6">
           <div class="flex flex-col items-center space-y-4">
             <div class="relative">
               <div class="w-24 h-24 rounded-full overflow-hidden bg-muted">
@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="space-y-1">
-              <h3 class="font-semibold text-lg">{{ dev.name }}</h3>
+              <h3 class="font-semibold text-lg text-foreground">{{ dev.name }}</h3>
               <p class="text-sm text-primary font-medium">{{ dev.role }}</p>
               <p class="text-sm text-muted-foreground">{{ dev.description }}</p>
             </div>
@@ -41,22 +41,22 @@
               </c-ui.button>
             </div>
           </div>
-        </c-ui.card.content>
-      </c-ui.card>
+        </div>
+      </div>
       {% endfor %}
     </div>
     <div class="mt-16 text-center">
-      <c-ui.card class="max-w-3xl mx-auto">
-        <c-ui.card.content class="py-12">
-          <h2 class="text-2xl font-bold mb-4">Join Our Team</h2>
+      <div class="bg-card border border-border rounded-lg max-w-3xl mx-auto">
+        <div class="p-12">
+          <h2 class="text-2xl font-bold mb-4 text-foreground">Join Our Team</h2>
           <p class="text-muted-foreground mb-6">
             We're always looking for talented individuals to join our growing team. If you're passionate about building great products, we'd love to hear from you.
           </p>
           <c-ui.button href="{% url 'board-contact' %}">
             Get in Touch
           </c-ui.button>
-        </c-ui.card.content>
-      </c-ui.card>
+        </div>
+      </div>
     </div>
   </c-ui.container>
 </c-ui.section>

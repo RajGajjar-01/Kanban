@@ -1,5 +1,4 @@
-{% load static %}
-{% load cotton %}
+{% load static %} {% load cotton %}
 <!DOCTYPE html>
 <html lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches) }" :data-theme="darkMode ? 'dark' : 'light'" :class="{ 'dark': darkMode }">
   <head>
@@ -13,13 +12,16 @@
     {% endif %}
     <link rel="stylesheet" href="{% static 'output.css' %}" />
     
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/lenis@1.3.13/dist/lenis.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
 
-  <body class="min-h-screen font-poppins bg-background">
-    {% block content %}{% endblock %}
-
+  <body class="min-h-screen font-poppins bg-background text-foreground">
+    <!-- Main Content (No Navbar/Footer) -->
+    <main class="h-screen overflow-hidden">{% block content %}{% endblock %}</main>
+    
     <script type="module" src="{% static 'js/main.js' %}"></script>
   </body>
 </html>
