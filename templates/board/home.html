@@ -78,8 +78,7 @@
         <h3 class="font-bold text-lg text-foreground mb-4">Add Board</h3>
         <form 
           id="addBoardForm" 
-          hx-post="/api/v1/boards/"
-          hx-on::after-request="if(event.detail.successful) { workspaceManager().closeBoardModal(); workspaceManager().loadBoards(workspaceManager().currentWorkspaceId); document.getElementById('addBoardForm').reset(); }"
+          @submit.prevent="createBoard()"
           class="space-y-4"
         >
           {% csrf_token %}
@@ -104,11 +103,11 @@
               rows="3"
             ></textarea>
           </div>
-          <div class="modal-action">
-            <c-ui.button type="button" variant="ghost" @click="closeBoardModal()">Cancel</c-ui.button>
-            <c-ui.button type="submit">Add Board</c-ui.button>
-          </div>
         </form>
+        <div class="modal-action">
+          <c-ui.button type="button" variant="ghost" @click="closeBoardModal()">Cancel</c-ui.button>
+          <c-ui.button type="button" @click="createBoard()">Add Board</c-ui.button>
+        </div>
       </div>
     </div>
 
@@ -127,6 +126,9 @@
 </div>
 
 <script>
+// Global reference to the workspace manager instance
+let workspaceManagerInstance = null;
+
 function workspaceManager() {
   return {
     showWorkspaceModal: false,
@@ -136,6 +138,8 @@ function workspaceManager() {
     workspaceToDelete: null,
     
     init() {
+      // Store reference to this instance globally
+      workspaceManagerInstance = this;
       this.loadWorkspaces();
       this.loadOtherWorkspaces();
     },
@@ -199,10 +203,10 @@ function workspaceManager() {
       }
       
       container.innerHTML = workspaces.map(ws => `
-        <div class="btn btn-ghost justify-between w-full" onclick="workspaceManager().selectWorkspace(${ws.id}, '${ws.workspace_name}')">
+        <div class="btn btn-ghost justify-between w-full" onclick="workspaceManagerInstance.selectWorkspace(${ws.id}, '${ws.workspace_name}')">
           <span class="font-medium text-foreground">${ws.workspace_name}</span>
           ${containerId === 'workspaceList' ? `
-            <button onclick="event.stopPropagation(); workspaceManager().openDeleteModal(${ws.id})" class="btn btn-ghost btn-xs btn-circle text-destructive hover:bg-destructive/10">
+            <button onclick="event.stopPropagation(); workspaceManagerInstance.openDeleteModal(${ws.id})" class="btn btn-ghost btn-xs btn-circle text-destructive hover:bg-destructive/10">
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
               </svg>
@@ -235,7 +239,7 @@ function workspaceManager() {
         container.innerHTML = `
           <div class="text-center py-12">
             <p class="text-muted-foreground mb-4">No boards yet</p>
-            <button onclick="workspaceManager().openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+            <button onclick="workspaceManagerInstance.openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 5v14M5 12h14"/>
               </svg>
@@ -250,7 +254,7 @@ function workspaceManager() {
       container.innerHTML = `
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-semibold text-foreground">Your Boards</h3>
-          <button onclick="workspaceManager().openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+          <button onclick="workspaceManagerInstance.openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 5v14M5 12h14"/>
             </svg>
