@@ -1,7 +1,7 @@
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
   {% for board in boards %}
   <a href="{% url 'get-board-by-id' workspace_id board.id %}" class="block">
-    <div class="p-6 rounded-lg border hover:shadow-lg transition-all cursor-pointer">
+    <div class="p-6 rounded-lg border hover:shadow-lg transition-all cursor-pointer" style="background: {{ board.background_color|default:'linear-gradient(to right, #ff7e5f, #feb47b)' }}">
       <h3 class="text-lg font-semibold text-white mb-2">{{ board.name }}</h3>
       <p class="text-sm text-white/80">{{ board.description|default:'No description' }}</p>
     </div>
