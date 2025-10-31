@@ -22,9 +22,6 @@ addWorkspaceForm.addEventListener("submit", handleAddWorkspace);
 cancelDeleteWorkspaceBtn.addEventListener("click", () => closeModal("deleteWorkspaceModal"))
 confirmDeleteWorkspaceBtn.addEventListener("click", ()=>deleteWorkspace());
 
-export const hello = 'helooo'
-
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px"><path d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"/></svg>`
 
 export function renderWorkspaces(workspacesToRender, ListToAdd) {    
     if (workspacesToRender.length == 0 && workspacesToRender === workspaces) {
@@ -53,15 +50,9 @@ export function renderWorkspaces(workspacesToRender, ListToAdd) {
         const selectButton = document.getElementById(`select-${workspace.id}`);
         if (selectButton) {
             if (!workspace.created_by) {
-                selectButton.addEventListener("click", () => {selectWorkspace(workspace.id)
-                    console.log(workspace.id);
-                    console.log("Otherss asdfasdfji");
-                });
+                selectButton.addEventListener("click", () => selectWorkspace(workspace.id));
             } else {
-                selectButton.addEventListener("click", () => {selectOtherWorkspace(workspace.id)
-                    console.log(workspace.id);
-                    console.log("Otherss");
-                });
+                selectButton.addEventListener("click", () => selectOtherWorkspace(workspace.id));
             }
         }
     });
@@ -135,7 +126,6 @@ export async function selectWorkspace(workspaceId) {
 
 export async function selectOtherWorkspace(workspaceId) {
     currentWorkspace = otherworkspaces.find((w) => w.id === workspaceId);
-    console.log(currentWorkspace);
     currentWorkspaceTitle.textContent = currentWorkspace.name;
     workspaceTabs.classList.remove("hidden");   
     try {
@@ -179,7 +169,6 @@ async function deleteWorkspace() {
             }
             const data = await response.json();
             if (data.success) {
-                console.log(data.message)
                 if (currentWorkspace && currentWorkspace.id === workspaceToDelete) {
                     currentWorkspace = workspaces.length > 0 ? workspaces[0] : null;
                     currentWorkspaceTitle.textContent = currentWorkspace ? currentWorkspace.name : "";
@@ -227,7 +216,6 @@ async function fetchWorkspaces() {
 }
 
 async function fetchOtherWorkspaces() {
-    console.log("Chal raha hai");
     try {
         const response = await fetch("/api/get-all-other-workspaces/", {
             method: 'GET',
@@ -241,7 +229,6 @@ async function fetchOtherWorkspaces() {
         }
         const data = await response.json();
         if (data.success) {
-            console.log(data.workspaces);
             otherworkspaces = data.workspaces.map(workspace => ({
                 id: workspace.id,
                 name: workspace.workspace_name, 
@@ -291,7 +278,6 @@ async function handleAddBoard(e) {
 
         const data = await response.json();
         if (data.success) {
-            console.log("created");
             selectWorkspace(currentWorkspace.id);
             closeModal("addBoardModal");
         } else {
@@ -308,7 +294,6 @@ async function renderBoards() {
         boardsGrid.innerHTML = "<p>Please select a workspace to view boards.</p>";
         return;
     }
-    console.log(currentWorkspace.boards.map((board)=>board.id));
     const boardsHTML = currentWorkspace.boards
         .map(
             (board) => `
@@ -337,7 +322,6 @@ async function renderBoards() {
         if (boardbtn) {
             boardbtn.addEventListener("click", ()=>{
                 currentBoard = board;
-                console.log(currentBoard);
                 window.location.href = `/workspace/${currentWorkspace.id}/get-board/${board.id}`;
             });
         }
@@ -357,7 +341,6 @@ export async function fetchMembersList() {
         }
         const data = await response.json();
         if (data.success) {
-            console.log(data.members);
             showMembers(data.members);
         } else {
             console.error('Error:', data.message);
