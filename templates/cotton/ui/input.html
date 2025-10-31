@@ -1,0 +1,33 @@
+<c-vars 
+  type="text" 
+  name="" 
+  id="" 
+  label="" 
+  placeholder="" 
+  required="false" 
+  error="" 
+  class=""
+/>
+
+<div class="form-control">
+  {% if label %}
+  <label class="label" for="{{ id }}">
+    <span class="label-text text-foreground font-medium">{{ label }}</span>
+  </label>
+  {% endif %}
+  <input 
+    id="{{ id }}"
+    name="{{ name }}"
+    type="{{ type }}"
+    {% if required == "true" %}required{% endif %}
+    class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-primary selection:text-primary-foreground {{ class }}"
+    placeholder="{{ placeholder }}"
+    autocomplete="off"
+    {{ attrs }}
+  >
+  {% if error %}
+  <label class="label">
+    <span class="label-text-alt text-destructive">{{ error }}</span>
+  </label>
+  {% endif %}
+</div>
