@@ -27,7 +27,6 @@ class UserRegistrationForm(forms.ModelForm):
             self.fields[field].widget.attrs.update(
                 {
                     "placeholder": placeholders.get(field, ""),
-                    "class": "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                 }
             )
 
@@ -92,12 +91,6 @@ class UserUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for field in self.fields:
-            self.fields[field].widget.attrs.update(
-                {
-                    "class": "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                }
-            )
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -107,11 +100,3 @@ class ProfileUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        for field in self.fields:
-            if field != "image":
-                self.fields[field].widget.attrs.update(
-                    {
-                        "class": "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    }
-                )

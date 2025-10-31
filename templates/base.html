@@ -1,6 +1,6 @@
 {% load static %} {% load cotton %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches) }" :data-theme="darkMode ? 'dark' : 'light'" :class="{ 'dark': darkMode }">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,23 +10,15 @@
     {% else %}
     <title>Taskify</title>
     {% endif %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
+    <link rel="stylesheet" href="{% static 'output.css' %}" />
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://unpkg.com/lenis@1.3.13/dist/lenis.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
 
-  <body
-    class="min-h-screen flex flex-col font-poppins"
-    x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
-  >
+  <body class="min-h-screen flex flex-col font-poppins">
     <!-- Navbar -->
     <c-app_navbar />
     <!-- Main Content -->
@@ -34,7 +26,6 @@
     <!-- Footer -->
     <c-app_footer />
     <!-- Toast Container -->
-    <c-ui.toast />
     <script type="module" src="{% static 'js/main.js' %}"></script>
     <script>
       const lenis = new Lenis({

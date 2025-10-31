@@ -36,8 +36,7 @@ Thumbs.db
 .env
 
 # Tailwind CSS Generated Files #
-static/css/tailwind.css
-static/css/tailwind.css.map
+static/tailwind
 
 tailwindcss-*
 tailwindcss-*.exe
