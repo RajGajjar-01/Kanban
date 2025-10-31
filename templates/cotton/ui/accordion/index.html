@@ -1,4 +1,0 @@
-<c-vars type="single" collapsible="true" />
-<div x-data="{ activeItem: null, type: '{{ type }}', collapsible: {{ collapsible|lower }}, toggle(value) { if (this.type === 'single') { if (this.activeItem === value && this.collapsible) { this.activeItem = null; } else { this.activeItem = value; } } }, isOpen(value) { return this.activeItem === value; } }" data-slot="accordion" data-type="{{ type }}" data-collapsible="{{ collapsible }}" class="w-full" {{ attrs }}>
-  {{ slot }}
-</div>

@@ -14,7 +14,7 @@ from .landing_context import get_about_context, get_landing_context
 
 def landing_view(request):
     landing_data = get_landing_context()
-    context = {"features": landing_data["features"]["items"], **landing_data}
+    context = landing_data
     return render(request, "boards/landing.html", context)
 
 
@@ -54,7 +54,7 @@ def board_data_view(request, pk, id):
         "createCard": card_modal_form,
         "inviteMember": invite_modal_form,
     }
-    return render(request, "board/boardIn.html", context)
+    return render(request, "board/board.html", context)
 
 
 def api_accept_invitation(request, token):
