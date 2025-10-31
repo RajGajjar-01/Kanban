@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -36,10 +35,5 @@ Thumbs.db
 .env
 
 # Tailwind CSS Generated Files #
-static/tailwind
-
-tailwindcss-*
-tailwindcss-*.exe
-=======
-.venv 
->>>>>>> 8a489c7 (The Beginning)
+static/vendor/tailwindcss-*
+static/vendor/tailwindcss-*.exe

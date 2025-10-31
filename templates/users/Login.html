@@ -1,7 +1,14 @@
-{% extends "base_auth.html" %}
+{% extends "base.html" %}
+
+{% block extra_head %}{% endblock %}
 {% load socialaccount %}
+{% block body_class %}min-h-screen font-poppins bg-background{% endblock %}
+
+{% block layout %}
+{% block navbar %}
+<c-navbar show_nav_links="false" show_boards_link="true" />
+{% endblock %}
 {% block content %}
-  <c-auth_header />
 
   <!-- Login Form -->
   <div class="h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
@@ -67,3 +74,4 @@
     </div>
   </div>
 {% endblock content %}
+{% endblock layout %}
