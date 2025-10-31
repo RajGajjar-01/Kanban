@@ -28,11 +28,11 @@ class Command(BaseCommand):
 
         # Build command
         cmd = [
-            binary,
+            "./static/vendor/tailwindcss",
             "-i",
-            "./static/src/input.css",
+            "./static/css/input.css",
             "-o",
-            "./static/css/tailwind.css",
+            "./static/css/output.css",
         ]
 
         if options["watch"]:

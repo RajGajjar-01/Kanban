@@ -1,8 +1,15 @@
-{% extends "base_auth.html" %}
+{% extends "base.html" %}
+
+{% block extra_head %}{% endblock %}
+{% block body_class %}min-h-screen font-poppins bg-background{% endblock %}
+
+{% block layout %}
+{% block navbar %}
+<c-navbar show_nav_links="false" show_boards_link="true" />
+{% endblock %}
 {% load cotton %}
 {% block content %}
 <div class="min-h-screen bg-background">
-    <c-auth_header show_boards="true" />
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -218,3 +225,4 @@
     </div>
 </div>
 {% endblock content %}
+{% endblock layout %}

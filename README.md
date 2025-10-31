@@ -101,7 +101,12 @@ This project uses:
 
 To compile TailwindCSS:
 ```bash
-npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
+./static/vendor/tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
+```
+
+Or use the Django management command:
+```bash
+python manage.py tailwind --watch
 ```
 
 ## Configuration
@@ -139,19 +144,21 @@ chmod +x tailwindcss-linux-x64
 curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-windows-x64.exe
 
 
-## Open 2 terminal
 
 ```bash
 python manage.py runserver
 ```
 
+**Terminal 2 - TailwindCSS Watch Mode:**
 ```bash
-tailwindcss-linux-x64 -i ./static/src/input.css -o ./static/src/output.css --watch
+./static/vendor/tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
 ```
 
-or another command for tailwind
+Or use the Django management command:
 ```bash
 python manage.py tailwind --watch
 ```
 
-custom color used in hero section achieve more text checkout 'custom-primary' in input.css
+## Custom Styling
+
+Custom color used in hero section - checkout `--custom-primary-dark` in `static/css/input.css`

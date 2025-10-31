@@ -78,8 +78,7 @@
         <h3 class="font-bold text-lg text-foreground mb-4">Add Board</h3>
         <form 
           id="addBoardForm" 
-          hx-post="/api/v1/boards/"
-          hx-on::after-request="if(event.detail.successful) { workspaceManager().closeBoardModal(); workspaceManager().loadBoards(workspaceManager().currentWorkspaceId); document.getElementById('addBoardForm').reset(); }"
+          @submit.prevent="createBoard()"
           class="space-y-4"
         >
           {% csrf_token %}
@@ -104,11 +103,11 @@
               rows="3"
             ></textarea>
           </div>
-          <div class="modal-action">
-            <c-ui.button type="button" variant="ghost" @click="closeBoardModal()">Cancel</c-ui.button>
-            <c-ui.button type="submit">Add Board</c-ui.button>
-          </div>
         </form>
+        <div class="modal-action">
+          <c-ui.button type="button" variant="ghost" @click="closeBoardModal()">Cancel</c-ui.button>
+          <c-ui.button type="button" @click="createBoard()">Add Board</c-ui.button>
+        </div>
       </div>
     </div>
 
@@ -127,6 +126,9 @@
 </div>
 
 <script>
+// Global reference to the workspace manager instance
+let workspaceManagerInstance = null;
+
 function workspaceManager() {
   return {
     showWorkspaceModal: false,
@@ -134,20 +136,22 @@ function workspaceManager() {
     showDeleteModal: false,
     currentWorkspaceId: null,
     workspaceToDelete: null,
-    
+
     init() {
+      // Store reference to this instance globally
+      workspaceManagerInstance = this;
       this.loadWorkspaces();
       this.loadOtherWorkspaces();
     },
-    
+
     openWorkspaceModal() {
       this.showWorkspaceModal = true;
     },
-    
+
     closeWorkspaceModal() {
       this.showWorkspaceModal = false;
     },
-    
+
     openBoardModal() {
       if (!this.currentWorkspaceId) {
         alert('Please select a workspace first');
@@ -156,21 +160,21 @@ function workspaceManager() {
       document.getElementById('boardWorkspaceId').value = this.currentWorkspaceId;
       this.showBoardModal = true;
     },
-    
+
     closeBoardModal() {
       this.showBoardModal = false;
     },
-    
+
     openDeleteModal(workspaceId) {
       this.workspaceToDelete = workspaceId;
       this.showDeleteModal = true;
     },
-    
+
     closeDeleteModal() {
       this.showDeleteModal = false;
       this.workspaceToDelete = null;
     },
-    
+
     async loadWorkspaces() {
       try {
         const response = await fetch('/api/v1/workspaces/');
@@ -180,7 +184,7 @@ function workspaceManager() {
         console.error('Error loading workspaces:', error);
       }
     },
-    
+
     async loadOtherWorkspaces() {
       try {
         const response = await fetch('/api/v1/workspaces/other-workspaces/');
@@ -190,19 +194,19 @@ function workspaceManager() {
         console.error('Error loading other workspaces:', error);
       }
     },
-    
+
     renderWorkspaces(workspaces, containerId) {
       const container = document.getElementById(containerId);
       if (!workspaces || workspaces.length === 0) {
         container.innerHTML = '<p class=\"text-sm text-muted-foreground\">No workspaces found</p>';
         return;
       }
-      
+
       container.innerHTML = workspaces.map(ws => `
-        <div class="btn btn-ghost justify-between w-full" onclick="workspaceManager().selectWorkspace(${ws.id}, '${ws.workspace_name}')">
+        <div class="btn btn-ghost justify-between w-full" onclick="workspaceManagerInstance.selectWorkspace(${ws.id}, '${ws.workspace_name}')">
           <span class="font-medium text-foreground">${ws.workspace_name}</span>
           ${containerId === 'workspaceList' ? `
-            <button onclick="event.stopPropagation(); workspaceManager().openDeleteModal(${ws.id})" class="btn btn-ghost btn-xs btn-circle text-destructive hover:bg-destructive/10">
+            <button onclick="event.stopPropagation(); workspaceManagerInstance.openDeleteModal(${ws.id})" class="btn btn-ghost btn-xs btn-circle text-destructive hover:bg-destructive/10">
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
               </svg>
@@ -211,14 +215,14 @@ function workspaceManager() {
         </div>
       `).join('');
     },
-    
+
     selectWorkspace(id, name) {
       this.currentWorkspaceId = id;
       document.getElementById('currentWorkspaceTitle').textContent = name;
       document.getElementById('workspaceTabs').classList.remove('hidden');
       this.loadBoards(id);
     },
-    
+
     async loadBoards(workspaceId) {
       try {
         const response = await fetch(`/api/v1/boards/?workspace=${workspaceId}`);
@@ -228,14 +232,14 @@ function workspaceManager() {
         console.error('Error loading boards:', error);
       }
     },
-    
+
     renderBoards(boards) {
       const container = document.getElementById('tabContent');
       if (!boards || boards.length === 0) {
         container.innerHTML = `
           <div class="text-center py-12">
             <p class="text-muted-foreground mb-4">No boards yet</p>
-            <button onclick="workspaceManager().openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+            <button onclick="workspaceManagerInstance.openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 5v14M5 12h14"/>
               </svg>
@@ -246,11 +250,11 @@ function workspaceManager() {
         `;
         return;
       }
-      
+
       container.innerHTML = `
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-semibold text-foreground">Your Boards</h3>
-          <button onclick="workspaceManager().openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+          <button onclick="workspaceManagerInstance.openBoardModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 5v14M5 12h14"/>
             </svg>
@@ -269,11 +273,11 @@ function workspaceManager() {
         </div>
       `;
     },
-    
+
     async createWorkspace() {
       const form = document.getElementById('addWorkspaceForm');
       const formData = new FormData(form);
-      
+
       try {
         const response = await fetch('/api/v1/workspaces/', {
           method: 'POST',
@@ -282,7 +286,7 @@ function workspaceManager() {
           },
           body: formData
         });
-        
+
         if (response.ok) {
           this.closeWorkspaceModal();
           this.loadWorkspaces();
@@ -292,17 +296,17 @@ function workspaceManager() {
         console.error('Error creating workspace:', error);
       }
     },
-    
+
     async createBoard() {
       if (!this.currentWorkspaceId) {
         alert('Please select a workspace first');
         return;
       }
-      
+
       const form = document.getElementById('addBoardForm');
       const formData = new FormData(form);
       formData.append('workspace', this.currentWorkspaceId);
-      
+
       try {
         const response = await fetch('/api/v1/boards/', {
           method: 'POST',
@@ -311,7 +315,7 @@ function workspaceManager() {
           },
           body: formData
         });
-        
+
         if (response.ok) {
           this.closeBoardModal();
           this.loadBoards(this.currentWorkspaceId);
@@ -321,10 +325,10 @@ function workspaceManager() {
         console.error('Error creating board:', error);
       }
     },
-    
+
     async confirmDeleteWorkspace() {
       if (!this.workspaceToDelete) return;
-      
+
       try {
         const response = await fetch(`/api/v1/workspaces/${this.workspaceToDelete}/`, {
           method: 'DELETE',
@@ -332,7 +336,7 @@ function workspaceManager() {
             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
           }
         });
-        
+
         if (response.ok) {
           this.closeDeleteModal();
           this.loadWorkspaces();
@@ -355,4 +359,4 @@ function workspaceManager() {
 [x-cloak] { display: none !important; }
 </style>
 
-{% endblock content %}
+{% endblock %}

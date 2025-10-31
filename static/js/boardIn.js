@@ -1,5 +1,4 @@
-import { openModal, closeModal, getCookie, initThemeToggle } from "./utils.js"
-import { icon_left, icon_right } from "./constants.js";
+import { openModal, closeModal, getCookie } from "./utils.js";
 
 const listArray = [];
 let listCounter = 0;
@@ -52,7 +51,6 @@ async function createListo(e) {
     formData.append('board', boardId);
     formData.append('list_position', listArray.length + 1);
 
-    console.log(formData);
     try {
         const response = await fetch('/api/board/create-list/', {
             method: 'POST',
@@ -67,7 +65,6 @@ async function createListo(e) {
         }
         const data = await response.json();
         if (data.success) {
-            console.log('hello');
             fetchLists();
             closeListModalBtn.click();
         } else {
@@ -122,7 +119,6 @@ async function deleteList(listId) {
 
         const data = await response.json();
         if (data.success) {
-            console.log('Task deleted successfully');
             fetchLists();
         } else {
             console.error('Error deleting task:', data.message);
@@ -206,7 +202,6 @@ document.getElementById("close-edit-list-modal").addEventListener("click", () =>
 
 document.getElementById("confirm-delete-list").addEventListener("click", () => {
     if (selectedList) {
-        console.log(selectedList)
         deleteList(selectedList.id);
         closeModal("delete-list-modal");
     }
@@ -245,7 +240,6 @@ function renderLists(lists) {
 
         list.querySelector(".add-task").addEventListener("click", () => {
             selectedList = listL;
-            console.log(selectedList);
             openModal("task-modal");
         });
 
@@ -266,7 +260,6 @@ function renderLists(lists) {
     });
     listContainer.appendChild(createAddListCard());
     listArray.push(lists);
-    console.log("fxn done");
 }
 
 function createAddListCard() {
@@ -362,7 +355,6 @@ document.getElementById("close-task-modal").addEventListener("click", () => {
 });
 
 function handleTaskDragOver(e) {
-    console.log("drag over kya hota hai?");
     e.preventDefault();
     e.stopPropagation();
 
@@ -388,7 +380,6 @@ function handleTaskDragOver(e) {
 }
 
 function handleTaskDragLeave(e) {
-    console.log("drag leave");
     if (e.relatedTarget && !e.relatedTarget.closest(".tasks")) {
         document.querySelectorAll(".task-drop-preview").forEach(el => el.remove());
         dragOverTask = null;
@@ -396,7 +387,6 @@ function handleTaskDragLeave(e) {
 }
 
 function dragStart(e) {
-    console.log("drag start")
     if (!e.target.classList.contains("bg-gray-100")) {
         e.dataTransfer.setData("text/plain", e.target.id);
         e.dataTransfer.setData("application/list", "false"); // if it's true ----> Bugggggssssss
@@ -419,7 +409,6 @@ function dragOver(e) {
 }
 
 function drop(e) {
-    console.log("drop");
     e.preventDefault();
     const draggedId = e.dataTransfer.getData("text/plain");
     const isTask = e.dataTransfer.getData("application/task") === "true";
@@ -452,7 +441,6 @@ function drop(e) {
 
     } else if (isList) { // Handle list swapping
         const dropZone = e.currentTarget;
-        console.log("lists");
         if (dropZone && dropZone !== draggedElement) {
             const tempHtml = dropZone.innerHTML;
             const tempId = dropZone.id;
@@ -563,7 +551,6 @@ async function updateBoardName(value) {
 
         const data = await response.json();
         if (data.success) {
-            console.log("successsss");
         } else {
             console.error(data.message);
         }
@@ -591,7 +578,6 @@ async function createTasko(e, listId) {
         }
         const data = await response.json();
         if (data.success) {
-            console.log("yehe");
             fetchLists();
             closeModal("task-modal");
         } else {
@@ -616,7 +602,6 @@ async function updateTaskParentList(taskId, listId) {
         }
         const data = await response.json();
         if (data.success) {
-            console.log("Hehe ho gaya baba");
         } else {
             console.error('Error:', data.message);
         }
@@ -639,7 +624,6 @@ inviteModalForm.addEventListener('submit', sendInvitation)
 async function sendInvitation(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    console.log(formData);
     const text = document.getElementById("wait-to-invite");
     text.classList.remove("hidden");
     text.innerHTML = "Just wait for a while...";

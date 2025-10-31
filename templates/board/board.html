@@ -1,5 +1,12 @@
-{% extends "base_board.html" %}
+{% extends "base.html" %}
 {% load cotton %}
+
+{% block body_class %}min-h-screen font-poppins bg-background text-foreground{% endblock %}
+
+{% block main_class %}h-screen overflow-hidden{% endblock %}
+
+{% block layout %}
+<!-- Board Layout: No Navbar/Footer -->
 {% block content %}
 
 <div class="flex h-screen bg-background" x-data="{ sidebarOpen: true }">
@@ -293,3 +300,4 @@
 </div>
 
 {% endblock content %}
+{% endblock layout %}
