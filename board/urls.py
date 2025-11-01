@@ -23,6 +23,10 @@ urlpatterns = [
         views.board_data_view,
         name="get-board-by-id",
     ),
+    # Blog URLs
+    path("blog/", views.blog_list_view, name="blog-list"),
+    path("blog/<slug:slug>/", views.blog_detail_view, name="blog-detail"),
+    path("blog/tag/<str:tag>/", views.blog_tag_view, name="blog-tag"),
     # Invitation acceptance (kept for email links)
     path(
         "accept-invitation/<str:token>/",
