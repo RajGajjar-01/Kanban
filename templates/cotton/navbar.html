@@ -32,19 +32,14 @@
         {% if show_nav_links == "true" %}
         <nav class="hidden md:flex items-center gap-6">
           <a
-            href="#features"
+            href="{% url 'board-landing' %}"
             class="text-muted-foreground hover:text-foreground transition-colors"
-            >Features</a
+            >Home</a
           >
           <a
             href="{% url 'board-contact' %}"
             class="text-muted-foreground hover:text-foreground transition-colors"
             >Contact</a
-          >
-          <a
-            href="#pricing"
-            class="text-muted-foreground hover:text-foreground transition-colors"
-            >Pricing</a
           >
           <a
             href="{% url 'board-about' %}"
@@ -287,21 +282,16 @@
     >
       <div class="px-6 py-4 space-y-3 flex flex-col">
         <!-- Navigation Links (Mobile) - Only on landing pages -->
-        {% if show_nav_links == "true" %}
+        {% if show_nav_links == "true" %}  
         <a
-          href="#features"
+          href="{% url 'board-landing' %}"
           class="text-muted-foreground hover:text-foreground transition-colors"
-          >Features</a
+          >Home</a
         >
         <a
           href="{% url 'board-contact' %}"
           class="text-muted-foreground hover:text-foreground transition-colors"
           >Contact</a
-        >
-        <a
-          href="#pricing"
-          class="text-muted-foreground hover:text-foreground transition-colors"
-          >Pricing</a
         >
         <a
           href="{% url 'board-about' %}"
