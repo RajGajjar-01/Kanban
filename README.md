@@ -15,23 +15,28 @@ A modern, feature-rich Kanban board application built with Django, designed for 
 
 ## Tech Stack
 
-- **Backend**: Django 5.1.5
-- **Authentication**: Django Allauth 65.3.1
-- **REST API**: Django REST Framework 3.15.2
+- **Backend**: Django 5.1.5+
+- **Authentication**: Django Allauth 65.3.1+
+- **REST API**: Django REST Framework 3.16.1+
+- **Template Components**: Django Cotton 2.1.3+
 - **Database**: SQLite (development) - easily switchable to PostgreSQL/MySQL
-- **Image Processing**: Pillow 11.1.0
+- **Image Processing**: Pillow 11.1.0+
 - **Styling**: TailwindCSS v4 (standalone CLI)
 - **UI Components**: DaisyUI
+- **Package Manager**: uv (Astral)
 - **Python Version**: 3.13+
 
 ## Prerequisites
 
 Before you begin, make sure you have the following installed:
 
-- **Python 3.13 or higher** - [Download Python](https://www.python.org/downloads/)
-- **pip** (comes with Python) or **uv** package manager
+- **uv** - Fast Python package manager by Astral - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+  - On Linux/Mac: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+  - On Windows: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
 - **Git** - [Download Git](https://git-scm.com/downloads)
 - **curl** (for downloading TailwindCSS) - usually pre-installed on Linux/Mac, available on Windows 10+
+
+> **Note**: `uv` will automatically install the correct Python version (3.13+) for you!
 
 ## Quick Start Guide
 
@@ -42,35 +47,23 @@ git clone <repository-url>
 cd Kanban
 ```
 
-### Step 2: Set Up Python Virtual Environment
+### Step 2: Install Dependencies with uv
 
-**On Windows:**
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-```
+`uv` will automatically create a virtual environment and install all dependencies:
 
-**On Linux/Mac:**
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
-
-> **Tip**: You should see `(.venv)` at the beginning of your command prompt when the virtual environment is activated.
-
-### Step 3: Install Python Dependencies
-
-**Using pip:**
-```bash
-pip install -r requirements.txt
-```
-
-**Or using uv (faster):**
 ```bash
 uv sync
 ```
 
-### Step 4: Download TailwindCSS Standalone CLI
+This command will:
+- Create a virtual environment (`.venv`)
+- Install Python 3.13+ if not already installed
+- Install all project dependencies from `pyproject.toml`
+- Create/update `uv.lock` for reproducible builds
+
+> **Tip**: `uv` is significantly faster than `pip` and handles everything automatically!
+
+### Step 3: Download TailwindCSS Standalone CLI
 
 The project uses TailwindCSS v4 standalone CLI. Download it based on your operating system:
 
@@ -89,31 +82,33 @@ move tailwindcss-windows-x64.exe static\vendor\tailwindcss.exe
 
 > **Note**: The TailwindCSS CLI is already configured to work with DaisyUI components. No additional setup needed!
 
-### Step 5: Set Up the Database
+### Step 4: Set Up the Database
 
 Run these commands to create the database and tables:
 
 ```bash
-python manage.py migrate
+uv run python manage.py migrate
 ```
 
-### Step 6: Create an Admin User
+> **Tip**: Use `uv run` prefix to run commands in the virtual environment without activating it manually!
+
+### Step 5: Create an Admin User
 
 Create a superuser account to access the admin panel:
 
 ```bash
-python manage.py createsuperuser
+uv run python manage.py createsuperuser
 ```
 
 Follow the prompts to set your username, email, and password.
 
-### Step 7: Run the Development Server
+### Step 6: Run the Development Server
 
 You need to run **TWO terminals** simultaneously:
 
 **Terminal 1 - Django Development Server:**
 ```bash
-python manage.py runserver
+uv run python manage.py runserver
 ```
 
 **Terminal 2 - TailwindCSS Watch Mode:**
@@ -130,10 +125,10 @@ python manage.py runserver
 
 Or use the Django management command (works on all platforms):
 ```bash
-python manage.py tailwind --watch
+uv run python manage.py tailwind --watch
 ```
 
-### Step 8: Access the Application
+### Step 7: Access the Application
 
 Open your web browser and navigate to:
 - **Application**: http://127.0.0.1:8000
@@ -172,8 +167,8 @@ Kanban/
 │       └── daisyui-theme.mjs # DaisyUI theme configuration
 ├── media/                   # User-uploaded files (avatars, etc.)
 ├── manage.py                # Django management script
-├── requirements.txt         # Python dependencies
-├── pyproject.toml           # Project configuration (for uv)
+├── pyproject.toml           # Project configuration and dependencies
+├── uv.lock                  # Locked dependencies (like package-lock.json)
 ├── .python-version          # Python version specification
 └── README.md                # This file
 ```
@@ -224,45 +219,64 @@ This project uses modern Python development tools:
 
 ```bash
 # Run Ruff linter
-ruff check .
+uv run ruff check .
 
 # Run Ruff formatter
-ruff format .
+uv run ruff format .
 
 # Run djlint on templates
-djlint templates/ --reformat
+uv run djlint templates/ --reformat
 ```
 
 ### Database Management
 
 ```bash
 # Create new migrations after model changes
-python manage.py makemigrations
+uv run python manage.py makemigrations
 
 # Apply migrations
-python manage.py migrate
+uv run python manage.py migrate
 
 # Create a database backup (SQLite)
-python manage.py dumpdata > backup.json
+uv run python manage.py dumpdata > backup.json
 
 # Load data from backup
-python manage.py loaddata backup.json
+uv run python manage.py loaddata backup.json
 ```
 
 ### Useful Django Commands
 
 ```bash
 # Open Django shell
-python manage.py shell
+uv run python manage.py shell
 
 # Create a new app
-python manage.py startapp app_name
+uv run python manage.py startapp app_name
 
 # Collect static files (for production)
-python manage.py collectstatic
+uv run python manage.py collectstatic
 
 # Check for common issues
-python manage.py check
+uv run python manage.py check
+```
+
+### Managing Dependencies with uv
+
+```bash
+# Add a new package
+uv add package-name
+
+# Add a development dependency
+uv add --dev package-name
+
+# Remove a package
+uv remove package-name
+
+# Update all dependencies
+uv lock --upgrade
+
+# Sync dependencies (install/update)
+uv sync
 ```
 
 ## Configuration
@@ -299,13 +313,16 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 - **Windows**: Ensure the file has `.exe` extension
 
 **Issue**: Static files not loading
-- **Solution**: Run `python manage.py collectstatic` and check `STATIC_URL` in settings
+- **Solution**: Run `uv run python manage.py collectstatic` and check `STATIC_URL` in settings
 
 **Issue**: Database errors
-- **Solution**: Delete `db.sqlite3` and run `python manage.py migrate` again
+- **Solution**: Delete `db.sqlite3` and run `uv run python manage.py migrate` again
 
 **Issue**: Module not found errors
-- **Solution**: Make sure virtual environment is activated and dependencies are installed
+- **Solution**: Run `uv sync` to ensure all dependencies are installed
+
+**Issue**: Command not found when running Django commands
+- **Solution**: Use `uv run` prefix before Python commands (e.g., `uv run python manage.py runserver`)
 
 ## Contributing
 
@@ -343,6 +360,7 @@ Need help? Here's how to get support:
 New to Django or web development? Check out these resources:
 
 - **Django Official Tutorial**: https://docs.djangoproject.com/en/stable/intro/tutorial01/
+- **uv Documentation**: https://docs.astral.sh/uv/
 - **TailwindCSS Documentation**: https://tailwindcss.com/docs
 - **DaisyUI Documentation**: https://daisyui.com/
 - **Python Official Tutorial**: https://docs.python.org/3/tutorial/
