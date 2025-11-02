@@ -1,4 +1,4 @@
-<c-vars spacing="default" />
-<section data-slot="section" class="w-full {% if spacing == 'none' %}py-0 {% elif spacing == 'sm' %}py-12 sm:py-16 {% elif spacing == 'md' %}py-16 sm:py-20 md:py-24 {% elif spacing == 'lg' %}py-20 sm:py-24 md:py-28 {% elif spacing == 'xl' %}py-24 sm:py-28 md:py-32 {% else %}py-16 sm:py-20 md:py-24 {% endif %}" {{ attrs }}>
+<c-vars spacing="default" class=""/>
+<section data-slot="section" class="w-full {% if spacing == 'none' %}py-0 {% elif spacing == 'sm' %}py-12 sm:py-16 {% elif spacing == 'md' %}py-16 sm:py-20 md:py-24 {% elif spacing == 'lg' %}py-20 sm:py-24 md:py-28 {% elif spacing == 'xl' %}py-24 sm:py-28 md:py-32 {% else %}py-16 sm:py-20 md:py-24 {% endif %} {{ class }}" {{ attrs }}>
   {{ slot }}
 </section>

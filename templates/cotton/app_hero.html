@@ -1,7 +1,8 @@
 <c-vars />
-<c-ui.section>
-  <c-ui.container>
-    <div class="space-y-8 ">
+<c-ui.section spacing="lg" class="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+
+  <c-ui.container class="relative z-10">
+    <div class="space-y-8">
       <div class="flex justify-center ">
         <c-ui.badge variant="outline">
           <svg class="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -43,3 +44,6 @@
     </div>
   </c-ui.container>
 </c-ui.section>
+
+{% load static %}
+<script src="{% static 'js/hero-animation.js' %}"></script>
