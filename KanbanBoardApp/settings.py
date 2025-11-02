@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "board",
     "users",
+    "blog",
     "django_cotton",
     "rest_framework",
     "django_filters",
