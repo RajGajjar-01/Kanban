@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load cotton %}
+
+{% block content %}
+<c-ui.section spacing="lg">
+  <c-ui.container>
+    <!-- Header -->
+    <div class="text-center mb-12 space-y-6">
+      <div class="flex justify-center">
+        <c-ui.badge variant="outline">
+          <svg class="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+            <path d="M2 2l7.586 7.586"/>
+          </svg>
+          {% if current_tag %}Tag: {{ current_tag }}{% else %}Blog{% endif %}
+        </c-ui.badge>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight text-foreground">
+        {% if current_tag %}
+          Posts tagged with <span class="text-primary">"{{ current_tag }}"</span>
+        {% else %}
+          Insights & <span class="text-primary">Updates</span>
+        {% endif %}
+      </h1>
+      
+      <p class="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+        {% if current_tag %}
+          Explore all articles tagged with {{ current_tag }}
+        {% else %}
+          Discover insights, tutorials, and updates from the Taskify team
+        {% endif %}
+      </p>
+
+      <!-- Popular Tags -->
+      {% if tags %}
+      <div class="flex flex-col items-center gap-4 pt-4">
+        <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+          <svg class="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+            <line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
+          <span>Popular Tags:</span>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2 max-w-3xl">
+          {% for tag in tags %}
+          <a href="{% url 'blog:tag' tag %}" 
+             class="px-4 py-2 rounded-full border {% if tag == current_tag %}border-primary bg-primary text-primary-content{% else %}border-border bg-muted text-foreground hover:border-primary hover:bg-primary/10{% endif %} transition-all duration-200 text-sm font-medium">
+            {{ tag }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Spacing between tags and blog list -->
+    <div class="mt-16"></div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-8">
+        {% if posts %}
+          {% for post in posts %}
+          <article class="group card bg-card border border-border hover:border-primary/50 hover:shadow-xl transition-all duration-300">
+            <div class="card-body p-8">
+              {% if post.image %}
+              <figure class="mb-6 -mx-8 -mt-8">
+                <img 
+                  src="{{ post.image }}" 
+                  alt="{{ post.title }}" 
+                  class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" 
+                />
+              </figure>
+              {% endif %}
+              
+              <div class="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                <div class="flex items-center gap-2">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>{{ post.date|date:"F d, Y" }}</span>
+                </div>
+                <span>•</span>
+                <div class="flex items-center gap-2">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>{{ post.author }}</span>
+                </div>
+              </div>
+              
+              <h2 class="text-2xl md:text-3xl font-semibold text-foreground mb-4 group-hover:text-primary transition-colors">
+                <a href="{% url 'blog:detail' post.slug %}" class="hover:underline">
+                  {{ post.title }}
+                </a>
+              </h2>
+              
+              <p class="text-muted-foreground leading-relaxed mb-6">{{ post.excerpt }}</p>
+              
+              {% if post.tags %}
+              <div class="flex flex-wrap gap-2 mb-6">
+                {% for tag in post.tags %}
+                <a href="{% url 'blog:tag' tag %}" 
+                   class="px-3 py-1 rounded-full border border-border bg-muted text-foreground hover:border-primary hover:bg-primary/10 transition-all duration-200 text-xs font-medium">
+                  {{ tag }}
+                </a>
+                {% endfor %}
+              </div>
+              {% endif %}
+              
+              <div class="flex justify-end">
+                <c-ui.button href="{% url 'blog:detail' post.slug %}" variant="ghost" size="sm">
+                  Read More
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </c-ui.button>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        {% else %}
+          <div class="card bg-card border border-border">
+            <div class="card-body text-center py-16">
+              <div class="flex justify-center mb-6">
+                <div class="p-4 bg-muted rounded-full">
+                  <svg class="h-16 w-16 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-2xl font-semibold text-foreground mb-3">No posts found</h3>
+              <p class="text-muted-foreground max-w-md mx-auto">
+                {% if current_tag %}
+                  No posts found with the tag "{{ current_tag }}". Try exploring other tags.
+                {% else %}
+                  Check back soon for new content!
+                {% endif %}
+              </p>
+              {% if current_tag %}
+              <div class="mt-6">
+                <c-ui.button href="{% url 'blog:list' %}" variant="outline">
+                  View All Posts
+                </c-ui.button>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-1">
+        <div class="sticky top-24 space-y-6">
+          <!-- About -->
+          <div class="card bg-card border border-border">
+            <div class="card-body">
+              <h3 class="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <svg class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                About
+              </h3>
+              <p class="text-sm text-muted-foreground leading-relaxed mb-4">
+                Welcome to the Taskify blog! Here we share insights, tutorials, and updates about project management and productivity.
+              </p>
+              <p class="text-sm text-muted-foreground leading-relaxed mb-4">
+                Our mission is to help teams work smarter, not harder. Whether you're a startup founder, project manager, or team lead, you'll find practical tips and strategies to improve your workflow.
+              </p>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Join thousands of professionals who read our blog to stay ahead in the world of agile project management, remote work, and team collaboration.
+              </p>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="card bg-primary/10 border border-primary/20">
+            <div class="card-body text-center">
+              <svg class="h-12 w-12 text-primary mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+              </svg>
+              <h3 class="text-lg font-semibold text-foreground mb-2">Try Taskify Today</h3>
+              <p class="text-sm text-muted-foreground mb-4">
+                Start organizing your projects with our powerful platform.
+              </p>
+              <c-ui.button href="{% url 'user-register' %}" size="sm" class="w-full">
+                Get Started Free
+              </c-ui.button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </c-ui.container>
+</c-ui.section>
+{% endblock %}
