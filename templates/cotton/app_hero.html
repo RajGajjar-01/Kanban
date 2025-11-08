@@ -1,3 +1,4 @@
+{% load static %}
 <c-vars />
 <c-ui.section spacing="lg" class="relative min-h-[calc(100vh-4rem)] overflow-hidden">
 
@@ -22,7 +23,7 @@
             faster.
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
-            <c-ui.button href="{% url 'user-register' %}" size="lg" class="w-full sm:w-auto">
+            <c-ui.button href="{% url 'user-register' %}" size="lg" class="w-full sm:w-auto bg-red-200">
               Get Started Free
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -45,5 +46,4 @@
   </c-ui.container>
 </c-ui.section>
 
-{% load static %}
 <script src="{% static 'js/hero-animation.js' %}"></script>
