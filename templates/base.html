@@ -46,6 +46,8 @@
   <body
     class="min-h-screen font-poppins {% block body_class %}bg-background text-foreground{% endblock %}"
   >
+    <!-- SVG Sprite -->
+    <object type="image/svg+xml" data="{% static 'icons/sprite.svg' %}" style="display:none;"></object>
     {% block layout %} {% if not hide_navbar %} {% block navbar %}
     <c-navbar show_nav_links="true" />
     {% endblock %} {% endif %}
