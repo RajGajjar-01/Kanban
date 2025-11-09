@@ -46,6 +46,7 @@
   <body
     class="min-h-screen font-poppins {% block body_class %}bg-background text-foreground{% endblock %}"
   >
+
     <!-- SVG Sprite Loader -->
     {% load static %}
     <div id="svg-sprite-loader"></div>
@@ -59,6 +60,7 @@
         })
         .catch(err => console.error("SVG sprite load failed:", err));
     </script>
+
     {% block layout %} {% if not hide_navbar %} {% block navbar %}
     <c-navbar show_nav_links="true" />
     {% endblock %} {% endif %}
