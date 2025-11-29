@@ -1,3 +1,5 @@
+{% load static %}
+<!-- ⚠️ SVG icons have been centralized into static/icons/sprite.svg. Do NOT edit inline SVGs here. -->
 <c-vars show_nav_links="true" show_boards_link="false" />
 <!-- Unified Navbar Component -->
 <div
@@ -11,18 +13,7 @@
         href="{% url 'board-landing' %}"
         class="flex items-center gap-2 text-xl font-semibold text-foreground hover:text-primary transition-colors"
       >
-        <svg
-          class="h-6 w-6"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-        </svg>
+        <svg class="h-6 w-6"><use href="#icon-grid"></use></svg>
         <span>Taskify</span>
       </a>
 
@@ -75,18 +66,7 @@
           <!-- Go to Boards Button (for auth pages) -->
           {% if show_boards_link == "true" %}
           <c-ui.button href="{% url 'board-home' %}" variant="default" size="sm">
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-            </svg>
+            <svg class="h-4 w-4"><use href="#icon-grid"></use></svg>
             Go to Boards
           </c-ui.button>
           {% endif %}
@@ -122,49 +102,19 @@
               <li class="menu-title">{{ user.username }}</li>
               <li>
                 <a href="{% url 'user-profile' %}">
-                  <svg
-                    class="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
+                  <svg class="h-4 w-4"><use href="#icon-user"></use></svg>
                   Profile
                 </a>
               </li>
               <li>
                 <a href="{% url 'board-home' %}">
-                  <svg
-                    class="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                  </svg>
+                  <svg class="h-4 w-4"><use href="#icon-grid"></use></svg>
                   My Boards
                 </a>
               </li>
               <li class="border-t mt-2 pt-2">
                 <a href="{% url 'user-logout' %}">
-                  <svg
-                    class="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                  </svg>
+                  <svg class="h-4 w-4"><use href="#icon-logout"></use></svg>
                   Logout
                 </a>
               </li>
@@ -179,18 +129,7 @@
             variant="ghost"
             size="sm"
           >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-              />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
+            <svg class="h-4 w-4"><use href="#icon-home"></use></svg>
             Home
           </c-ui.button>
           {% else %}
@@ -325,16 +264,7 @@
             variant="ghost"
             class="w-full justify-start"
           >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+            <svg class="h-5 w-5"><use href="#icon-user"></use></svg>
             Profile
           </c-ui.button>
           <c-ui.button
@@ -342,17 +272,7 @@
             variant="ghost"
             class="w-full justify-start"
           >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
+            <svg class="h-5 w-5"><use href="#icon-logout"></use></svg>
             Logout
           </c-ui.button>
           {% else %}
@@ -363,18 +283,7 @@
             variant="default"
             class="w-full"
           >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-              />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
+            <svg class="h-4 w-4"><use href="#icon-home"></use></svg>
             Home
           </c-ui.button>
           {% else %}
