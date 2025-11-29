@@ -46,8 +46,21 @@
   <body
     class="min-h-screen font-poppins {% block body_class %}bg-background text-foreground{% endblock %}"
   >
-    <!-- SVG Sprite -->
-    <object type="image/svg+xml" data="{% static 'icons/sprite.svg' %}" style="display:none;"></object>
+
+    <!-- SVG Sprite Loader -->
+    {% load static %}
+    <div id="svg-sprite-loader"></div>
+    <script>
+    fetch("{% static 'icons/sprite.svg' %}")
+        .then(response => response.text())
+        .then(data => {
+            const div = document.getElementById("svg-sprite-loader");
+            div.innerHTML = data;
+            div.style.display = "none";
+        })
+        .catch(err => console.error("SVG sprite load failed:", err));
+    </script>
+
     {% block layout %} {% if not hide_navbar %} {% block navbar %}
     <c-navbar show_nav_links="true" />
     {% endblock %} {% endif %}
