@@ -25,9 +25,9 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("user/", include("users.urls")),
     path("blog/", include("blog.urls")),
-    path("browser-reload/", include("django_browser_reload.urls")),
     path("", include("board.urls")),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [path("browser-reload/", include("django_browser_reload.urls"))]

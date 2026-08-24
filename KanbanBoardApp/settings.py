@@ -47,7 +47,6 @@ USE_X_FORWARDED_HOST = True
 # Application definition
 
 INSTALLED_APPS = [
-    "django_browser_reload",
     "KanbanBoardApp",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -67,6 +66,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append("django_browser_reload")
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -78,9 +80,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Related to Google Authentication. For more info go to Notes.md or allauth documentation
     "allauth.account.middleware.AccountMiddleware",
-    # Related to tailwind
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+
+if DEBUG:
+    # Related to tailwind live reload; dev only
+    MIDDLEWARE.append("django_browser_reload.middleware.BrowserReloadMiddleware")
 
 # Related to Google Authentication. For more info go to Notes.md or allauth documentation
 SITE_ID = 2
