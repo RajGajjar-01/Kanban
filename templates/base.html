@@ -73,9 +73,6 @@
     <c-app_footer />
     {% endif %} {% endblock %}
 
-    <script type="module" src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/htmx.min.js' %}"></script>
-
     {% block extra_scripts %} {% if not hide_navbar %}
     <script>
       const lenis = new Lenis({

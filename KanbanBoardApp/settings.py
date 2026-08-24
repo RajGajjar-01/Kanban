@@ -174,6 +174,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Related to Google Authentication. For more info go to Notes.md or allauth documentation
 _google_client_id = env("DJANGO_GOOGLE_OAUTH_CLIENT_ID", default="")
 _google_client_secret = env("DJANGO_GOOGLE_OAUTH_CLIENT_SECRET", default="")
+GOOGLE_OAUTH_ENABLED = bool(_google_client_id and _google_client_secret)
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

@@ -202,99 +202,17 @@ class ListCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
 
-class CardMemberSerializer(serializers.ModelSerializer):
-    """Serializer for CardMember model"""
-
-    username = serializers.CharField(source="user.username", read_only=True)
-
-    class Meta:
-        model = models.CardMember
-        fields = ["id", "user", "username", "card", "added_date"]
-        read_only_fields = ["id", "added_date"]
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    """Serializer for Comment model"""
-
-    username = serializers.CharField(source="user.username", read_only=True)
-
-    class Meta:
-        model = models.Comment
-        fields = [
-            "id",
-            "user",
-            "username",
-            "card",
-            "content",
-            "created_date",
-            "updated_date",
-        ]
-        read_only_fields = ["id", "user", "created_date", "updated_date"]
 
 
-class CardActivitySerializer(serializers.ModelSerializer):
-    """Serializer for CardActivity model"""
-
-    username = serializers.CharField(source="user.username", read_only=True)
-
-    class Meta:
-        model = models.CardActivity
-        fields = ["id", "user", "username", "card", "activity", "created_date"]
-        read_only_fields = ["id", "user", "created_date"]
 
 
-class CardAttachmentSerializer(serializers.ModelSerializer):
-    """Serializer for CardAttachment model"""
-
-    class Meta:
-        model = models.CardAttachment
-        fields = ["id", "card", "name", "location", "uploaded_date"]
-        read_only_fields = ["id", "uploaded_date"]
 
 
-class BoardInvitationSerializer(serializers.ModelSerializer):
-    """Serializer for BoardInvitation model"""
-
-    inviter_username = serializers.CharField(source="inviter.username", read_only=True)
-    board_name = serializers.CharField(source="board.name", read_only=True)
-
-    class Meta:
-        model = models.BoardInvitaton
-        fields = [
-            "id",
-            "email",
-            "board",
-            "board_name",
-            "token",
-            "inviter",
-            "inviter_username",
-            "created_at",
-            "expires_at",
-            "status",
-        ]
-        read_only_fields = [
-            "id",
-            "token",
-            "created_at",
-            "expires_at",
-            "inviter",
-        ]
-
-    def create(self, validated_data):
-        """Set the inviter to the current user"""
-        request = self.context.get("request")
-        if request and hasattr(request, "user"):
-            validated_data["inviter"] = request.user
-        return super().create(validated_data)
 
 
 class BoardNameUpdateSerializer(serializers.Serializer):
     """Serializer for updating board name"""
 
     value = serializers.CharField(max_length=255, required=True)
-
-
-class CardPositionUpdateSerializer(serializers.Serializer):
-    """Serializer for updating card position (moving to different list)"""
-
-    list_id = serializers.IntegerField(required=True)

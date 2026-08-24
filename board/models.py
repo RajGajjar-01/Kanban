@@ -9,11 +9,6 @@ class Workspace(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if not self.created_by and hasattr(self, "request") and hasattr(self.request, "user"):
-            self.created_by = self.request.user
-        super().save(*args, **kwargs)
-
     @property
     def board_list(self):
         return Board.objects.filter(workspace=self)

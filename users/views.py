@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -5,7 +6,6 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 
 from board import models
-from KanbanBoardApp.settings import EMAIL_HOST_USER
 
 from . import forms
 
@@ -14,7 +14,6 @@ def register_view(request):
     if request.method == "POST":
         register_form = forms.UserRegistrationForm(request.POST, auto_id=True)
         if register_form.is_valid():
-            print(register_form.cleaned_data)
             register_form.save()
             username = register_form.cleaned_data["username"]
             email = register_form.cleaned_data["email"]
@@ -24,7 +23,7 @@ def register_view(request):
             send_mail(
                 subject,
                 message,
-                EMAIL_HOST_USER,
+                settings.EMAIL_HOST_USER,
                 recipient_list,
                 fail_silently=True,
             )
@@ -32,7 +31,7 @@ def register_view(request):
     else:
         register_form = forms.UserRegistrationForm(auto_id=True)
 
-    context = {"form": register_form, "title": "sign up"}
+    context = {"form": register_form, "title": "sign up", "google_enabled": settings.GOOGLE_OAUTH_ENABLED}
     return render(request, "users/Register.html", context)
 
 
@@ -64,7 +63,7 @@ def login_view(request):
     else:
         login_form = forms.UserLoginForm(auto_id=True)
 
-    context = {"form": login_form, "title": "sign in"}
+    context = {"form": login_form, "title": "sign in", "google_enabled": settings.GOOGLE_OAUTH_ENABLED}
     return render(request, "users/Login.html", context)
 
 
@@ -80,12 +79,10 @@ def profile_view(request):
         u_form = forms.UserUpdateForm(request.POST, instance=request.user)
         p_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-        print(u_form.is_valid)
-        print(p_form.is_valid)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            redirect("/profile")
+            return redirect("user-profile")
     else:
         u_form = forms.UserUpdateForm(instance=request.user)
         p_form = forms.ProfileUpdateForm(instance=request.user.profile)

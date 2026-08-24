@@ -82,12 +82,14 @@
                class="font-medium text-primary hover:underline ml-1">Sign in</a>
           </div>
           
+          {% if google_enabled %}
           <div class="divider text-muted-foreground">OR</div>
-          
+
           <c-ui.button variant="outline" href="{% provider_login_url 'google' %}" class="w-full">
             <svg class="h-5 w-5"><use href="#icon-google"></use></svg>
             Continue with Google
           </c-ui.button>
+          {% endif %}
         </form>
       </div>
     </div>
