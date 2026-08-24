@@ -185,3 +185,22 @@ class InvitationAcceptance(AuthzTestCase):
         self.assertFalse(self.board.memofboard.filter(user=other).exists())
         inv.refresh_from_db()
         self.assertEqual(inv.status, "pending")
+
+
+class CardEditing(AuthzTestCase):
+    def test_member_can_edit_card_details(self):
+        r = self.client_as(self.member).patch(
+            f"/api/v1/cards/{self.card.id}/",
+            {"card_description": "Details", "due_date": "2026-09-01T10:00", "label": "urgent & important"},
+            format="json",
+        )
+        self.assertEqual(r.status_code, 200)
+        self.card.refresh_from_db()
+        self.assertEqual(self.card.card_description, "Details")
+        self.assertEqual(self.card.label, "urgent & important")
+
+    def test_outsider_cannot_edit_card(self):
+        r = self.client_as(self.outsider).patch(
+            f"/api/v1/cards/{self.card.id}/", {"card_name": "hax"}, format="json"
+        )
+        self.assertEqual(r.status_code, 404)

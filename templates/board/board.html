@@ -122,29 +122,6 @@
                     />
                 </div>
                 <div class="flex items-center gap-3">
-                    <!-- Theme Toggle -->
-                    <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm">
-                        <input 
-                            type="checkbox" 
-                            id="theme-toggle"
-                            x-model="darkMode"
-                            @change="localStorage.setItem('darkMode', darkMode)"
-                        />
-                        <svg x-show="!darkMode" class="swap-off h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5" />
-                            <line x1="12" y1="1" x2="12" y2="3" />
-                            <line x1="12" y1="21" x2="12" y2="23" />
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                            <line x1="1" y1="12" x2="3" y2="12" />
-                            <line x1="21" y1="12" x2="23" y2="12" />
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                        </svg>
-                        <svg x-show="darkMode" class="swap-on h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg>
-                    </label>
                     
                     <!-- Add Members Button -->
                     <c-ui.button id="add-members-btn" variant="default" size="sm">
@@ -162,11 +139,11 @@
 
         <!-- Board Content - Lists Container -->
         <main class="flex-1 overflow-x-auto overflow-y-hidden p-4">
-            <div id="list-container" class="flex gap-4 h-full min-w-max">
+            <div id="list-container" class="flex items-start gap-4 h-full min-w-max">
 
                 <!-- Add List Tile -->
                 <div id="add-list-tile" class="w-72 flex-shrink-0">
-                    <button id="show-add-list" class="w-full h-full min-h-[120px] bg-card/50 hover:bg-card border-2 border-dashed border-border hover:border-ring rounded-lg transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground">
+                    <button id="show-add-list" class="w-full min-h-[52px] bg-card/50 hover:bg-card border-2 border-dashed border-border hover:border-ring rounded-lg transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground px-4 py-3">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
@@ -217,6 +194,42 @@
                 <div class="modal-action">
                     <button type="button" data-close-invite class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground">Cancel</button>
                     <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">Send Invite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="card-modal" class="modal">
+        <div class="modal-box bg-card border border-border">
+            <h3 class="font-bold text-lg text-foreground mb-4">Card Details</h3>
+            <form id="card-detail-form" class="space-y-4">
+                {% csrf_token %}
+                <input name="card_name" required aria-label="Card title" placeholder="Card title"
+                    class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]" />
+                <textarea name="card_description" rows="4" aria-label="Description" placeholder="Add a description…"
+                    class="w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="form-control">
+                        <span class="label-text text-foreground text-sm mb-1 block">Due date</span>
+                        <input type="datetime-local" name="due_date" aria-label="Due date"
+                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]" />
+                    </label>
+                    <label class="form-control">
+                        <span class="label-text text-foreground text-sm mb-1 block">Label</span>
+                        <select name="label" aria-label="Label"
+                            class="h-9 w-full min-w-0 rounded-md border border-input bg-background dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]">
+                            <option value="">No label</option>
+                            <option value="urgent & important">Urgent &amp; important</option>
+                            <option value="urgent but not important">Urgent but not important</option>
+                            <option value="important but not urgent">Important but not urgent</option>
+                            <option value="neither important nor urgent">Neither urgent nor important</option>
+                        </select>
+                    </label>
+                </div>
+                <p id="card-feedback" class="text-sm hidden"></p>
+                <div class="modal-action">
+                    <button type="button" data-close-card class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground">Cancel</button>
+                    <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">Save</button>
                 </div>
             </form>
         </div>
