@@ -2,9 +2,7 @@
 # Exit on error
 set -o errexit
 
-# Install Astral uv
-curl -sSf https://astral.sh/uv/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
+# uv is preinstalled by Render's Python runtime
 
 # Sync dependencies using uv
 uv sync
