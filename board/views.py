@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -30,7 +31,7 @@ def home_view(request):
 
 
 def contact_view(request):
-    context = {"form": forms.ContactForm}
+    context = {"form": forms.ContactForm, "web3forms_access_key": settings.WEB3FORMS_ACCESS_KEY}
     return render(request, "board/contact.html", context)
 
 

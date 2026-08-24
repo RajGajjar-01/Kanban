@@ -29,7 +29,7 @@
         <div class="p-6">
           <form class="space-y-4" action="https://api.web3forms.com/submit" method="POST">
             {% csrf_token %}
-            <input type="hidden" name="access_key" value="77e1dff2-69ed-45f8-9823-d6c425e40de1">
+            <input type="hidden" name="access_key" value="{{ web3forms_access_key }}">
             <input type="hidden" name="redirect" value="http://127.0.0.1:8000/success">
             <div class="space-y-2">
               <label for="name" class="text-sm font-medium text-foreground">
