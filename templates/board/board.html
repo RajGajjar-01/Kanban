@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load cotton %}
+{% load static %}
 
 {% block body_class %}min-h-screen font-poppins bg-background text-foreground{% endblock %}
 
@@ -9,7 +10,7 @@
 <!-- Board Layout: No Navbar/Footer -->
 {% block content %}
 
-<div class="flex h-screen bg-background" x-data="{ sidebarOpen: true }">
+<div id="board-app" data-board-id="{{ board.id }}" class="flex h-screen bg-background" x-data="{ sidebarOpen: true }">
     <!-- Sidebar -->
     <aside id="sidebar" :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-card border-r border-border flex-shrink-0 flex flex-col transition-all duration-300 ease-in-out overflow-hidden">
         <!-- Sidebar Header -->
@@ -111,10 +112,9 @@
         <!-- Board Header -->
         <header class="bg-card border-b border-border px-4 py-3">
             <div class="flex items-center justify-between">
-                <span id="board-id" class="hidden">{{ board.id }}</span>
                 <div class="flex-1">
-                    <input 
-                        id="edit-name" 
+                    <input
+                        id="edit-name"
                         type="text"
                         class="text-xl font-bold bg-transparent border-none outline-none focus:ring-2 focus:ring-ring rounded-md px-2 py-1 -ml-2 text-foreground"
                         value="{{ board.name }}"
@@ -163,141 +163,69 @@
         <!-- Board Content - Lists Container -->
         <main class="flex-1 overflow-x-auto overflow-y-hidden p-4">
             <div id="list-container" class="flex gap-4 h-full min-w-max">
-                <!-- Sample List 1: To Do -->
-                <div class="w-72 flex-shrink-0">
-                    <div class="bg-card rounded-lg border border-border h-full flex flex-col shadow-sm">
-                        <div class="p-3 border-b border-border flex items-center justify-between">
-                            <h3 class="font-semibold text-foreground">To Do</h3>
-                            <button class="text-muted-foreground hover:text-foreground">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="1" />
-                                    <circle cx="12" cy="5" r="1" />
-                                    <circle cx="12" cy="19" r="1" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="flex-1 overflow-y-auto p-3 space-y-2">
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors group">
-                                <p class="text-sm text-foreground font-medium">Design new landing page</p>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <span class="text-xs px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded">Urgent</span>
-                                    <span class="text-xs text-muted-foreground">Due: Nov 5</span>
-                                </div>
-                            </div>
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors">
-                                <p class="text-sm text-foreground font-medium">Update documentation</p>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <span class="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded">Important</span>
-                                </div>
-                            </div>
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors">
-                                <p class="text-sm text-foreground font-medium">Review pull requests</p>
-                            </div>
-                        </div>
-                        <div class="p-3 border-t border-border">
-                            <button class="w-full text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md py-2 transition-colors flex items-center justify-center gap-2">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                </svg>
-                                Add card
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Sample List 2: In Progress -->
-                <div class="w-72 flex-shrink-0">
-                    <div class="bg-card rounded-lg border border-border h-full flex flex-col shadow-sm">
-                        <div class="p-3 border-b border-border flex items-center justify-between">
-                            <h3 class="font-semibold text-foreground">In Progress</h3>
-                            <button class="text-muted-foreground hover:text-foreground">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="1" />
-                                    <circle cx="12" cy="5" r="1" />
-                                    <circle cx="12" cy="19" r="1" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="flex-1 overflow-y-auto p-3 space-y-2">
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors">
-                                <p class="text-sm text-foreground font-medium">Implement user authentication</p>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <div class="flex -space-x-2">
-                                        <div class="h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs border-2 border-background">A</div>
-                                        <div class="h-6 w-6 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center text-xs border-2 border-background">B</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors">
-                                <p class="text-sm text-foreground font-medium">Fix responsive issues</p>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <span class="text-xs px-2 py-0.5 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 rounded">Bug</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-3 border-t border-border">
-                            <button class="w-full text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md py-2 transition-colors flex items-center justify-center gap-2">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                </svg>
-                                Add card
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sample List 3: Done -->
-                <div class="w-72 flex-shrink-0">
-                    <div class="bg-card rounded-lg border border-border h-full flex flex-col shadow-sm">
-                        <div class="p-3 border-b border-border flex items-center justify-between">
-                            <h3 class="font-semibold text-foreground">Done</h3>
-                            <button class="text-muted-foreground hover:text-foreground">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="1" />
-                                    <circle cx="12" cy="5" r="1" />
-                                    <circle cx="12" cy="19" r="1" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="flex-1 overflow-y-auto p-3 space-y-2">
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors opacity-75">
-                                <p class="text-sm text-foreground font-medium line-through">Setup project structure</p>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <span class="text-xs px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded">Completed</span>
-                                </div>
-                            </div>
-                            <div class="bg-background p-3 rounded-md border border-border hover:border-ring cursor-pointer transition-colors opacity-75">
-                                <p class="text-sm text-foreground font-medium line-through">Create database schema</p>
-                            </div>
-                        </div>
-                        <div class="p-3 border-t border-border">
-                            <button class="w-full text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md py-2 transition-colors flex items-center justify-center gap-2">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                </svg>
-                                Add card
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add List Button -->
-                <div class="w-72 flex-shrink-0">
-                    <button class="w-full h-full min-h-[120px] bg-card/50 hover:bg-card border-2 border-dashed border-border hover:border-ring rounded-lg transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground">
+                <!-- Add List Tile -->
+                <div id="add-list-tile" class="w-72 flex-shrink-0">
+                    <button id="show-add-list" class="w-full h-full min-h-[120px] bg-card/50 hover:bg-card border-2 border-dashed border-border hover:border-ring rounded-lg transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                         <span class="font-medium">Add another list</span>
                     </button>
+                    <form id="add-list-form" class="hidden bg-card rounded-lg border border-border p-3 space-y-2">
+                        <input
+                            name="list_name"
+                            type="text"
+                            required
+                            autocomplete="off"
+                            placeholder="Enter list name"
+                            aria-label="New list name"
+                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                        />
+                        <div class="flex justify-end gap-2">
+                            <button id="cancel-add-list" type="button" class="btn btn-ghost btn-sm">Cancel</button>
+                            <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-8 px-3 bg-primary text-primary-foreground hover:bg-primary/90">Add List</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Invite Member Modal -->
+    <div id="invite-modal" class="modal">
+        <div class="modal-box bg-card border border-border">
+            <h3 class="font-bold text-lg text-foreground mb-4">Invite to Board</h3>
+            <form id="invite-form" class="space-y-4">
+                {% csrf_token %}
+                <div class="form-control">
+                    <label class="label" for="invite-email">
+                        <span class="label-text text-foreground font-medium">Email</span>
+                    </label>
+                    <input
+                        id="invite-email"
+                        name="email"
+                        type="email"
+                        required
+                        autocomplete="off"
+                        placeholder="teammate@example.com"
+                        class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                    />
+                </div>
+                <p id="invite-feedback" class="text-sm hidden"></p>
+                <div class="modal-action">
+                    <button type="button" data-close-invite class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground">Cancel</button>
+                    <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">Send Invite</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 {% endblock content %}
 {% endblock layout %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

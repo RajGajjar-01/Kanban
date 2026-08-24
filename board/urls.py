@@ -32,5 +32,6 @@ urlpatterns = [
     # ============================================
     # Django REST Framework API (v1)
     # ============================================
+    path("api/v1/invitations/", views.InvitationCreate.as_view(), name="invitation-create"),
     path("api/v1/", include(router.urls)),
 ]

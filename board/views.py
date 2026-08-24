@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status, viewsets
+from rest_framework import filters, generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -314,6 +315,28 @@ class CardViewSet(viewsets.ModelViewSet):
         card.list_id = destination_list
         card.save()
         return Response({"success": True, "message": "Position updated"})
+
+
+class InvitationCreate(generics.CreateAPIView):
+    """Create a board invitation and email the accept link"""
+
+    queryset = models.BoardInvitaton.objects.all()
+    serializer_class = serializers.BoardInvitationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        board = get_object_or_404(
+            models.Board.objects.for_user(self.request.user), pk=serializer.validated_data["board"].pk
+        )
+        invitation = serializer.save()
+        send_mail(
+            f"You're invited to board {board.name} on Taskify",
+            "Accept your invitation: "
+            + self.request.build_absolute_uri(f"/accept-invitation/{invitation.token}/"),
+            settings.EMAIL_HOST_USER,
+            [invitation.email],
+            fail_silently=True,
+        )
 
 
 class BoardMemberViewSet(viewsets.ReadOnlyModelViewSet):

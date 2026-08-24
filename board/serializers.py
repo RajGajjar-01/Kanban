@@ -216,3 +216,19 @@ class BoardNameUpdateSerializer(serializers.Serializer):
     """Serializer for updating board name"""
 
     value = serializers.CharField(max_length=255, required=True)
+
+
+class BoardInvitationSerializer(serializers.ModelSerializer):
+    """Serializer for creating board invitations"""
+
+    class Meta:
+        model = models.BoardInvitaton
+        fields = ["id", "email", "board", "inviter"]
+        read_only_fields = ["id", "inviter"]
+
+    def create(self, validated_data):
+        """Set the inviter field to the current user"""
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            validated_data["inviter"] = request.user
+        return super().create(validated_data)
