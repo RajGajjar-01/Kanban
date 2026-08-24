@@ -145,11 +145,11 @@ class CardAttachment(models.Model):
 
 
 class BoardInvitaton(models.Model):
-    STATUS_CHOICES = {
+    STATUS_CHOICES = [
         ("pending", "Pending"),
         ("accepted", "Accepted"),
         ("expired", "Expired"),
-    }
+    ]
 
     email = models.EmailField()
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
