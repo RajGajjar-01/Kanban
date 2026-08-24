@@ -23,7 +23,7 @@ dependencies = [
 
 
 [tool.ruff]
-line-length = 500  # Strict PEP 8, or use 88 for Black compatibility
+line-length = 88
 target-version = "py311"
 
 exclude = [
@@ -45,7 +45,7 @@ select = [
     "C4",  # flake8-comprehensions
 ]
 
-ignore = []
+ignore = ["E501"]  # legacy lines exceed 88; reformatting deferred
 
 [tool.ruff.lint.isort]
 known-first-party = ["Kanban"]

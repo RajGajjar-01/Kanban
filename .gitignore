@@ -35,8 +35,11 @@ Thumbs.db
 .env
 
 # Tailwind CSS Generated Files #
-static/vendor/tailwindcss-*
-static/vendor/tailwindcss-*.exe
+static/vendor/tailwindcss
+static/vendor/tailwindcss.exe
+tailwindcss-linux-x64
+tailwindcss-windows-x64.exe
+static/css/output.css
 
 # Git worktrees
 .worktrees/

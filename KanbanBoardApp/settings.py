@@ -163,6 +163,9 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = "Taskify <noreply@yourapp.com>"
 
+# Contact form (Web3Forms)
+WEB3FORMS_ACCESS_KEY = env("WEB3FORMS_ACCESS_KEY", default="")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
