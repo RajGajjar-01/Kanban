@@ -2,9 +2,15 @@
 # Exit on error
 set -o errexit
 
-python3 -m pip install --upgrade pip
-pip install -r requirements.txt
+# Install Astral uv
+curl -sSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
 
-python3 manage.py collectstatic --no-input
-python3 manage.py migrate
+# Sync dependencies using uv
+uv sync
+
+# Run Django management tasks using uv
+uv run python manage.py collectstatic --no-input
+uv run python manage.py migrate
+
 
