@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -44,11 +45,12 @@ def contact_success_view(request):
     return render(request, "board/success.html")
 
 
+@login_required
 def board_data_view(request, pk, id):
     list_modal_form = forms.ListModalForm(auto_id=True)
     card_modal_form = forms.CardModalForm(auto_id=True)
     invite_modal_form = forms.InviteModalForm(auto_id=True)
-    board = models.Board.objects.filter(id=id).first()
+    board = get_object_or_404(models.Board.objects.for_user(request.user), id=id, workspace_id=pk)
     context = {
         "board": board,
         "createList": list_modal_form,
@@ -63,11 +65,12 @@ def api_accept_invitation(request, token):
     invitation = get_object_or_404(models.BoardInvitaton, token=token)
 
     if invitation.status != "pending" or timezone.now() > invitation.expires_at:
-        return render(request, "board/Landing.html")
+        return redirect("board-landing")
 
     if request.user.is_authenticated:
         if request.user.email.lower() != invitation.email.lower():
-            return render(request, "board/Success.html")
+            messages.error(request, "This invitation was sent to a different email address.")
+            return redirect("board-home")
 
         models.BoardMember.objects.get_or_create(
             user=request.user,
@@ -156,9 +159,10 @@ class BoardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         workspace_id = self.request.query_params.get("workspace") or self.kwargs.get("workspace_pk")
+        qs = models.Board.objects.for_user(self.request.user)
         if workspace_id:
-            return models.Board.objects.filter(workspace_id=workspace_id)
-        return models.Board.objects.filter(user=self.request.user)
+            qs = qs.filter(workspace_id=workspace_id)
+        return qs
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -175,7 +179,7 @@ class BoardViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        workspace = get_object_or_404(models.Workspace, pk=workspace_id)
+        workspace = get_object_or_404(models.Workspace.objects.for_user(request.user), pk=workspace_id)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         board = serializer.save(workspace=workspace)
@@ -209,9 +213,10 @@ class ListViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         board_id = self.request.query_params.get("board") or self.kwargs.get("board_pk")
+        qs = models.List.objects.filter(board__in=models.Board.objects.for_user(self.request.user))
         if board_id:
-            return models.List.objects.filter(board_id=board_id)
-        return models.List.objects.filter(board__user=self.request.user)
+            qs = qs.filter(board_id=board_id)
+        return qs
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -226,6 +231,9 @@ class ListViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        get_object_or_404(
+            models.Board.objects.for_user(request.user), pk=serializer.validated_data["board"].pk
+        )
         self.perform_create(serializer)
         return Response(
             {
@@ -261,9 +269,10 @@ class CardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         list_id = self.request.query_params.get("list_id") or self.kwargs.get("list_pk")
+        qs = models.Card.objects.filter(list_id__board__in=models.Board.objects.for_user(self.request.user))
         if list_id:
-            return models.Card.objects.filter(list_id=list_id)
-        return models.Card.objects.filter(list_id__board__user=self.request.user)
+            qs = qs.filter(list_id=list_id)
+        return qs
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -278,6 +287,10 @@ class CardViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        get_object_or_404(
+            models.List.objects.filter(board__in=models.Board.objects.for_user(request.user)),
+            pk=serializer.validated_data["list_id"].pk,
+        )
         self.perform_create(serializer)
         return Response(
             {
@@ -295,7 +308,9 @@ class CardViewSet(viewsets.ModelViewSet):
     )
     def update_position(self, request, pk=None, list_id=None):
         card = self.get_object()
-        destination_list = get_object_or_404(models.List, pk=list_id)
+        destination_list = get_object_or_404(
+            models.List.objects.filter(board__in=models.Board.objects.for_user(request.user)), pk=list_id
+        )
         card.list_id = destination_list
         card.save()
         return Response({"success": True, "message": "Position updated"})
@@ -312,10 +327,10 @@ class BoardMemberViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         workspace_id = self.request.query_params.get("workspace") or self.kwargs.get("workspace_pk")
         if workspace_id:
-            workspace = get_object_or_404(models.Workspace, pk=workspace_id)
+            workspace = get_object_or_404(models.Workspace.objects.for_user(self.request.user), pk=workspace_id)
             boards = workspace.board_list.all()
             return models.BoardMember.objects.filter(board__in=boards)
-        return models.BoardMember.objects.filter(board__user=self.request.user)
+        return models.BoardMember.objects.filter(board__in=models.Board.objects.for_user(self.request.user))
 
     def list(self, request, *args, **kwargs):
         workspace_id = kwargs.get("workspace_pk") or request.query_params.get("workspace")
@@ -325,7 +340,7 @@ class BoardMemberViewSet(viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        workspace = get_object_or_404(models.Workspace, pk=workspace_id)
+        workspace = get_object_or_404(models.Workspace.objects.for_user(request.user), pk=workspace_id)
         boards = workspace.board_list.all()
         member_list = []
         for board in boards:

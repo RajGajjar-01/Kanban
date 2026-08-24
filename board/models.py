@@ -1,13 +1,26 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+
+
+class WorkspaceQuerySet(models.QuerySet):
+    def for_user(self, user):
+        return self.filter(Q(created_by=user) | Q(boards__memofboard__user=user)).distinct()
+
+
+class BoardQuerySet(models.QuerySet):
+    def for_user(self, user):
+        return self.filter(Q(workspace__created_by=user) | Q(memofboard__user=user)).distinct()
 
 
 class Workspace(models.Model):
     workspace_name = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
+
+    objects = WorkspaceQuerySet.as_manager()
 
     @property
     def board_list(self):
@@ -21,6 +34,8 @@ class Board(models.Model):
     description = models.TextField()
     background_color = models.CharField(max_length=255, default="linear-gradient(to right, #ff7e5f, #feb47b)")
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="boards")
+
+    objects = BoardQuerySet.as_manager()
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
