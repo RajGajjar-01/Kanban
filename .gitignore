@@ -37,3 +37,6 @@ Thumbs.db
 # Tailwind CSS Generated Files #
 static/vendor/tailwindcss-*
 static/vendor/tailwindcss-*.exe
+
+# Git worktrees
+.worktrees/
