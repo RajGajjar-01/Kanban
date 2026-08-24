@@ -228,6 +228,10 @@ uv run ruff format .
 uv run djlint templates/ --reformat
 ```
 
+### CI
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `main` and every pull request. It checks code style with Ruff, lints templates with djlint, and runs the Django test suite on Python 3.13.
+
 ### Database Management
 
 ```bash
