@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Ruff
+        run: uv run ruff check .
+
+      # Scoped to templates/boards/: the rest of templates/ has pre-existing
+      # formatting drift (indentation only); widen once reformatted.
+      - name: djlint
+        run: uv run djlint templates/boards/ --check
+
+      - name: Tests
+        env:
+          DJANGO_SECRET_KEY: ci-only-dummy-secret-key
+          DJANGO_DEBUG: "True"
+          DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,testserver
+          WEB3FORMS_ACCESS_KEY: ""
+          EMAIL_HOST_USER: ""
+          EMAIL_HOST_PASSWORD: ""
+        run: uv run python manage.py test --parallel 1 -v 1
