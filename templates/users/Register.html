@@ -1,11 +1,5 @@
 {% extends "base.html" %}
-
-{% load static %}
-{% load socialaccount %}
-
-<!-- ⚠️ SVG icons have been centralized into static/icons/sprite.svg. Do NOT edit inline SVGs here. -->
-
-{% block extra_head %}{% endblock %}
+{% load static %}{% load socialaccount %}
 {% block body_class %}min-h-screen font-poppins bg-background{% endblock %}
 
 {% block layout %}
@@ -13,78 +7,41 @@
 <c-navbar show_nav_links="false" show_boards_link="true" />
 {% endblock %}
 {% block content %}
-
-  <!-- Registration Form -->
   <div class="h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-y-auto">
     <div class="max-w-md w-full py-8">
       <div class="bg-card border border-border rounded-xl shadow-lg p-8">
-        <!-- Header -->
         <div class="text-center mb-8">
           <h2 class="text-3xl font-bold text-foreground">Create your account</h2>
           <p class="mt-2 text-sm text-muted-foreground">Join us today</p>
         </div>
         
-        <!-- Sign Up Form -->
         <form class="space-y-6" action="{% url 'user-register' %}" method="POST">
           {% csrf_token %}
           <div class="space-y-4">
-            <c-ui.input 
-              id="id_username"
-              name="username"
-              type="text"
-              label="Username"
-              placeholder="Choose a username"
-              required="true"
-            />
-            <c-ui.input 
-              id="id_email"
-              name="email"
-              type="email"
-              label="Email"
-              placeholder="Enter your email"
-              required="true"
-            />
+            <c-ui.input id="id_username" name="username" type="text" label="Username" placeholder="Choose a username" required="true" />
+            <c-ui.input id="id_email" name="email" type="email" label="Email" placeholder="Enter your email" required="true" />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <c-ui.input 
-                id="id_password"
-                name="password"
-                type="password"
-                label="Password"
-                placeholder="Password"
-                required="true"
-              />
-              <c-ui.input 
-                id="id_confirm_password"
-                name="confirm_password"
-                type="password"
-                label="Confirm Password"
-                placeholder="Confirm password"
-                required="true"
-              />
+              <c-ui.input id="id_password" name="password" type="password" label="Password" placeholder="Password" required="true" />
+              <c-ui.input id="id_confirm_password" name="confirm_password" type="password" label="Confirm Password" placeholder="Confirm password" required="true" />
             </div>
           </div>
           
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" id="terms" name="terms" required />
             <span class="text-sm text-foreground">
-              I agree to the
-              <a href="#" class="text-primary hover:underline">Terms and Conditions</a>
+              I agree to the <a href="#" class="text-primary hover:underline">Terms and Conditions</a>
             </span>
           </label>
           
-          <c-ui.button type="submit" class="w-full">
-            Sign up
-          </c-ui.button>
+          <c-ui.button type="submit" class="w-full">Sign up</c-ui.button>
           
           <div class="text-center text-sm text-muted-foreground">
             Already have an account?
-            <a href="{% url 'user-login' %}"
-               class="font-medium text-primary hover:underline ml-1">Sign in</a>
+            <a href="{% url 'user-login' %}" class="font-medium text-primary hover:underline ml-1">Sign in</a>
           </div>
           
           {% if google_enabled %}
           <div class="divider text-muted-foreground">OR</div>
-
           <c-ui.button variant="outline" href="{% provider_login_url 'google' %}" class="w-full">
             <svg class="h-5 w-5"><use href="#icon-google"></use></svg>
             Continue with Google

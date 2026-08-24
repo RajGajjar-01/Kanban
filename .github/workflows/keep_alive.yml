@@ -1,0 +1,33 @@
+name: Keep Alive (Prevent Render Cold Starts)
+
+on:
+  schedule:
+    # Run every 14 minutes (Render spins down after 15 minutes of inactivity)
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Web Service
+        env:
+          RENDER_APP_URL: ${{ secrets.RENDER_APP_URL || vars.RENDER_APP_URL }}
+        run: |
+          URL="${RENDER_APP_URL}"
+          if [ -z "$URL" ]; then
+            echo "Error: RENDER_APP_URL secret or repository variable is not set!"
+            echo "Please add RENDER_APP_URL to your GitHub repository secrets or variables."
+            exit 1
+          fi
+
+          HEALTH_URL="${URL%/}/health/"
+          echo "Pinging health endpoint: $HEALTH_URL..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L "$HEALTH_URL")
+          echo "HTTP Response Status Code: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Health check passed! Render app is active."
+          else
+            echo "⚠️ Warning: Health check received HTTP status code $HTTP_STATUS"
+          fi

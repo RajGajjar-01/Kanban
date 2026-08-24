@@ -11,107 +11,14 @@
 {% block content %}
 
 <div id="board-app" data-board-id="{{ board.id }}" class="flex h-screen bg-background" x-data="{ sidebarOpen: true }">
-    <!-- Sidebar -->
-    <aside id="sidebar" :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-card border-r border-border flex-shrink-0 flex flex-col transition-all duration-300 ease-in-out overflow-hidden">
-        <!-- Sidebar Header -->
-        <div class="h-14 px-3 border-b border-border flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2 min-w-0 overflow-hidden">
-                <svg class="h-5 w-5 text-primary flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                </svg>
-                <span x-show="sidebarOpen" x-transition class="text-lg font-semibold text-foreground whitespace-nowrap overflow-hidden">Taskify</span>
-            </div>
-            <button @click="sidebarOpen = !sidebarOpen" class="p-1 hover:bg-accent rounded transition-colors flex-shrink-0">
-                <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="M9 3v18" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Sidebar Navigation -->
-        <nav class="flex-1 p-2 overflow-y-auto">
-            <ul class="space-y-1">
-                <li>
-                    <a href="{% url 'board-home' %}" class="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors" :title="!sidebarOpen ? 'Workspaces' : ''">
-                        <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                            <polyline points="9 22 9 12 15 12 15 22" />
-                        </svg>
-                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap text-sm">Workspaces</span>
-                    </a>
-                </li>
-                <li>
-                    <button id="open-invite-modal" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors" :title="!sidebarOpen ? 'Members' : ''">
-                        <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap text-sm">Members</span>
-                    </button>
-                </li>
-                <li>
-                    <button id="open-background-modal" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors" :title="!sidebarOpen ? 'Background' : ''">
-                        <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <circle cx="9" cy="9" r="2" />
-                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                        </svg>
-                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap text-sm">Background</span>
-                    </button>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors" :title="!sidebarOpen ? 'Analytics' : ''">
-                        <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-                            <path d="M22 12A10 10 0 0 0 12 2v10z" />
-                        </svg>
-                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap text-sm">Analytics</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'board-home' %}" class="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors" :title="!sidebarOpen ? 'All Boards' : ''">
-                        <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7" rx="1" />
-                            <rect x="14" y="3" width="7" height="7" rx="1" />
-                            <rect x="14" y="14" width="7" height="7" rx="1" />
-                            <rect x="3" y="14" width="7" height="7" rx="1" />
-                        </svg>
-                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap text-sm">All Boards</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Sidebar Footer - User Profile -->
-        <div class="p-2 border-t border-border">
-            <a href="{% url 'user-profile' %}" class="flex items-center gap-2 px-2 py-2 hover:bg-accent rounded-md transition-colors" :title="!sidebarOpen ? '{{user.username}}' : ''">
-                <div class="h-8 w-8 flex-shrink-0 flex items-center justify-center bg-primary text-primary-foreground rounded-full font-semibold text-sm">
-                    <span class="hidden" id="self-user">{{user.id}}</span>
-                    {{ user.username|slice:":1"|upper }}
-                </div>
-                <div x-show="sidebarOpen" x-transition class="flex-1 min-w-0">
-                    <div class="text-xs font-medium text-foreground truncate">
-                        {{user.username}}
-                    </div>
-                    <div class="text-[10px] text-muted-foreground truncate">
-                        {{user.email}}
-                    </div>
-                </div>
-            </a>
-        </div>
-    </aside>
+    <!-- Reusable Sidebar -->
+    <c-sidebar mode="board" />
 
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Board Header -->
-        <header class="bg-card border-b border-border px-4 py-3">
-            <div class="flex items-center justify-between">
+        <header class="bg-card border-b border-border px-4 h-14 flex items-center shrink-0 box-border">
+            <div class="flex items-center justify-between w-full">
                 <div class="flex-1">
                     <input
                         id="edit-name"
@@ -148,7 +55,7 @@
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
-                        <span class="font-medium">Add another list</span>
+                        <span class="font-medium">Add first list</span>
                     </button>
                     <form id="add-list-form" class="hidden bg-card rounded-lg border border-border p-3 space-y-2">
                         <input
@@ -200,36 +107,142 @@
     </div>
 
     <div id="card-modal" class="modal">
-        <div class="modal-box bg-card border border-border">
-            <h3 class="font-bold text-lg text-foreground mb-4">Card Details</h3>
+        <div class="modal-box bg-card border border-border max-w-2xl w-full p-6">
+            <div class="flex items-center justify-between mb-4 border-b border-border pb-3">
+                <h3 class="font-bold text-lg text-foreground flex items-center gap-2">
+                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Task Details
+                </h3>
+                <button type="button" data-close-card class="text-muted-foreground hover:text-foreground text-xl font-bold p-1">&times;</button>
+            </div>
             <form id="card-detail-form" class="space-y-4">
                 {% csrf_token %}
-                <input name="card_name" required aria-label="Card title" placeholder="Card title"
-                    class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]" />
-                <textarea name="card_description" rows="4" aria-label="Description" placeholder="Add a description…"
-                    class="w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"></textarea>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label class="form-control">
-                        <span class="label-text text-foreground text-sm mb-1 block">Due date</span>
-                        <input type="datetime-local" name="due_date" aria-label="Due date"
-                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]" />
-                    </label>
-                    <label class="form-control">
-                        <span class="label-text text-foreground text-sm mb-1 block">Label</span>
-                        <select name="label" aria-label="Label"
-                            class="h-9 w-full min-w-0 rounded-md border border-input bg-background dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]">
-                            <option value="">No label</option>
-                            <option value="urgent & important">Urgent &amp; important</option>
-                            <option value="urgent but not important">Urgent but not important</option>
-                            <option value="important but not urgent">Important but not urgent</option>
-                            <option value="neither important nor urgent">Neither urgent nor important</option>
-                        </select>
-                    </label>
+
+                <!-- Task Title -->
+                <div>
+                    <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Task Title</label>
+                    <input name="card_name" required aria-label="Task title" placeholder="Enter task title..."
+                        class="h-10 w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base font-semibold text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]" />
                 </div>
+
+                <!-- Status, Priority, Assignee, Points -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Status</label>
+                        <select name="status" aria-label="Status"
+                            class="h-9 w-full rounded-md border border-input bg-card px-2 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer">
+                            <option value="todo" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">To Do</option>
+                            <option value="in_progress" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">In Progress</option>
+                            <option value="in_review" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">In Review</option>
+                            <option value="done" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Done</option>
+                            <option value="backlog" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Backlog</option>
+                            <option value="cancelled" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Priority</label>
+                        <select name="priority" aria-label="Priority"
+                            class="h-9 w-full rounded-md border border-input bg-card px-2 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer">
+                            <option value="low" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟢 Low</option>
+                            <option value="medium" selected style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟡 Medium</option>
+                            <option value="high" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟠 High</option>
+                            <option value="urgent" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🔴 Urgent</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Assignee</label>
+                        <select name="assignee" aria-label="Assignee" id="card-assignee-select"
+                            class="h-9 w-full rounded-md border border-input bg-card px-2 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer">
+                            <option value="" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Unassigned</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Points</label>
+                        <input type="number" name="story_points" min="0" max="100" placeholder="0" aria-label="Story points"
+                            class="h-9 w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50" />
+                    </div>
+                </div>
+
+                <!-- Dates & Cover Color -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Start Date</label>
+                        <input type="datetime-local" name="start_date" aria-label="Start date"
+                            class="h-9 w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-2 py-1 text-xs text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50" />
+                    </div>
+
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Due Date</label>
+                        <input type="datetime-local" name="due_date" aria-label="Due date"
+                            class="h-9 w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-2 py-1 text-xs text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50" />
+                    </div>
+
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Cover Color</label>
+                        <select name="cover_color" aria-label="Cover Color"
+                            class="h-9 w-full rounded-md border border-input bg-card px-2 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer">
+                            <option value="" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">None</option>
+                            <option value="#ef4444" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🔴 Red</option>
+                            <option value="#f97316" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟠 Orange</option>
+                            <option value="#eab308" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟡 Yellow</option>
+                            <option value="#22c55e" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟢 Green</option>
+                            <option value="#3b82f6" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🔵 Blue</option>
+                            <option value="#a855f7" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">🟣 Purple</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tags & Eisenhower Matrix Label -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Tags (comma-separated)</label>
+                        <input type="text" name="tags" placeholder="Frontend, UI, Bug" aria-label="Tags"
+                            class="h-9 w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50" />
+                    </div>
+
+                    <div>
+                        <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Eisenhower Label</label>
+                        <select name="label" aria-label="Eisenhower Label"
+                            class="h-9 w-full rounded-md border border-input bg-card px-2 py-1 text-xs md:text-sm text-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer">
+                            <option value="" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">No label</option>
+                            <option value="urgent & important" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Urgent &amp; Important</option>
+                            <option value="urgent but not important" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Urgent but Not Important</option>
+                            <option value="important but not urgent" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Important but Not Urgent</option>
+                            <option value="neither important nor urgent" style="background-color: #18181b; color: #f4f4f5;" class="bg-card text-foreground py-1">Neither Urgent nor Important</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="label-text text-foreground text-xs font-semibold uppercase tracking-wider mb-1 block">Description</label>
+                    <textarea name="card_description" rows="4" aria-label="Description" placeholder="Add a detailed description..."
+                        class="w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"></textarea>
+                </div>
+
+                <!-- Completion Checkbox -->
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="card-is-completed" name="is_completed" class="w-4 h-4 rounded border-input text-primary focus:ring-ring cursor-pointer" />
+                    <label for="card-is-completed" class="text-sm font-medium text-foreground cursor-pointer select-none">Mark task as completed</label>
+                </div>
+
                 <p id="card-feedback" class="text-sm hidden"></p>
-                <div class="modal-action">
-                    <button type="button" data-close-card class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground">Cancel</button>
-                    <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">Save</button>
+
+                <!-- Actions -->
+                <div class="modal-action flex justify-between items-center border-t border-border pt-4 mt-4">
+                    <button type="button" id="delete-card-modal-btn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium transition-all h-9 px-3 text-destructive hover:bg-destructive/10">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        Delete Task
+                    </button>
+                    <div class="flex gap-2">
+                        <button type="button" data-close-card class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground">Cancel</button>
+                        <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">Save Task</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -240,5 +253,5 @@
 {% endblock layout %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/main.js' %}?v={% now 'U' %}"></script>
 {% endblock %}

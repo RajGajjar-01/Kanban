@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 from . import forms, models, serializers
 from . import permissions as custom_permissions
-from .landing_context import get_about_context, get_landing_context
+from .landing_context import get_landing_context
 
 
 def landing_view(request):
@@ -37,13 +37,25 @@ def contact_view(request):
     return render(request, "board/contact.html", context)
 
 
-def about_view(request):
-    context = get_about_context()
-    return render(request, "board/AboutUs.html", context)
-
-
 def contact_success_view(request):
     return render(request, "board/success.html")
+
+
+def health_check_view(request):
+    from django.db import connection
+    from django.http import JsonResponse
+
+    try:
+        connection.ensure_connection()
+        db_status = True
+    except Exception:
+        db_status = False
+
+    return JsonResponse(
+        {"status": "healthy" if db_status else "unhealthy", "database": "connected" if db_status else "disconnected"},
+        status=200 if db_status else 500,
+    )
+
 
 
 @login_required
@@ -275,9 +287,9 @@ class CardViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    filterset_fields = ["list_id", "label"]
-    search_fields = ["card_name", "card_description"]
-    ordering_fields = ["created_date", "due_date"]
+    filterset_fields = ["list_id", "label", "priority", "status", "assignee", "is_completed"]
+    search_fields = ["card_name", "card_description", "tags"]
+    ordering_fields = ["created_date", "due_date", "start_date", "priority", "position"]
     ordering = ["position", "id"]
 
     def get_queryset(self):

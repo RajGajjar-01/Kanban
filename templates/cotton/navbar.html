@@ -3,11 +3,10 @@
 <c-vars show_nav_links="true" show_boards_link="false" />
 <!-- Unified Navbar Component -->
 <div
-  class="h-16 bg-card border-b border-border sticky top-0 z-50 shadow-sm flex items-center justify-between"
+  class="relative bg-card border-b border-border sticky top-0 z-50 shadow-sm"
   x-data="{ mobileMenuOpen: false }"
 >
-  <div class="container-fluid px-4 sm:px-6 lg:px-8 w-full">
-    <div class="flex items-center justify-between w-full">
+  <div class="h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full">
       <!-- Left Side: Brand -->
       <a
         href="{% url 'board-landing' %}"
@@ -33,32 +32,12 @@
             >Contact</a
           >
           <a
-            href="{% url 'board-about' %}"
-            class="text-muted-foreground hover:text-foreground transition-colors"
-            >About</a
-          >
-          <a
             href="{% url 'blog:list' %}"
             class="text-muted-foreground hover:text-foreground transition-colors"
             >Blog</a
           >
         </nav>
         {% endif %}
-
-        <!-- Theme Toggle Button -->
-        <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm">
-          <input
-            type="checkbox"
-            x-model="darkMode"
-            @change="localStorage.setItem('darkMode', darkMode)"
-          />
-          <svg x-show="!darkMode" class="swap-off h-5 w-5">
-            <use href="#icon-sun"></use>
-          </svg>
-          <svg x-show="darkMode" class="swap-on h-5 w-5">
-            <use href="#icon-moon"></use>
-          </svg>
-        </label>
 
         <!-- Auth Section (Desktop) -->
         <div class="hidden md:flex items-center gap-3">
@@ -181,7 +160,7 @@
           </svg>
         </button>
       </div>
-    </div>
+  </div>
 
     <!-- Mobile Menu Dropdown -->
     <div
@@ -208,11 +187,6 @@
           href="{% url 'board-contact' %}"
           class="text-muted-foreground hover:text-foreground transition-colors"
           >Contact</a
-        >
-        <a
-          href="{% url 'board-about' %}"
-          class="text-muted-foreground hover:text-foreground transition-colors"
-          >About</a
         >
         <a
           href="{% url 'blog:list' %}"
@@ -300,5 +274,4 @@
         </div>
       </div>
     </div>
-  </div>
 </div>

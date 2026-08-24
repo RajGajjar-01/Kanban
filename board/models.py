@@ -31,7 +31,7 @@ class Board(models.Model):
     user = models.ManyToManyField(User, through="BoardMember", related_name="user")
     name = models.CharField(max_length=255, default="Untitled")
     created_date = models.DateTimeField(auto_now_add=True)
-    description = models.TextField()
+    description = models.TextField(blank=True, default="")
     background_color = models.CharField(max_length=255, default="linear-gradient(to right, #ff7e5f, #feb47b)")
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="boards")
 
@@ -70,6 +70,20 @@ class List(models.Model):
 
 
 class Card(models.Model):
+    class PriorityChoices(models.TextChoices):
+        LOW = "low", "Low"
+        MEDIUM = "medium", "Medium"
+        HIGH = "high", "High"
+        URGENT = "urgent", "Urgent"
+
+    class StatusChoices(models.TextChoices):
+        BACKLOG = "backlog", "Backlog"
+        TODO = "todo", "To Do"
+        IN_PROGRESS = "in_progress", "In Progress"
+        IN_REVIEW = "in_review", "In Review"
+        DONE = "done", "Done"
+        CANCELLED = "cancelled", "Cancelled"
+
     class LabelChoices(models.TextChoices):
         URGENT_IMP = "urgent & important"
         URGENT_NOT_IMP = "urgent but not important"
@@ -81,7 +95,15 @@ class Card(models.Model):
     position = models.IntegerField(default=0)
     card_description = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
+    priority = models.CharField(max_length=20, choices=PriorityChoices.choices, default=PriorityChoices.MEDIUM)
+    status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.TODO)
+    story_points = models.PositiveIntegerField(null=True, blank=True, default=None)
+    assignee = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_cards")
+    tags = models.CharField(max_length=255, null=True, blank=True)
+    cover_color = models.CharField(max_length=30, null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
     card_member = models.ManyToManyField(User, through="CardMember", related_name="cards")
     label = models.CharField(max_length=60, choices=LabelChoices.choices, null=True, blank=True)
 

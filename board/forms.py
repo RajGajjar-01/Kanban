@@ -79,7 +79,21 @@ class ListModalForm(forms.ModelForm):
 class CardModalForm(forms.ModelForm):
     class Meta:
         model = Card
-        fields = ["list_id", "card_name"]
+        fields = [
+            "list_id",
+            "card_name",
+            "card_description",
+            "priority",
+            "status",
+            "story_points",
+            "assignee",
+            "start_date",
+            "due_date",
+            "tags",
+            "cover_color",
+            "is_completed",
+            "label",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -199,6 +199,30 @@ class CardEditing(AuthzTestCase):
         self.assertEqual(self.card.card_description, "Details")
         self.assertEqual(self.card.label, "urgent & important")
 
+    def test_member_can_update_rich_task_schema(self):
+        r = self.client_as(self.member).patch(
+            f"/api/v1/cards/{self.card.id}/",
+            {
+                "priority": "urgent",
+                "status": "in_progress",
+                "story_points": 5,
+                "assignee": self.member.id,
+                "tags": "Frontend, UI",
+                "cover_color": "#ef4444",
+                "is_completed": True,
+            },
+            format="json",
+        )
+        self.assertEqual(r.status_code, 200)
+        self.card.refresh_from_db()
+        self.assertEqual(self.card.priority, "urgent")
+        self.assertEqual(self.card.status, "in_progress")
+        self.assertEqual(self.card.story_points, 5)
+        self.assertEqual(self.card.assignee, self.member)
+        self.assertEqual(self.card.tags, "Frontend, UI")
+        self.assertEqual(self.card.cover_color, "#ef4444")
+        self.assertTrue(self.card.is_completed)
+
     def test_outsider_cannot_edit_card(self):
         r = self.client_as(self.outsider).patch(
             f"/api/v1/cards/{self.card.id}/", {"card_name": "hax"}, format="json"

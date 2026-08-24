@@ -1,46 +1,36 @@
 {% extends 'base.html' %}
-{% load static %}
-
-<!-- ⚠️ SVG icons have been centralized into static/icons/sprite.svg. Do NOT edit inline SVGs here. -->
-
-{% block extra_head %}{% endblock %}
+{% load static %}{% load cotton %}
 {% block body_class %}min-h-screen font-poppins bg-background{% endblock %}
 
 {% block layout %}
 {% block navbar %}
 <c-navbar show_nav_links="false" show_boards_link="true" />
 {% endblock %}
-{% load cotton %}
 {% block content %}
 <div class="min-h-screen bg-background">
-    <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Left Sidebar - Profile Card -->
             <div class="lg:col-span-1">
                 <div class="card bg-card border border-border shadow-xl">
                     <div class="card-body items-center text-center">
-                        <!-- Profile Image -->
                         <div class="avatar">
                             <div class="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                                 <img src="{{user.profile.image.url}}" alt="Profile" />
                             </div>
                         </div>
                         
-                        <!-- Upload Button -->
                         <label for="{{p_form.image.id_for_label}}" class="cursor-pointer">
                             <c-ui.button variant="primary" size="sm" class="btn-circle">
                                 <svg class="h-4 w-4"><use href="#icon-camera"></use></svg>
                             </c-ui.button>
                         </label>
                         
-                        <!-- User Info -->
                         <h2 class="card-title text-2xl text-foreground mt-4">{{ user.username }}</h2>
                         <p class="text-muted-foreground">{{ user.email }}</p>
                         
                         <div class="divider"></div>
                         
-                        <!-- Stats -->
                         <div class="stats stats-vertical shadow bg-base-200 w-full">
                             <div class="stat">
                                 <div class="stat-title">Member Since</div>
@@ -49,14 +39,12 @@
                             </div>
                         </div>
                         
-                        <!-- Bio -->
                         {% if user.profile.bio %}
                         <div class="w-full mt-4">
                             <p class="text-sm text-muted-foreground text-center px-4">{{ user.profile.bio }}</p>
                         </div>
                         {% endif %}
                         
-                        <!-- Logout Button -->
                         <div class="card-actions w-full mt-4">
                             <c-ui.button href="{% url 'user-logout' %}" variant="destructive" class="w-full">
                                 <svg class="h-5 w-5"><use href="#icon-logout"></use></svg>
@@ -78,11 +66,8 @@
                         
                         <form enctype="multipart/form-data" method="post" class="space-y-6">
                             {% csrf_token %}
-                            <div class="hidden">
-                                {{ p_form.image }}
-                            </div>
+                            <div class="hidden">{{ p_form.image }}</div>
                             
-                            <!-- Account Information -->
                             <div class="space-y-4">
                                 <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
                                     <svg class="h-5 w-5"><use href="#icon-user"></use></svg>
@@ -90,7 +75,6 @@
                                 </h3>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <!-- Username -->
                                     <div class="form-control">
                                         <label class="label">
                                             <span class="label-text text-foreground font-medium">{{ u_form.username.label }}</span>
@@ -100,12 +84,11 @@
                                             id="{{ u_form.username.id_for_label }}"
                                             name="{{ u_form.username.name }}"
                                             value="{{ u_form.username.value }}"
-                                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-primary selection:text-primary-foreground"
+                                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                                             placeholder="Enter username"
                                         />
                                     </div>
                                     
-                                    <!-- Email -->
                                     <div class="form-control">
                                         <label class="label">
                                             <span class="label-text text-foreground font-medium">{{ u_form.email.label }}</span>
@@ -115,7 +98,7 @@
                                             id="{{ u_form.email.id_for_label }}"
                                             name="{{ u_form.email.name }}"
                                             value="{{ u_form.email.value }}"
-                                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-primary selection:text-primary-foreground"
+                                            class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                                             placeholder="Enter email"
                                         />
                                     </div>
@@ -124,14 +107,12 @@
                             
                             <div class="divider"></div>
                             
-                            <!-- Personal Information -->
                             <div class="space-y-4">
                                 <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
                                     <svg class="h-5 w-5"><use href="#icon-document"></use></svg>
                                     Personal Information
                                 </h3>
                                 
-                                <!-- Bio -->
                                 <div class="form-control">
                                     <label class="label">
                                         <span class="label-text text-foreground font-medium">{{ p_form.bio.label }}</span>
@@ -139,13 +120,12 @@
                                     <textarea 
                                         id="{{ p_form.bio.id_for_label }}"
                                         name="{{ p_form.bio.name }}"
-                                        class="min-h-[6rem] w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-primary selection:text-primary-foreground resize-y"
+                                        class="min-h-[6rem] w-full rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-y"
                                         placeholder="Tell us about yourself..."
                                     >{{ p_form.bio.value|default:'' }}</textarea>
                                 </div>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <!-- Location -->
                                     <div class="form-control">
                                         <label class="label">
                                             <span class="label-text text-foreground font-medium">{{ p_form.location.label }}</span>
@@ -159,13 +139,12 @@
                                                 id="{{ p_form.location.id_for_label }}"
                                                 name="{{ p_form.location.name }}"
                                                 value="{{ p_form.location.value|default:'' }}"
-                                                class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-primary selection:text-primary-foreground"
+                                                class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                                                 placeholder="City, Country"
                                             />
                                         </div>
                                     </div>
                                     
-                                    <!-- Website -->
                                     <div class="form-control">
                                         <label class="label">
                                             <span class="label-text text-foreground font-medium">{{ p_form.website.label }}</span>
@@ -179,7 +158,7 @@
                                                 id="{{ p_form.website.id_for_label }}"
                                                 name="{{ p_form.website.name }}"
                                                 value="{{ p_form.website.value|default:'' }}"
-                                                class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 selection:bg-primary selection:text-primary-foreground"
+                                                class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-1 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                                                 placeholder="https://example.com"
                                             />
                                         </div>
@@ -189,7 +168,6 @@
                             
                             <div class="divider"></div>
                             
-                            <!-- Action Buttons -->
                             <div class="card-actions justify-end gap-2">
                                 <c-ui.button type="reset" variant="ghost">
                                     <svg class="h-5 w-5"><use href="#icon-close"></use></svg>

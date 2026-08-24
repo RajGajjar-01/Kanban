@@ -36,6 +36,11 @@ def register_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("board-home")
+
+    next_url = request.GET.get("next") or request.POST.get("next") or "board-home"
+
     if request.method == "POST":
         login_form = forms.UserLoginForm(request.POST, auto_id=True)
         if login_form.is_valid():
@@ -47,9 +52,9 @@ def login_view(request):
                 login(request, user)
                 token = request.session.get("board_invitation_token")
                 if token:
-                    invitation = get_object_or_404(models.BoardInvitaton, token=token)
-                    if request.user.email.lower() == invitation.email.lower():
-                        models.BoardMember.objects.create(
+                    invitation = models.BoardInvitaton.objects.filter(token=token).first()
+                    if invitation and request.user.email.lower() == invitation.email.lower():
+                        models.BoardMember.objects.get_or_create(
                             user=user,
                             board=invitation.board,
                         )
@@ -57,13 +62,18 @@ def login_view(request):
                         invitation.save()
                         del request.session["board_invitation_token"]
                 messages.success(request, "You have logged in successfully!")
-                return redirect("board-home")
+                return redirect(next_url)
             else:
                 messages.error(request, "Invalid email or password.")
     else:
         login_form = forms.UserLoginForm(auto_id=True)
 
-    context = {"form": login_form, "title": "sign in", "google_enabled": settings.GOOGLE_OAUTH_ENABLED}
+    context = {
+        "form": login_form,
+        "title": "sign in",
+        "google_enabled": settings.GOOGLE_OAUTH_ENABLED,
+        "next": next_url,
+    }
     return render(request, "users/Login.html", context)
 
 

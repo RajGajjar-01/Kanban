@@ -97,6 +97,7 @@ class BoardMemberSerializer(serializers.ModelSerializer):
 class BoardSerializer(serializers.ModelSerializer):
     """Serializer for Board model"""
 
+    description = serializers.CharField(required=False, allow_blank=True, default="")
     workspace_name = serializers.CharField(source="workspace.workspace_name", read_only=True)
     user_count = serializers.IntegerField(read_only=True)
     members = BoardMemberSerializer(source="memofboard", many=True, read_only=True)
@@ -145,6 +146,7 @@ class CardSerializer(serializers.ModelSerializer):
     """Serializer for Card model"""
 
     member_count = serializers.IntegerField(read_only=True)
+    assignee_username = serializers.CharField(source="assignee.username", read_only=True)
 
     class Meta:
         model = models.Card
@@ -155,7 +157,16 @@ class CardSerializer(serializers.ModelSerializer):
             "list_id",
             "position",
             "created_date",
+            "start_date",
             "due_date",
+            "priority",
+            "status",
+            "story_points",
+            "assignee",
+            "assignee_username",
+            "tags",
+            "cover_color",
+            "is_completed",
             "label",
             "member_count",
         ]
@@ -163,11 +174,28 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class CardListSerializer(serializers.ModelSerializer):
-    """Lightweight serializer for listing cards"""
+    """Serializer for listing cards on board"""
+
+    assignee_username = serializers.CharField(source="assignee.username", read_only=True)
 
     class Meta:
         model = models.Card
-        fields = ["id", "card_name", "position"]
+        fields = [
+            "id",
+            "card_name",
+            "position",
+            "priority",
+            "status",
+            "story_points",
+            "assignee",
+            "assignee_username",
+            "start_date",
+            "due_date",
+            "tags",
+            "cover_color",
+            "is_completed",
+            "label",
+        ]
         read_only_fields = ["id"]
 
 
