@@ -153,6 +153,7 @@ class CardSerializer(serializers.ModelSerializer):
             "card_name",
             "card_description",
             "list_id",
+            "position",
             "created_date",
             "due_date",
             "label",
@@ -166,7 +167,7 @@ class CardListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Card
-        fields = ["id", "card_name"]
+        fields = ["id", "card_name", "position"]
         read_only_fields = ["id"]
 
 
@@ -232,3 +233,10 @@ class BoardInvitationSerializer(serializers.ModelSerializer):
         if request and hasattr(request, "user"):
             validated_data["inviter"] = request.user
         return super().create(validated_data)
+
+
+class CardPositionSerializer(serializers.Serializer):
+    """Minimal payload item for bulk card reordering"""
+
+    id = serializers.IntegerField()
+    position = serializers.IntegerField()
