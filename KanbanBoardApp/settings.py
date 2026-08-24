@@ -12,20 +12,25 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "REMOVED_DJANGO_SECRET_KEY"
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DJANGO_DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -152,8 +157,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "REMOVED_EMAIL_ADDRESS"
-EMAIL_HOST_PASSWORD = "REMOVED_GMAIL_APP_PASSWORD"
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = "Taskify <noreply@yourapp.com>"
@@ -164,13 +169,22 @@ DEFAULT_FROM_EMAIL = "Taskify <noreply@yourapp.com>"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Related to Google Authentication. For more info go to Notes.md or allauth documentation
+_google_client_id = env("DJANGO_GOOGLE_OAUTH_CLIENT_ID", default="")
+_google_client_secret = env("DJANGO_GOOGLE_OAUTH_CLIENT_SECRET", default="")
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "APP": {
-            "client_id": "REMOVED_GOOGLE_OAUTH_CLIENT_ID",
-            "secret": "REMOVED_GOOGLE_OAUTH_CLIENT_SECRET",
-            "key": "",
-        },
+        **(
+            {
+                "APP": {
+                    "client_id": _google_client_id,
+                    "secret": _google_client_secret,
+                    "key": "",
+                }
+            }
+            if _google_client_id and _google_client_secret
+            else {}
+        ),
         "AUTH_PARAMS": {"prompt": "select_account"},
     }
 }

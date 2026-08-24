@@ -293,15 +293,21 @@ Important settings can be modified in `KanbanBoardApp/settings.py`:
 
 ### Environment Variables
 
-For production, use environment variables for sensitive data:
+All configuration is read from a `.env` file at the project root (see `.env.example`). Copy it and fill in your values:
 
-```python
-# Example: Using environment variables
-import os
-
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+```bash
+cp .env.example .env
 ```
+
+| Variable | Required | Description |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | Yes | Secret key for cryptographic signing |
+| `DJANGO_DEBUG` | Yes | `True` or `False` |
+| `DJANGO_ALLOWED_HOSTS` | No (defaults to empty) | Comma-separated hostnames |
+| `EMAIL_HOST_USER` | No | SMTP username for password reset emails |
+| `EMAIL_HOST_PASSWORD` | No | SMTP password |
+| `DJANGO_GOOGLE_OAUTH_CLIENT_ID` | No | Google OAuth client ID |
+| `DJANGO_GOOGLE_OAUTH_CLIENT_SECRET` | No | Google OAuth client secret |
 
 ## Troubleshooting
 
