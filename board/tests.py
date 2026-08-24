@@ -105,6 +105,58 @@ class ListAndCardAccess(AuthzTestCase):
         self.assertEqual(own_card.list_id, own_lst)
 
 
+class CardOrdering(AuthzTestCase):
+    def test_card_list_exposes_position(self):
+        r = self.client_as(self.owner).get(f"/api/v1/cards/?list_id={self.lst.id}")
+        self.assertIn("position", r.data["cards"][0])
+
+    def test_move_to_list_with_position_sets_both(self):
+        dest = List.objects.create(list_name="dest", board=self.board)
+        r = self.client_as(self.owner).put(
+            f"/api/v1/cards/{self.card.id}/move-to-list/{dest.id}/", {"position": 7}, format="json"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.card.refresh_from_db()
+        self.assertEqual(self.card.list_id, dest)
+        self.assertEqual(self.card.position, 7)
+
+    def test_move_to_list_without_body_keeps_position(self):
+        r = self.client_as(self.owner).put(
+            f"/api/v1/cards/{self.card.id}/move-to-list/{self.lst.id}/"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.card.refresh_from_db()
+        self.assertEqual(self.card.position, 0)
+
+    def test_reorder_cards_updates_multiple_positions(self):
+        c2 = Card.objects.create(card_name="C2", list_id=self.lst, position=1)
+        payload = {"cards": [{"id": self.card.id, "position": 5}, {"id": c2.id, "position": 9}]}
+        r = self.client_as(self.owner).post(
+            f"/api/v1/lists/{self.lst.id}/reorder-cards/", payload, format="json"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.data["success"])
+        self.card.refresh_from_db()
+        c2.refresh_from_db()
+        self.assertEqual((self.card.position, c2.position), (5, 9))
+
+    def test_outsider_cannot_reorder_foreign_list_cards(self):
+        payload = {"cards": [{"id": self.card.id, "position": 99}]}
+        r = self.client_as(self.outsider).post(
+            f"/api/v1/lists/{self.lst.id}/reorder-cards/", payload, format="json"
+        )
+        self.assertEqual(r.status_code, 404)
+        self.card.refresh_from_db()
+        self.assertEqual(self.card.position, 0)
+
+    def test_default_ordering_by_position(self):
+        Card.objects.create(card_name="second", list_id=self.lst, position=2)
+        Card.objects.create(card_name="middle", list_id=self.lst, position=1)
+        r = self.client_as(self.member).get(f"/api/v1/cards/?list_id={self.lst.id}")
+        names = [c["card_name"] for c in r.data["cards"]]
+        self.assertEqual(names, ["C", "middle", "second"])
+
+
 class InvitationAcceptance(AuthzTestCase):
     def invite(self, **kw):
         from django.utils import timezone

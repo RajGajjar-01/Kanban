@@ -78,11 +78,15 @@ class Card(models.Model):
 
     list_id = models.ForeignKey(List, on_delete=models.CASCADE)
     card_name = models.CharField(max_length=255)
+    position = models.IntegerField(default=0)
     card_description = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(null=True, blank=True)
     card_member = models.ManyToManyField(User, through="CardMember", related_name="cards")
     label = models.CharField(max_length=60, choices=LabelChoices.choices, null=True, blank=True)
+
+    class Meta:
+        ordering = ["position", "id"]
 
     def __str__(self):
         return self.card_name

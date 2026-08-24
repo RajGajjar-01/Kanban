@@ -50,7 +50,7 @@
               <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" id="remember-me" name="remember-me" />
               <span class="text-sm text-foreground">Remember me</span>
             </label>
-            <a href="#" class="text-sm font-medium text-primary hover:underline">Forgot password?</a>
+            <a href="{% url 'password_reset' %}" class="text-sm font-medium text-primary hover:underline">Forgot password?</a>
           </div>
           
           <c-ui.button type="submit" class="w-full">

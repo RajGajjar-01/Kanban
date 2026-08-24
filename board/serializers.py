@@ -153,6 +153,7 @@ class CardSerializer(serializers.ModelSerializer):
             "card_name",
             "card_description",
             "list_id",
+            "position",
             "created_date",
             "due_date",
             "label",
@@ -166,7 +167,7 @@ class CardListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Card
-        fields = ["id", "card_name"]
+        fields = ["id", "card_name", "position"]
         read_only_fields = ["id"]
 
 
@@ -216,3 +217,10 @@ class BoardNameUpdateSerializer(serializers.Serializer):
     """Serializer for updating board name"""
 
     value = serializers.CharField(max_length=255, required=True)
+
+
+class CardPositionSerializer(serializers.Serializer):
+    """Minimal payload item for bulk card reordering"""
+
+    id = serializers.IntegerField()
+    position = serializers.IntegerField()

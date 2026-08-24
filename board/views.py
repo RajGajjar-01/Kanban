@@ -252,6 +252,18 @@ class ListViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
         )
 
+    @action(detail=True, methods=["post"], url_path="reorder-cards")
+    def reorder_cards(self, request, pk=None):
+        lst = self.get_object()
+        serializer = serializers.CardPositionSerializer(data=request.data.get("cards"), many=True)
+        serializer.is_valid(raise_exception=True)
+        updates = {item["id"]: item["position"] for item in serializer.validated_data}
+        cards = models.Card.objects.filter(list_id=lst, pk__in=updates)
+        for card in cards:
+            card.position = updates[card.pk]
+            card.save(update_fields=["position"])
+        return Response({"success": True})
+
 
 class CardViewSet(viewsets.ModelViewSet):
     """DRF ViewSet for Card CRUD operations"""
@@ -265,7 +277,7 @@ class CardViewSet(viewsets.ModelViewSet):
     filterset_fields = ["list_id", "label"]
     search_fields = ["card_name", "card_description"]
     ordering_fields = ["created_date", "due_date"]
-    ordering = ["-created_date"]
+    ordering = ["position", "id"]
 
     def get_queryset(self):
         list_id = self.request.query_params.get("list_id") or self.kwargs.get("list_pk")
@@ -312,6 +324,14 @@ class CardViewSet(viewsets.ModelViewSet):
             models.List.objects.filter(board__in=models.Board.objects.for_user(request.user)), pk=list_id
         )
         card.list_id = destination_list
+        if "position" in request.data:
+            try:
+                card.position = int(request.data["position"])
+            except (TypeError, ValueError):
+                return Response(
+                    {"success": False, "message": "Invalid position"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         card.save()
         return Response({"success": True, "message": "Position updated"})
 
