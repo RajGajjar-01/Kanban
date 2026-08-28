@@ -238,9 +238,6 @@ class ListCreateSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
 class BoardNameUpdateSerializer(serializers.Serializer):
     """Serializer for updating board name"""
 

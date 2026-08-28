@@ -129,7 +129,13 @@
 /* Base Styles */
 @layer base {
   * {
-    @apply outline-ring/50;
+    /* Remove the global ring outline — it causes white outlines on dark backgrounds */
+    outline: none;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
   
   body {
@@ -162,6 +168,43 @@
     --chkbg: var(--primary) !important;
     --chkfg: #000000 !important;
     color: #000000 !important;
+  }
+
+  /* ── Fix DaisyUI modal-box: use our dark card background, not DaisyUI's base-100 ── */
+  .modal-box {
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  /* ── Override DaisyUI's conflicting border/base color tokens ── */
+  :root, .dark, [data-theme="dark"] {
+    --color-base-100: oklch(20.5% 0 0);
+    --color-base-200: oklch(18% 0 0);
+    --color-base-300: oklch(23% 0 0);
+    --color-base-content: oklch(98.5% 0 0);
+    --color-neutral: oklch(26.9% 0 0);
+    --color-neutral-content: oklch(98.5% 0 0);
+    /* Force border to always be our dark value */
+    --tw-border-opacity: 1;
+  }
+
+  /* ── Globally enforce dark borders on all interactive elements ── */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+  textarea,
+  select {
+    border-color: var(--border) !important;
+    background-color: transparent;
+    color: var(--foreground);
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--ring) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 30%, transparent);
   }
 }
 
@@ -319,6 +362,17 @@
     padding: 0.5em 0.75em;
     font-size: 0.875em;
   }
+}
+
+/* Auth terminal (Login / Register) - tactical brutalist panel */
+.brutal-scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
 }
 
 

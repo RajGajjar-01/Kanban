@@ -22,61 +22,46 @@ class ContactForm(forms.Form):
     )
 
 
-class WorkspaceModalForm(forms.ModelForm):
+class StyledFormMixin:
+    """Applies a placeholder + shared CSS class to the fields listed in `placeholders`."""
+
+    placeholders = {}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field, placeholder in self.placeholders.items():
+            self.fields[field].widget.attrs.update(
+                {"placeholder": placeholder, "class": "w-full p-2 border rounded-lg mb-4"}
+            )
+
+
+class WorkspaceModalForm(StyledFormMixin, forms.ModelForm):
+    placeholders = {"workspace_name": "Workspace Name"}
+
     class Meta:
         model = Workspace
         fields = ["workspace_name"]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        self.fields["workspace_name"].widget.attrs.update(
-            {
-                "placeholder": "Workspace Name",
-                "class": "w-full p-2 border rounded-lg mb-4",
-            }
-        )
+class BoardModalForm(StyledFormMixin, forms.ModelForm):
+    placeholders = {"name": "Board Title", "description": "Description", "workspace": ""}
 
-
-class BoardModalForm(forms.ModelForm):
     class Meta:
         model = Board
         fields = ["name", "description", "workspace"]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        placeholders = {
-            "name": "Board Title",
-            "description": "Description",
-        }
+class ListModalForm(StyledFormMixin, forms.ModelForm):
+    placeholders = {"list_name": "List Name"}
 
-        for field in self.fields:
-            self.fields[field].widget.attrs.update(
-                {
-                    "placeholder": placeholders.get(field, ""),
-                    "class": "w-full p-2 border rounded-lg mb-4",
-                }
-            )
-
-
-class ListModalForm(forms.ModelForm):
     class Meta:
         model = List
         fields = ["list_name", "board", "list_position"]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        self.fields["list_name"].widget.attrs.update(
-            {
-                "placeholder": "List Name",
-                "class": "w-full p-2 border rounded-lg mb-4",
-            }
-        )
+class CardModalForm(StyledFormMixin, forms.ModelForm):
+    placeholders = {"card_name": "Task Name"}
 
-
-class CardModalForm(forms.ModelForm):
     class Meta:
         model = Card
         fields = [
@@ -95,28 +80,10 @@ class CardModalForm(forms.ModelForm):
             "label",
         ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        self.fields["card_name"].widget.attrs.update(
-            {
-                "placeholder": "Task Name",
-                "class": "w-full p-2 border rounded-lg mb-4",
-            }
-        )
+class InviteModalForm(StyledFormMixin, forms.ModelForm):
+    placeholders = {"email": "Enter email"}
 
-
-class InviteModalForm(forms.ModelForm):
     class Meta:
         model = BoardInvitaton
         fields = ["email"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields["email"].widget.attrs.update(
-            {
-                "placeholder": "Enter email",
-                "class": "w-full p-2 border rounded-lg mb-4",
-            }
-        )

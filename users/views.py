@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +10,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from board import models
 
 from . import forms
+
+logger = logging.getLogger(__name__)
 
 
 def register_view(request):
@@ -50,6 +54,7 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
+                logger.info("login succeeded for %s", email)
                 token = request.session.get("board_invitation_token")
                 if token:
                     invitation = models.BoardInvitaton.objects.filter(token=token).first()
@@ -64,7 +69,10 @@ def login_view(request):
                 messages.success(request, "You have logged in successfully!")
                 return redirect(next_url)
             else:
+                logger.warning("login failed (bad credentials) for %s", email)
                 messages.error(request, "Invalid email or password.")
+        else:
+            logger.warning("login form invalid: %s", login_form.errors.as_json())
     else:
         login_form = forms.UserLoginForm(auto_id=True)
 
@@ -84,7 +92,6 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    print(request.method)
     if request.method == "POST":
         u_form = forms.UserUpdateForm(request.POST, instance=request.user)
         p_form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)

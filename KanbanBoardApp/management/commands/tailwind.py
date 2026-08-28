@@ -13,17 +13,8 @@ class Command(BaseCommand):
         parser.add_argument("--minify", action="store_true", help="Minify output")
 
     def handle(self, *args, **options):
-        # Detect platform
-        system = platform.system()
-        binaries = {
-            "Linux": "./tailwindcss-linux-x64",
-            "Darwin": "./tailwindcss-macos-arm64",
-            "Windows": "./tailwindcss-windows-x64.exe",
-        }
-
-        binary = binaries.get(system)
-        if not binary:
-            self.stdout.write(self.style.ERROR(f"Unsupported platform: {system}"))
+        if platform.system() not in ("Linux", "Darwin", "Windows"):
+            self.stdout.write(self.style.ERROR(f"Unsupported platform: {platform.system()}"))
             sys.exit(1)
 
         # Build command

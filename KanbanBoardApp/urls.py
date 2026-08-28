@@ -30,4 +30,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += [path("browser-reload/", include("django_browser_reload.urls"))]
+    if settings.BROWSER_RELOAD_ENABLED:
+        urlpatterns += [path("browser-reload/", include("django_browser_reload.urls"))]

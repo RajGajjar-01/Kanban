@@ -66,7 +66,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
 ]
 
-if DEBUG:
+BROWSER_RELOAD_ENABLED = False
+
+if DEBUG and BROWSER_RELOAD_ENABLED:
     INSTALLED_APPS.append("django_browser_reload")
 
 MIDDLEWARE = [
@@ -82,7 +84,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-if DEBUG:
+if DEBUG and BROWSER_RELOAD_ENABLED:
     # Related to tailwind live reload; dev only
     MIDDLEWARE.append("django_browser_reload.middleware.BrowserReloadMiddleware")
 
